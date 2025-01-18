@@ -1,0 +1,1 @@
+pm2 delete all; NODE_ENV=production npm run build; NODE_ENV=production pm2 start /home/ubuntu/piggynote/server/dist/main.js --name "piggynote"
