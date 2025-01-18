@@ -11,7 +11,7 @@ async function bootstrap() {
     credentials: true,
   });
   // 정적 파일 서빙
-  const frontendPath = join(__dirname, "../frontend/dist");
+  const frontendPath = join(__dirname, "../", "../frontend/dist");
   app.use(express.static(frontendPath));
   const port = process.env.PORT || 3000;
   await app.listen(port);
