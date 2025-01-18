@@ -7,6 +7,6 @@ export class AppController {
 
   @Get()
   serveFrontend(@Request() req, @Res() res) {
-    res.sendFile("index.html", { root: "../../frontend/dist" });
+    res.sendFile("index.html", { root: "../frontend/dist" });
   }
 }
