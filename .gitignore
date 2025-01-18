@@ -47,3 +47,7 @@ packages/frontend/node_modules
 packages/frontend/dist
 
 packages/expo/
+
+
+packages/backend/.env
+packages/backend/.env.production
