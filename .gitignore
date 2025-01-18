@@ -45,7 +45,7 @@ yarn-error.log*
 packages/backend/node_modules
 packages/backend/dist
 packages/backend/test
-packages/backend/logs/
+packages/backend/logs/*.log
 
 packages/backend/ssl
 packages/frontend/node_modules
