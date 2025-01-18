@@ -12,6 +12,9 @@ pnpm-lock.yaml
 .env.development.local
 .env.test.local
 .env.production.local
+packages/backend/.env
+packages/backend/.env.production
+
 
 # Testing
 coverage
@@ -41,6 +44,7 @@ yarn-error.log*
 packages/backend/node_modules
 packages/backend/dist
 packages/backend/test
+packages/backend/logs
 
 packages/backend/ssl
 packages/frontend/node_modules
@@ -49,5 +53,3 @@ packages/frontend/dist
 packages/expo/
 
 
-packages/backend/.env
-packages/backend/.env.production
