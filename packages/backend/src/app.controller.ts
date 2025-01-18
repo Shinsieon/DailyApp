@@ -8,7 +8,7 @@ export class AppController {
 
   @Get("*")
   serveFrontend(@Res() res) {
-    const rootPath = join(__dirname, "../frontend/dist");
+    const rootPath = join(__dirname, "../", "../frontend/dist");
     res.sendFile("index.html", { root: rootPath });
   }
 }
