@@ -6,10 +6,14 @@ import Label from "./Label";
 import { useThemeStore } from "../store/themeStore";
 import { colors } from "../colors";
 import CustomCard from "./Card";
+import { useMemoStore } from "../store/memoStore";
+import { Tag } from "antd-mobile";
 
 const MemoCard = () => {
   const navigate = useNavigate();
   const isDarkMode = useThemeStore((state) => state.theme.isDarkMode);
+  const memos = useMemoStore((state) => state.memos);
+  console.log(memos);
   return (
     <CustomCard
       title={
@@ -18,10 +22,12 @@ const MemoCard = () => {
         </>
       }
       extra={<RightOutline onClick={() => navigate("/memo")} />}
+      onClick={() => navigate("/memo")}
       actions={[
         <EditOutlined
           key="edit"
-          onClick={() => {
+          onClick={(e) => {
+            e.stopPropagation();
             navigate("memoEdit");
           }}
           style={{
@@ -33,7 +39,21 @@ const MemoCard = () => {
     >
       <Flex vertical gap={5}>
         <Label name="메모 목록" />
-        <Space direction="horizontal"></Space>
+        <Space direction="horizontal">
+          {memos
+            .sort((a, b) => b.id! - a.id!)
+            .map(
+              (memo, index: number) =>
+                index < 3 && (
+                  <Space key={memo.id}>
+                    <Tag style={{ fontSize: "15px" }} color="primary">
+                      {" "}
+                      {memo.title}
+                    </Tag>
+                  </Space>
+                )
+            )}
+        </Space>
       </Flex>
     </CustomCard>
   );

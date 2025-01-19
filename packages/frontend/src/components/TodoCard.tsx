@@ -25,7 +25,8 @@ const TodoCard = () => {
   const actions: React.ReactNode[] = [
     <EditOutlined
       key="edit"
-      onClick={() => {
+      onClick={(e) => {
+        e.stopPropagation();
         setTodoVisible(true);
       }}
       style={{
@@ -41,6 +42,7 @@ const TodoCard = () => {
           <FillinOutline /> 할 일 정리
         </>
       }
+      onClick={() => navigate("/todo")}
       extra={<RightOutline onClick={() => navigate("/todo")} />}
       actions={actions}
     >

@@ -2,6 +2,7 @@ import { Flex } from "antd";
 import { Menu } from "../types";
 import Label from "./Label";
 import { useThemeStore } from "../store/themeStore";
+import { colors } from "../colors";
 
 const BottomMenu = ({
   menus,
@@ -24,7 +25,9 @@ const BottomMenu = ({
         bottom: 0,
         left: 0,
         fontSize: "20px",
-
+        backgroundColor: theme.isDarkMode
+          ? colors.darkBlack
+          : colors.lightWhite,
         boxShadow: theme.isDarkMode
           ? "0 0 2px 0 rgba(255, 255, 255, 0.9)"
           : "0 0 5px 0 rgba(0, 0, 0, 0.1)",

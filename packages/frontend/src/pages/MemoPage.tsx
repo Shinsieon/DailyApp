@@ -220,11 +220,7 @@ const MemoPage = () => {
                     (memo.title.includes(search) ||
                       memo.content.includes(search))
                 )
-                .sort((a, b) =>
-                  sortDesc
-                    ? b.date.localeCompare(a.date)
-                    : a.date.localeCompare(b.date)
-                )}
+                .sort((a, b) => (sortDesc ? b.id! - a.id! : a.id! - b.id!))}
             />
           </Tabs.Tab>
 

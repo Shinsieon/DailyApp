@@ -32,7 +32,8 @@ const BudgetCard = () => {
         fontSize: "20px",
         color: isDarkMode ? colors.lightWhite : colors.darkBlack,
       }}
-      onClick={() => {
+      onClick={(e) => {
+        e.stopPropagation();
         setExpenseVisible(true);
       }}
     />,
@@ -42,7 +43,8 @@ const BudgetCard = () => {
         fontSize: "20px",
         color: isDarkMode ? colors.lightWhite : colors.darkBlack,
       }}
-      onClick={() => {
+      onClick={(e) => {
+        e.stopPropagation();
         setIncomeVisible(true);
       }}
     />,
@@ -77,6 +79,7 @@ const BudgetCard = () => {
         }
         extra={<RightOutline onClick={() => navigate("/budget")} />}
         actions={actions}
+        onClick={() => navigate("/budget")}
       >
         <p>이번달 지출 {formatMoney(monthlyBudget.expense)}원</p>
         <p>이번달 수입 {formatMoney(monthlyBudget.income)}원</p>
