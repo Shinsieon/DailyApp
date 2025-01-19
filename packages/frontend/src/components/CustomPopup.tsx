@@ -36,14 +36,7 @@ const CustomPopup = (props: CustomPopupProps) => {
         backgroundColor: isDarkMode ? colors.darkBlack : colors.lightWhite,
       }}
     >
-      <AppHeader
-        title={props.title}
-        backIcon={false}
-        style={{
-          backgroundColor: isDarkMode ? colors.darkBlack : colors.lightWhite,
-          color: isDarkMode ? colors.lightWhite : colors.darkBlack,
-        }}
-      />
+      <AppHeader title={props.title} backIcon={false} />
       <div key={key}>{props.children}</div>
     </Popup>
   );

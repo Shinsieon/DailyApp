@@ -38,7 +38,7 @@ const MemoItem = (props: MemoItemProps) => (
   <Card
     icon={
       <Button
-        style={{ border: "none" }}
+        style={{ border: "none", width: "30px" }}
         onClick={(e) => {
           e.stopPropagation();
           props.onStarClick();
@@ -52,8 +52,8 @@ const MemoItem = (props: MemoItemProps) => (
       </Button>
     }
     onHeaderClick={props.onHeaderClick}
-    title={<div style={{ fontWeight: "normal" }}>{props.memo.title}</div>}
-    extra={<RightOutline />}
+    title={props.memo.title}
+    extra={<RightOutline style={{ width: "30px" }} />}
     style={{ borderRadius: "16px", border: "1px solid #e5e5e5" }}
   >
     <Flex vertical gap={5}>
@@ -77,7 +77,7 @@ const MemoItem = (props: MemoItemProps) => (
       >
         <Label name={dayjs(props.memo.date).format("YYYY년 MM월 DD일")} />
 
-        <Button style={{ border: "none" }} onClick={props.onCopyClick}>
+        <Button style={{ border: "none" }} onClick={() => props.onCopyClick()}>
           <CopyFilled style={{ fontSize: "15px" }} />
         </Button>
 
@@ -112,11 +112,16 @@ const MemoList = ({ memos }: { memos: MemoData[] }) => {
     console.log(memoId);
     toggleMemo(memoId);
   };
-  const handleCopyClick = (content: string) => {
-    message.success(`${navigator.clipboard.readText()} 복사되었습니다.`);
+  const handleCopyClick = async (content: string) => {
+    console.log("copy click");
+    if (window && window.ReactNativeWebView) {
+      window.ReactNativeWebView.postMessage(
+        JSON.stringify({ type: "copy", data: content })
+      );
+    }
+    await navigator.clipboard.writeText(content);
 
-    navigator.clipboard.writeText(content);
-    console.log(navigator.clipboard.readText());
+    message.success(`${await navigator.clipboard.readText()} 복사되었습니다.`);
   };
   return (
     <Flex vertical gap={10} style={{ height: "75vh", overflowY: "scroll" }}>

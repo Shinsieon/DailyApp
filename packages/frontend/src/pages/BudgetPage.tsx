@@ -94,139 +94,120 @@ const BudgetPage = () => {
   );
 
   return (
-    <Flex vertical style={{ width: "100%" }}>
+    <>
       <AppHeader title="가계부" />
-      {/* <Flex vertical style={{ padding: "0px 20px" }}>
-        <Calendar
-          fullscreen={true}
-          cellRender={cellRender}
-          onSelect={(date: Dayjs) => {
-            setSelDate(date.format("YYYYMMDD"));
-            setDetailOpen(true);
+      <Flex vertical style={{ height: "100vh", overflowY: "auto" }}>
+        <Flex
+          style={{
+            height: "45vh",
+            backgroundColor: isDarkMode ? colors.lightGray : colors.darkBlue,
+            borderEndStartRadius: "20px",
+            borderEndEndRadius: "20px",
+            padding: "20px",
+            boxShadow: "0 4px 8px rgba(0, 0, 0, 0.1)",
+          }}
+        >
+          <Calendar
+            style={{ width: "100%" }}
+            fullscreen={false}
+            onSelect={(date: Dayjs) => {
+              setSelDate(date.format("YYYYMMDD"));
+            }}
+            headerRender={({ value, type, onChange }) => {
+              console.log(value, type);
+              const nowMonth = value.month();
+              const monthNames = [
+                "January",
+                "February",
+                "March",
+                "April",
+                "May",
+                "June",
+                "July",
+                "August",
+                "September",
+                "October",
+                "November",
+                "December",
+              ];
+              const monthText = monthNames[nowMonth];
+              return (
+                <Flex
+                  justify="center"
+                  align="center"
+                  gap={10}
+                  style={{ height: "50px" }}
+                >
+                  <LeftCircleFilled
+                    style={{ fontSize: "25px", color: "rgba(0,34,68)" }}
+                    onClick={() => {
+                      onChange(value.add(-1, "month"));
+                    }}
+                  />
+                  <Typography style={{ fontSize: "25px", fontWeight: "bold" }}>
+                    {monthText}
+                  </Typography>
+                  <RightCircleFilled
+                    style={{ fontSize: "25px", color: "rgba(0,34,68)" }}
+                    onClick={() => {
+                      onChange(value.add(1, "month"));
+                    }}
+                  />
+                </Flex>
+              );
+            }}
+          />
+        </Flex>
+        <Space style={{ padding: "0 20px" }}>
+          <Title
+            level={3}
+            name={
+              selDate.substring(0, 4) +
+              "년 " +
+              selDate.substring(4, 6) +
+              "월 " +
+              selDate.substring(6) +
+              "일"
+            }
+          />
+        </Space>
+        <Tabs
+          onChange={(tab) => {
+            setSelTab(tab as "income" | "expense");
+          }}
+          activeKey={selTab}
+        >
+          <Tabs.Tab title="수입" key="income">
+            {RenderList("income", incomes)}
+          </Tabs.Tab>
+          <Tabs.Tab title="지출" key="expense">
+            {RenderList("expense", expenses)}
+          </Tabs.Tab>
+        </Tabs>
+        <FloatButton
+          style={{ width: "40px", height: "40px" }}
+          icon={<PlusOutlined />}
+          onClick={() => {
+            setVisible(true);
           }}
         />
         <CustomPopup
-          title="상세 내역"
-          visible={detailOpen}
-          setVisible={setDetailOpen}
+          title={selTab === "income" ? "수입 기록" : "지출 기록"}
+          height="40%"
+          visible={visible}
+          setVisible={setVisible}
           children={
-            <DetailBudget
+            <NewBudget
+              type={selTab}
               date={selDate}
-              budgets={budget.filter((item) => item.date === selDate)}
+              onOk={() => {
+                setVisible(false);
+              }}
             />
           }
         />
-      </Flex> */}
-      <Flex
-        style={{
-          height: "40%",
-          backgroundColor: isDarkMode ? colors.lightGray : colors.darkBlue,
-          borderEndStartRadius: "20px",
-          borderEndEndRadius: "20px",
-          padding: "20px",
-          boxShadow: "0 4px 8px rgba(0, 0, 0, 0.1)",
-        }}
-      >
-        <Calendar
-          style={{ width: "100%" }}
-          fullscreen={false}
-          onSelect={(date: Dayjs) => {
-            setSelDate(date.format("YYYYMMDD"));
-          }}
-          headerRender={({ value, type, onChange }) => {
-            console.log(value, type);
-            const nowMonth = value.month();
-            const monthNames = [
-              "January",
-              "February",
-              "March",
-              "April",
-              "May",
-              "June",
-              "July",
-              "August",
-              "September",
-              "October",
-              "November",
-              "December",
-            ];
-            const monthText = monthNames[nowMonth];
-            return (
-              <Flex
-                justify="center"
-                align="center"
-                gap={10}
-                style={{ height: "50px" }}
-              >
-                <LeftCircleFilled
-                  style={{ fontSize: "25px", color: "rgba(0,34,68)" }}
-                  onClick={() => {
-                    onChange(value.add(-1, "month"));
-                  }}
-                />
-                <Typography style={{ fontSize: "25px", fontWeight: "bold" }}>
-                  {monthText}
-                </Typography>
-                <RightCircleFilled
-                  style={{ fontSize: "25px", color: "rgba(0,34,68)" }}
-                  onClick={() => {
-                    onChange(value.add(1, "month"));
-                  }}
-                />
-              </Flex>
-            );
-          }}
-        />
       </Flex>
-      <Space style={{ padding: "0 20px" }}>
-        <Title
-          level={3}
-          name={
-            selDate.substring(0, 4) +
-            "년 " +
-            selDate.substring(4, 6) +
-            "월 " +
-            selDate.substring(6) +
-            "일"
-          }
-        />
-      </Space>
-      <Tabs
-        onChange={(tab) => {
-          setSelTab(tab as "income" | "expense");
-        }}
-        activeKey={selTab}
-      >
-        <Tabs.Tab title="수입" key="income">
-          {RenderList("income", incomes)}
-        </Tabs.Tab>
-        <Tabs.Tab title="지출" key="expense">
-          {RenderList("expense", expenses)}
-        </Tabs.Tab>
-      </Tabs>
-      <FloatButton
-        style={{ width: "40px", height: "40px" }}
-        icon={<PlusOutlined />}
-        onClick={() => {
-          setVisible(true);
-        }}
-      />
-      <CustomPopup
-        title={selTab === "income" ? "수입 기록" : "지출 기록"}
-        height="40%"
-        visible={visible}
-        setVisible={setVisible}
-        children={
-          <NewBudget
-            type={selTab}
-            date={selDate}
-            onOk={() => {
-              setVisible(false);
-            }}
-          />
-        }
-      />
-    </Flex>
+    </>
   );
 };
 export default BudgetPage;
