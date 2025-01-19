@@ -1,5 +1,4 @@
 import { MinusOutlined, PlusOutlined } from "@ant-design/icons";
-import { Card } from "antd";
 import { useEffect, useState } from "react";
 import { BudgetData, BudgetSum } from "../types";
 import { useNavigate } from "react-router-dom";
