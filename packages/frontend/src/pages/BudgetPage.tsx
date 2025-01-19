@@ -56,7 +56,7 @@ const RenderList = (type: "income" | "expense", budgets: BudgetData[]) => {
   return (
     <Space
       direction="vertical"
-      style={{ width: "100%", height: "35vh", overflowY: "scroll" }}
+      style={{ width: "100%", height: "35vh", overflowY: "auto" }}
     >
       {budgets.length === 0 ? (
         <Empty

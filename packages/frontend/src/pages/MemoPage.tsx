@@ -124,7 +124,7 @@ const MemoList = ({ memos }: { memos: MemoData[] }) => {
     message.success(`${await navigator.clipboard.readText()} 복사되었습니다.`);
   };
   return (
-    <Flex vertical gap={10} style={{ height: "75vh", overflowY: "scroll" }}>
+    <Flex vertical gap={10} style={{ height: "75vh", overflowY: "auto" }}>
       {memos.length > 0 ? (
         memos.map((memo) => (
           <MemoItem
