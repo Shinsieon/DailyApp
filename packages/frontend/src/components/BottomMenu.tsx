@@ -20,7 +20,7 @@ const BottomMenu = ({
       align="center"
       style={{
         position: "fixed",
-        height: "10vh",
+        height: "10%",
         width: "100%",
         bottom: 0,
         left: 0,

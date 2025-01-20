@@ -8,11 +8,6 @@
     "scheme": "dailyapp",
     "userInterfaceStyle": "automatic",
     "newArchEnabled": true,
-    "splash": {
-      "image": "./assets/images/splash.png",
-      "resizeMode": "contain",
-      "backgroundColor": "#ffffff"
-    },
     "ios": {
       "supportsTablet": true,
       "bundleIdentifier": "com.shinsieon.dailyapp",
@@ -38,8 +33,23 @@
       }
     },
     "plugins": [
-      "expo-font",
-      "expo-router"
+      [
+        "expo-splash-screen",
+        {
+          "backgroundColor": "#ffffff",
+          "image": "./assets/images/splash.png",
+          "dark": {
+            "image": "./assets/images/splash.png",
+            "backgroundColor": "#000000"
+          },
+          "imageWidth": 200
+        }
+      ]
     ]
+  },
+  "splash": {
+    "image": "./assets/images/splash.png",
+    "resizeMode": "cover",
+    "backgroundColor": "#FFFFFF"
   }
 }
