@@ -93,7 +93,7 @@ export default function Index() {
       >
         <WebView
           ref={webviewRef}
-          source={{ uri: "http://172.30.1.82:3000" }} // React 웹 페이지 URL
+          source={{ uri: "http://172.30.1.65:3000" }} // React 웹 페이지 URL
           style={styles.webview}
           javaScriptEnabled={true} // JavaScript 활성화
           domStorageEnabled={true} // DOM 저장소 활성화
