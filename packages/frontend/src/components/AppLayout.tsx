@@ -2,7 +2,6 @@ import { useEffect } from "react";
 import { useBudgetStore } from "../store/budgetStore";
 import { useTodoStore } from "../store/todoStore";
 import ErrorBoundary from "./ErrorBoundary";
-import { Space } from "antd-mobile";
 import { useMemoStore } from "../store/memoStore";
 import { Flex } from "antd";
 import { useThemeStore } from "../store/themeStore";
@@ -23,8 +22,8 @@ export const AppLayout = ({ children }: { children: React.ReactElement }) => {
     fetchTheme();
   }, []);
   return (
-    <Space
-      direction="vertical"
+    <Flex
+      vertical
       style={{
         minHeight: "100vh",
         minWidth: "100vw",
@@ -33,9 +32,7 @@ export const AppLayout = ({ children }: { children: React.ReactElement }) => {
         color: isDarkMode ? colors.lightWhite : colors.darkBlack,
       }}
     >
-      <Flex vertical>
-        <ErrorBoundary>{children}</ErrorBoundary>
-      </Flex>
-    </Space>
+      <ErrorBoundary>{children}</ErrorBoundary>
+    </Flex>
   );
 };

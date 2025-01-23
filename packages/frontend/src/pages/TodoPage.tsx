@@ -1,13 +1,15 @@
 import { Calendar, Empty, Flex, FloatButton, message, Typography } from "antd";
 import AppHeader from "../components/AppHeader";
-import { Checkbox, List, Space, Tabs } from "antd-mobile";
+import { Button, Checkbox, List, Space, Tabs } from "antd-mobile";
 import { useState } from "react";
 import dayjs, { Dayjs } from "dayjs";
 import {
   DeleteTwoTone,
+  DownOutlined,
   LeftCircleFilled,
   PlusOutlined,
   RightCircleFilled,
+  UpOutlined,
 } from "@ant-design/icons";
 import { useTodoStore } from "../store/todoStore";
 import CustomPopup from "../components/CustomPopup";
@@ -46,7 +48,7 @@ const RenderListItem = (todo: TodoData) => {
 };
 const RenderList = (todos: TodoData[]) => {
   return (
-    <Flex vertical style={{ width: "100%", height: "35vh", overflowY: "auto" }}>
+    <Flex vertical>
       {todos.length === 0 ? (
         <Empty description="할 일이 없습니다." />
       ) : (
@@ -65,6 +67,7 @@ const RenderList = (todos: TodoData[]) => {
 const TodoPage = () => {
   const [selDate, setSelDate] = useState<string>(dayjs().format("YYYYMMDD"));
   const [visible, setVisible] = useState(false);
+  const [calenderFolded, setCalenderFolded] = useState<boolean | null>(null);
   const isDarkMode = useThemeStore((state) => state.theme.isDarkMode);
   const todos = useTodoStore((state) => state.todos);
   const notCompletedTodos = todos.filter(
@@ -76,12 +79,12 @@ const TodoPage = () => {
   console.log(`length : ${completedTodos.length}`);
 
   return (
-    <>
+    <Flex vertical style={{ height: "100vh" }}>
       <AppHeader title="할 일 정리" />
-      <Flex vertical style={{ height: "100vh", overflowY: "auto" }}>
+      <Flex vertical style={{ flex: 1, overflow: "auto" }}>
         <Flex
+          vertical
           style={{
-            height: "45vh",
             backgroundColor: isDarkMode ? colors.lightGray : colors.darkBlue,
             borderEndStartRadius: "20px",
             borderEndEndRadius: "20px",
@@ -90,13 +93,36 @@ const TodoPage = () => {
           }}
         >
           <Calendar
-            style={{ width: "100%" }}
+            style={{ width: "100%", position: "relative" }}
+            className={
+              calenderFolded === true
+                ? "slideup"
+                : calenderFolded === false
+                  ? "slidedown"
+                  : ""
+            }
             fullscreen={false}
             onSelect={(date: Dayjs) => {
               setSelDate(date.format("YYYYMMDD"));
             }}
+            cellRender={(props) => {
+              if (
+                todos.find((todo) => todo.date === props.format("YYYYMMDD"))
+              ) {
+                return (
+                  <div
+                    style={{
+                      width: "8px",
+                      height: "8px",
+                      backgroundColor: "red",
+                      borderRadius: "50%",
+                      margin: "0 auto",
+                    }}
+                  ></div>
+                );
+              }
+            }}
             headerRender={({ value, type, onChange }) => {
-              console.log(value, type);
               const nowMonth = value.month();
               const monthNames = [
                 "January",
@@ -140,27 +166,48 @@ const TodoPage = () => {
             }}
           />
         </Flex>
-        <Space style={{ padding: "0 20px" }}>
-          <Title
-            level={3}
-            name={
-              selDate.substring(0, 4) +
-              "년 " +
-              selDate.substring(4, 6) +
-              "월 " +
-              selDate.substring(6) +
-              "일"
-            }
-          />
-        </Space>
-        <Tabs>
-          <Tabs.Tab title="Todo" key="Todo">
-            {RenderList(notCompletedTodos)}
-          </Tabs.Tab>
-          <Tabs.Tab title="Done" key="Done">
-            {RenderList(completedTodos)}
-          </Tabs.Tab>
-        </Tabs>
+        <Flex vertical style={{ flex: 1 }}>
+          <Flex
+            justify="center"
+            align="center"
+            vertical
+            style={{ height: "30px" }}
+          >
+            <Button
+              style={{
+                border: "none",
+                backgroundColor: colors.lightGray,
+              }}
+              className="blinking-text"
+              onClick={() => {
+                setCalenderFolded(!calenderFolded);
+              }}
+            >
+              {calenderFolded ? <DownOutlined /> : <UpOutlined />}
+            </Button>
+          </Flex>
+          <Space style={{ padding: "0 20px" }}>
+            <Title
+              level={3}
+              name={
+                selDate.substring(0, 4) +
+                "년 " +
+                selDate.substring(4, 6) +
+                "월 " +
+                selDate.substring(6) +
+                "일"
+              }
+            />
+          </Space>
+          <Tabs style={{ flex: 1 }}>
+            <Tabs.Tab title="Todo" key="Todo">
+              {RenderList(notCompletedTodos)}
+            </Tabs.Tab>
+            <Tabs.Tab title="Done" key="Done">
+              {RenderList(completedTodos)}
+            </Tabs.Tab>
+          </Tabs>
+        </Flex>
         <FloatButton
           style={{ width: "40px", height: "40px" }}
           icon={<PlusOutlined />}
@@ -182,7 +229,7 @@ const TodoPage = () => {
           }
         />
       </Flex>
-    </>
+    </Flex>
   );
 };
 export default TodoPage;

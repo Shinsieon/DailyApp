@@ -72,16 +72,16 @@ const BudgetCard = () => {
       <CustomCard
         title={
           <>
-            <CollectMoneyOutline />
-            가계부 정리
+            <CollectMoneyOutline /> 가계부 정리
           </>
         }
         extra={<RightOutline onClick={() => navigate("/budget")} />}
         actions={actions}
         onClick={() => navigate("/budget")}
       >
-        <p>이번달 지출 {formatMoney(monthlyBudget.expense)}원</p>
         <p>이번달 수입 {formatMoney(monthlyBudget.income)}원</p>
+
+        <p>이번달 지출 {formatMoney(monthlyBudget.expense)}원</p>
       </CustomCard>
       <CustomPopup
         title="지출 기록"

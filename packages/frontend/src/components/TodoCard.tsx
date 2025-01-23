@@ -66,7 +66,7 @@ const TodoCard = () => {
             </Tag>
           ) : null}
         </Space>
-        <Label name="아직 끝내지 못한 일" />
+        <Label name="남은 할 일" />
         <Space direction="horizontal">
           {uncompletedTodos.map(
             (todo, index: number) =>

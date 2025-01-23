@@ -55,15 +55,41 @@ button:focus-visible {
   outline: 4px auto -webkit-focus-ring-color;
 }
 
-@media (prefers-color-scheme: light) {
-  :root {
-    color: #213547;
-    background-color: #ffffff;
+@keyframes blink {
+  0% {
+    opacity: 1;
   }
-  a:hover {
-    color: #747bff;
+  50% {
+    opacity: 0;
   }
-  button {
-    background-color: #f9f9f9;
+  100% {
+    opacity: 1;
   }
+}
+.blinking-text {
+  animation: blink 5s infinite; /* 1초 간격으로 무한 반복 */
+}
+
+@keyframes slideup {
+  from {
+    max-height: 500px;
+  }
+  to {
+    max-height: 0;
+  }
+}
+@keyframes slidedown {
+  from {
+    max-height: 0;
+  }
+  to {
+    max-height: 500px;
+  }
+}
+.slideup {
+  animation: slideup 0.5s forwards;
+  overflow: hidden;
+}
+.slidedown {
+  animation: slidedown 0.5s forwards;
 }
