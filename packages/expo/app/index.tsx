@@ -15,13 +15,11 @@ import * as SplashScreen from "expo-splash-screen";
 
 // Keep the splash screen visible while we fetch resources
 SplashScreen.preventAutoHideAsync();
-
 // Set the animation options. This is optional.
 SplashScreen.setOptions({
   duration: 1000,
   fade: true,
 });
-
 export default function Index() {
   const [isDarkMode, setIsDarkMode] = useState(false);
   const [appIsReady, setAppIsReady] = useState(false);
@@ -93,7 +91,7 @@ export default function Index() {
       >
         <WebView
           ref={webviewRef}
-          source={{ uri: "http://172.30.1.65:3000" }} // React 웹 페이지 URL "https://bono-dev.click"
+          source={{ uri: "https://bono-dev.click" }} // React 웹 페이지 URL "https://bono-dev.click"
           style={styles.webview}
           javaScriptEnabled={true} // JavaScript 활성화
           domStorageEnabled={true} // DOM 저장소 활성화

@@ -2,8 +2,28 @@
   "expo": {
     "name": "하루정리",
     "slug": "dailyapp",
-    "version": "1.0.0",
+    "version": "1.0.2",
     "orientation": "portrait",
+    "splash": {
+      "image": "./assets/images/splash-icon.png",
+      "resizeMode": "cover",
+      "backgroundColor": "#FFFFFF"
+    },
+    "plugins": [
+      [
+        "expo-splash-screen",
+        {
+          "backgroundColor": "#ffffff",
+          "image": "./assets/images/splash-icon.png",
+          "dark": {
+            "image": "./assets/images/splash-icon.png",
+            "backgroundColor": "#000000"
+          },
+          "resizeMode": "cover"
+        }
+      ],
+      "expo-router"
+    ],
     "icon": "./assets/images/dayicon.png",
     "scheme": "dailyapp",
     "userInterfaceStyle": "automatic",
@@ -12,12 +32,6 @@
       "supportsTablet": true,
       "bundleIdentifier": "com.shinsieon.dailyapp",
       "usesAppleSignIn": true
-    },
-    "android": {
-      "adaptiveIcon": {
-        "foregroundImage": "./assets/images/dayicon.png",
-        "backgroundColor": "#ffffff"
-      }
     },
     "web": {
       "bundler": "metro",
@@ -32,24 +46,8 @@
         "projectId": "78b4155e-ca07-408b-bc6e-387128315138"
       }
     },
-    "plugins": [
-      [
-        "expo-splash-screen",
-        {
-          "backgroundColor": "#ffffff",
-          "image": "./assets/images/splash.png",
-          "dark": {
-            "image": "./assets/images/splash.png",
-            "backgroundColor": "#000000"
-          },
-          "imageWidth": 200
-        }
-      ]
-    ]
-  },
-  "splash": {
-    "image": "./assets/images/splash.png",
-    "resizeMode": "cover",
-    "backgroundColor": "#FFFFFF"
+    "android": {
+      "package": "com.shinsieon.dailyapp"
+    }
   }
 }

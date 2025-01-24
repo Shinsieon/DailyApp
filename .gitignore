@@ -51,5 +51,9 @@ packages/backend/ssl
 packages/frontend/node_modules
 packages/frontend/dist
 
+packages/expo/.expo
+packages/expo/.expo-shared
+packages/expo/node_modules
+
 
 
