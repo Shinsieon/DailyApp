@@ -14,17 +14,6 @@ const HomePage = () => {
           padding: "30px 20px",
         }}
       >
-        <Button
-          onClick={() => {
-            if (window && window.ReactNativeWebView) {
-              window.ReactNativeWebView.postMessage(
-                JSON.stringify({ type: "review" })
-              );
-            }
-          }}
-        >
-          Add
-        </Button>
         <MemoCard />
         <TodoCard />
         <BudgetCard />
