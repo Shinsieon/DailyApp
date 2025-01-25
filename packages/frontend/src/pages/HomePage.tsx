@@ -14,10 +14,11 @@ const HomePage = () => {
           padding: "30px 20px",
         }}
       >
+        <MemoCard />
+
         <TodoCard />
 
         <BudgetCard />
-        <MemoCard />
       </Space>
     </>
   );
