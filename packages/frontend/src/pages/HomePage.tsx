@@ -14,9 +14,8 @@ const HomePage = () => {
           padding: "30px 20px",
         }}
       >
-        <MemoCard />
-
         <TodoCard />
+        <MemoCard />
 
         <BudgetCard />
       </Space>
