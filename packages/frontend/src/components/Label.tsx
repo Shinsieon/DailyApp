@@ -13,6 +13,7 @@ const Label = (props: LabelProps) => {
       style={{
         color: theme.isDarkMode ? colors.lightWhite : colors.darkBlack,
       }}
+      {...props}
     >
       {props.name}
     </Typography.Text>

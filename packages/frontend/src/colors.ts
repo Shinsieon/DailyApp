@@ -5,6 +5,7 @@ export const colors = {
   lightGray: "#f0f0f0",
   darkBlue: "rgba(0,34,68)",
   lightBlue: "rgba(0,0,255)",
+  primary: "#1677ff",
 };
 
 export const darkStyles = {

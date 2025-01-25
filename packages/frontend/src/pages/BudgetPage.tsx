@@ -9,7 +9,7 @@ import {
 } from "antd";
 import AppHeader from "../components/AppHeader";
 import dayjs, { Dayjs } from "dayjs";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { BudgetData } from "../types";
 import { formatMoney } from "../utils";
 import { useBudgetStore } from "../store/budgetStore";
@@ -31,15 +31,18 @@ import NewBudget from "../popups/NewBudget";
 interface RenderListItemProps {
   budget: BudgetData;
   type: "income" | "expense";
+  setSelItem: (budget: BudgetData) => void;
 }
-const RenderListItem = ({ budget, type }: RenderListItemProps) => {
+const RenderListItem = ({ budget, type, setSelItem }: RenderListItemProps) => {
   const deleteTodo = useBudgetStore((state) => state.deleteBudget);
   return (
     <List.Item
       key={budget.id}
+      arrowIcon={<></>}
       extra={
         <DeleteTwoTone
-          onClick={() => {
+          onClick={(e) => {
+            e.stopPropagation();
             deleteTodo(budget.id!);
             message.success(
               type === "income"
@@ -49,12 +52,20 @@ const RenderListItem = ({ budget, type }: RenderListItemProps) => {
           }}
         />
       }
+      onClick={() => {
+        console.log("clicked", budget);
+        setSelItem({ ...budget });
+      }}
     >
       {budget.category.label + " " + formatMoney(budget.amount) + "원"}
     </List.Item>
   );
 };
-const RenderList = (type: "income" | "expense", budgets: BudgetData[]) => {
+const RenderList = (
+  type: "income" | "expense",
+  budgets: BudgetData[],
+  setSelItem: (budget: BudgetData) => void
+) => {
   return (
     <Space
       direction="vertical"
@@ -73,7 +84,12 @@ const RenderList = (type: "income" | "expense", budgets: BudgetData[]) => {
         <>
           <List key={"budgetlist"}>
             {budgets.map((budget) => (
-              <RenderListItem key={budget.id} budget={budget} type={type} />
+              <RenderListItem
+                key={budget.id}
+                budget={budget}
+                type={type}
+                setSelItem={setSelItem}
+              />
             ))}
           </List>
         </>
@@ -86,6 +102,7 @@ const BudgetPage = () => {
   const [selDate, setSelDate] = useState<string>(dayjs().format("YYYYMMDD"));
   const [selTab, setSelTab] = useState<"income" | "expense">("income");
   const [visible, setVisible] = useState<boolean>(false);
+  const [selItem, setSelItem] = useState<BudgetData | null>(null);
   const [calenderFolded, setCalenderFolded] = useState<boolean | null>(null);
   const isDarkMode = useThemeStore((state) => state.theme.isDarkMode);
   const budget = useBudgetStore((state) => state.budgets);
@@ -95,6 +112,10 @@ const BudgetPage = () => {
   const expenses = budget.filter(
     (item) => item.type === "expense" && item.date === selDate
   );
+
+  useEffect(() => {
+    if (selItem) setVisible(true);
+  }, [selItem]);
 
   return (
     <Flex vertical style={{ height: "100vh" }}>
@@ -125,7 +146,6 @@ const BudgetPage = () => {
               setSelDate(date.format("YYYYMMDD"));
             }}
             cellRender={(props) => {
-              console.log(props.format("YYYYMMDD"));
               if (budget.find((bud) => bud.date === props.format("YYYYMMDD"))) {
                 return (
                   <div
@@ -141,7 +161,6 @@ const BudgetPage = () => {
               }
             }}
             headerRender={({ value, type, onChange }) => {
-              console.log(value, type);
               const nowMonth = value.month();
               const monthNames = [
                 "January",
@@ -226,10 +245,10 @@ const BudgetPage = () => {
             activeKey={selTab}
           >
             <Tabs.Tab title="수입" key="income">
-              {RenderList("income", incomes)}
+              {RenderList("income", incomes, setSelItem)}
             </Tabs.Tab>
             <Tabs.Tab title="지출" key="expense">
-              {RenderList("expense", expenses)}
+              {RenderList("expense", expenses, setSelItem)}
             </Tabs.Tab>
           </Tabs>
         </Flex>
@@ -237,6 +256,7 @@ const BudgetPage = () => {
           style={{ width: "40px", height: "40px" }}
           icon={<PlusOutlined />}
           onClick={() => {
+            setSelItem(null);
             setVisible(true);
           }}
         />
@@ -249,6 +269,7 @@ const BudgetPage = () => {
             <NewBudget
               type={selTab}
               date={selDate}
+              selBudget={selItem}
               onOk={() => {
                 setVisible(false);
               }}

@@ -8,7 +8,7 @@ import {
 } from "antd-mobile";
 import dayjs from "dayjs";
 import { RefObject, useState } from "react";
-import { PopupProps } from "../types";
+import { BudgetData, PopupProps } from "../types";
 import { message } from "antd";
 import { useBudgetStore } from "../store/budgetStore";
 import { CheckListValue } from "antd-mobile/es/components/check-list";
@@ -52,6 +52,7 @@ const options = {
 interface NewBudgetProps extends PopupProps {
   type: "income" | "expense";
   date?: string; //20241202
+  selBudget: BudgetData | null;
 }
 
 interface FormValues {
@@ -60,27 +61,43 @@ interface FormValues {
 }
 
 const NewBudget = (props: NewBudgetProps) => {
-  const [category, setCategory] = useState(options[props.type][0]);
+  let deafultCategory = options[props.type][0];
+  if (props.selBudget) {
+    const foundCat = options[props.type].find(
+      (item) => item.value === props.selBudget?.category.value
+    );
+    if (foundCat) deafultCategory = foundCat;
+  }
+  const [category, setCategory] = useState(deafultCategory);
   const [visible, setVisible] = useState(false);
-  const [koreaMoney, setKoreaMoney] = useState("");
+  const [koreaMoney, setKoreaMoney] = useState(
+    props.selBudget ? translateToKorean(props.selBudget.amount) : ""
+  );
   const saveBudget = useBudgetStore((state) => state.saveBudget);
+  const updateBudget = useBudgetStore((state) => state.updateBudget);
   const defaultDate = props.date || dayjs().format("YYYYMMDD");
+  const defaultAmount = props.selBudget
+    ? props.selBudget.amount.toString()
+    : "";
+  const [amount, setAmount] = useState(defaultAmount);
   const isDarkMode = useThemeStore((state) => state.theme.isDarkMode);
+
   const onFinish = async (values: FormValues) => {
-    console.log(dayjs(values.date));
-    if (parseInt(values.amount) <= 0 || Number.isNaN(parseInt(values.amount))) {
+    if (parseInt(amount) <= 0 || Number.isNaN(parseInt(amount))) {
       message.error("금액을 확인해주세요.");
       return;
     }
     try {
-      await saveBudget({
+      const newBudget = {
         date: values.date ? dayjs(values.date).format("YYYYMMDD") : defaultDate,
         category: category,
-        amount: parseInt(values.amount),
+        amount: parseInt(amount),
         type: props.type,
-      });
+      };
+      if (props.selBudget) {
+        await updateBudget({ ...props.selBudget, ...newBudget });
+      } else await saveBudget(newBudget);
     } catch (e) {
-      console.log(e);
       message.error("데이터를 추가하는데 실패했습니다.");
       return;
     }
@@ -94,7 +111,7 @@ const NewBudget = (props: NewBudgetProps) => {
       layout="horizontal"
       footer={
         <Button block type="submit" color="primary" size="large">
-          확인
+          {props.selBudget ? "수정" : "확인"}
         </Button>
       }
       style={{
@@ -113,11 +130,14 @@ const NewBudget = (props: NewBudgetProps) => {
         }}
         rules={[{ required: true, message: "금액을 입력해주세요" }]}
         extra={"₩"}
+        initialValue={defaultAmount}
       >
         <Input
           placeholder="금액입력"
           inputMode="numeric"
+          value={amount}
           onChange={(value) => {
+            setAmount(value);
             setKoreaMoney(translateToKorean(parseInt(value)));
           }}
         />
@@ -127,11 +147,10 @@ const NewBudget = (props: NewBudgetProps) => {
           name="translateToKorean"
           style={{
             backgroundColor: isDarkMode ? colors.darkBlack : colors.lightWhite,
-            color: isDarkMode ? colors.lightWhite : colors.darkBlack,
             textAlign: "right",
           }}
         >
-          <Label name={koreaMoney + "원"} />
+          <Label name={koreaMoney + "원"} style={{ color: colors.primary }} />
         </Form.Item>
       )}
       <Form.Item
