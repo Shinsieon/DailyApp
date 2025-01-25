@@ -91,7 +91,7 @@ export default function Index() {
       >
         <WebView
           ref={webviewRef}
-          source={{ uri: "https://bono-dev.click" }} // React 웹 페이지 URL "https://bono-dev.click"
+          source={{ uri: "http://172.30.1.72:3000" }} // React 웹 페이지 URL "https://bono-dev.click"
           style={styles.webview}
           javaScriptEnabled={true} // JavaScript 활성화
           domStorageEnabled={true} // DOM 저장소 활성화

@@ -15,6 +15,7 @@ import { CheckListValue } from "antd-mobile/es/components/check-list";
 import Label from "../components/Label";
 import { useThemeStore } from "../store/themeStore";
 import { colors } from "../colors";
+import { translateToKorean } from "../utils";
 
 interface NewBudgetProps extends PopupProps {
   type: "income" | "expense";
@@ -61,6 +62,7 @@ interface FormValues {
 const NewBudget = (props: NewBudgetProps) => {
   const [category, setCategory] = useState(options[props.type][0]);
   const [visible, setVisible] = useState(false);
+  const [koreaMoney, setKoreaMoney] = useState("");
   const saveBudget = useBudgetStore((state) => state.saveBudget);
   const defaultDate = props.date || dayjs().format("YYYYMMDD");
   const isDarkMode = useThemeStore((state) => state.theme.isDarkMode);
@@ -112,8 +114,26 @@ const NewBudget = (props: NewBudgetProps) => {
         rules={[{ required: true, message: "금액을 입력해주세요" }]}
         extra={"₩"}
       >
-        <Input placeholder="금액입력" inputMode="numeric" />
+        <Input
+          placeholder="금액입력"
+          inputMode="numeric"
+          onChange={(value) => {
+            setKoreaMoney(translateToKorean(parseInt(value)));
+          }}
+        />
       </Form.Item>
+      {koreaMoney && koreaMoney.length > 0 && (
+        <Form.Item
+          name="translateToKorean"
+          style={{
+            backgroundColor: isDarkMode ? colors.darkBlack : colors.lightWhite,
+            color: isDarkMode ? colors.lightWhite : colors.darkBlack,
+            textAlign: "right",
+          }}
+        >
+          <Label name={koreaMoney + "원"} />
+        </Form.Item>
+      )}
       <Form.Item
         onClick={(_, datePickerRef: RefObject<DatePickerRef>) => {
           datePickerRef.current?.open(); // ⬅️
