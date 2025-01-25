@@ -1,6 +1,0 @@
-Command line invocation:
-    /Applications/Xcode.app/Contents/Developer/usr/bin/xcodebuild -project /Users/sinsieon/ReactNative/myapp/packages/expo/ios/dailyapp.xcodeproj -configuration Debug -scheme dailyapp -destination id=D2B2D79E-B155-4A91-A7E4-8770C1E53392 clean build
-
-User defaults from command line:
-    IDEPackageSupportUseBuiltinSCM = YES
-

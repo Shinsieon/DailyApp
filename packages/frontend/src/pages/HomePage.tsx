@@ -1,4 +1,4 @@
-import { Space } from "antd-mobile";
+import { Button, Space } from "antd-mobile";
 import BudgetCard from "../components/BudgetCard";
 import TodoCard from "../components/TodoCard";
 import MemoCard from "../components/MemoCard";
@@ -14,6 +14,17 @@ const HomePage = () => {
           padding: "30px 20px",
         }}
       >
+        <Button
+          onClick={() => {
+            if (window && window.ReactNativeWebView) {
+              window.ReactNativeWebView.postMessage(
+                JSON.stringify({ type: "review" })
+              );
+            }
+          }}
+        >
+          Add
+        </Button>
         <MemoCard />
         <TodoCard />
         <BudgetCard />
