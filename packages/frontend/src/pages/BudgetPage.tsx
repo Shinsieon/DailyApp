@@ -262,7 +262,7 @@ const BudgetPage = () => {
         />
         <CustomPopup
           title={selTab === "income" ? "수입 기록" : "지출 기록"}
-          height="45%"
+          height="50%"
           visible={visible}
           setVisible={setVisible}
           children={
