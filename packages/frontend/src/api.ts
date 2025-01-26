@@ -3,7 +3,7 @@ import axios from "axios";
 import { LoginResponse } from "./types";
 
 export const http = axios.create({
-  baseURL: "https://127.0.0.1:3000",
+  baseURL: "http://127.0.0.1:3000",
   withCredentials: true,
   beforeRedirect: () => {
     console.log("Redirecting...");
