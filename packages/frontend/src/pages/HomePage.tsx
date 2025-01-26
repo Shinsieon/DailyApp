@@ -44,8 +44,6 @@ const HomePage = () => {
           padding: "30px 20px",
         }}
       >
-<<<<<<< HEAD
-=======
         {patchNotes && (
           <NoticeBar
             color="info"
@@ -60,7 +58,6 @@ const HomePage = () => {
           />
         )}
 
->>>>>>> feature
         <MemoCard />
         <TodoCard />
         <BudgetCard />
