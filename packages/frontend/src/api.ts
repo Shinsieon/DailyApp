@@ -52,6 +52,11 @@ const getPatchNotes = async () => {
   return response.data;
 };
 
+const getCategories = async () => {
+  const response = await http.get("/api/v1/categories");
+  return response.data;
+};
+
 const getWeather = async (latitude: number, longitude: number) => {
   //const key =
   "P+/y/R84yS9jBDWOea6o+ooWcZ1t9SRKQaKK23tR2DeF8HGCMh+61cTAFpV71qF7HdooH1nZsvvv8MtVGq71Fw==";
@@ -67,4 +72,5 @@ export const api = {
   signin,
   getWeather,
   getPatchNotes,
+  getCategories,
 };

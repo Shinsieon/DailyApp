@@ -8,14 +8,20 @@ export interface PopupProps {
   onOk?: () => void;
   onCancel?: () => void;
 }
-export type BugetModalType = "income" | "expense";
+export type BudgetType = "income" | "expense";
 export interface BudgetData {
   id?: number;
   date: string;
-  category: { label: string; value: string };
+  category: { label: string; value: string; type: string };
   amount: number;
-  type: BugetModalType;
+  type: BudgetType;
   other?: string;
+}
+export interface CategoryData {
+  id?: number;
+  type: string;
+  label: string;
+  value: string;
 }
 export type BudgetSum = {
   income: number;

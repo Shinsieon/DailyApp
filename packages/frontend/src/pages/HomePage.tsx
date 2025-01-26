@@ -1,4 +1,4 @@
-import { Button, Space, NoticeBar } from "antd-mobile";
+import { NoticeBar } from "antd-mobile";
 import BudgetCard from "../components/BudgetCard";
 import TodoCard from "../components/TodoCard";
 import MemoCard from "../components/MemoCard";
@@ -7,6 +7,7 @@ import { PatchNote } from "../types";
 import { api, showError } from "../api";
 import { useNavigate } from "react-router-dom";
 import { Flex } from "antd";
+
 const HomePage = () => {
   const [patchNotes, setPatchNotes] = useState<PatchNote | null>(null);
   const navigate = useNavigate();

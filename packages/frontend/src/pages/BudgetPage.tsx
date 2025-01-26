@@ -10,7 +10,7 @@ import {
 import AppHeader from "../components/AppHeader";
 import dayjs, { Dayjs } from "dayjs";
 import { useEffect, useState } from "react";
-import { BudgetData } from "../types";
+import { BudgetData, BudgetType } from "../types";
 import { formatMoney } from "../utils";
 import { useBudgetStore } from "../store/budgetStore";
 import { Button, List, Tabs } from "antd-mobile";
@@ -30,7 +30,7 @@ import NewBudget from "../popups/NewBudget";
 
 interface RenderListItemProps {
   budget: BudgetData;
-  type: "income" | "expense";
+  type: BudgetType;
   setSelItem: (budget: BudgetData) => void;
 }
 const RenderListItem = ({ budget, type, setSelItem }: RenderListItemProps) => {
@@ -62,7 +62,7 @@ const RenderListItem = ({ budget, type, setSelItem }: RenderListItemProps) => {
   );
 };
 const RenderList = (
-  type: "income" | "expense",
+  type: BudgetT,
   budgets: BudgetData[],
   setSelItem: (budget: BudgetData) => void
 ) => {
@@ -100,7 +100,7 @@ const RenderList = (
 
 const BudgetPage = () => {
   const [selDate, setSelDate] = useState<string>(dayjs().format("YYYYMMDD"));
-  const [selTab, setSelTab] = useState<"income" | "expense">("income");
+  const [selTab, setSelTab] = useState<BudgetType>("income");
   const [visible, setVisible] = useState<boolean>(false);
   const [selItem, setSelItem] = useState<BudgetData | null>(null);
   const [calenderFolded, setCalenderFolded] = useState<boolean | null>(null);
@@ -118,7 +118,7 @@ const BudgetPage = () => {
   }, [selItem]);
 
   return (
-    <Flex vertical style={{ height: "100vh" }}>
+    <Flex vertical>
       <AppHeader title="가계부" />
       <Flex vertical style={{ flex: 1, overflowY: "auto" }}>
         <Flex
@@ -240,7 +240,7 @@ const BudgetPage = () => {
           <Tabs
             style={{ flex: 1 }}
             onChange={(tab) => {
-              setSelTab(tab as "income" | "expense");
+              setSelTab(tab as BudgetType);
             }}
             activeKey={selTab}
           >

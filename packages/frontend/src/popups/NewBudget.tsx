@@ -7,8 +7,8 @@ import {
   Input,
 } from "antd-mobile";
 import dayjs from "dayjs";
-import { RefObject, useState } from "react";
-import { BudgetData, PopupProps } from "../types";
+import { RefObject, useEffect, useState } from "react";
+import { BudgetData, BudgetType, CategoryData, PopupProps } from "../types";
 import { message } from "antd";
 import { useBudgetStore } from "../store/budgetStore";
 import { CheckListValue } from "antd-mobile/es/components/check-list";
@@ -16,43 +16,16 @@ import Label from "../components/Label";
 import { useThemeStore } from "../store/themeStore";
 import { colors } from "../colors";
 import { translateToKorean } from "../utils";
+import { api } from "../api";
 
 interface NewBudgetProps extends PopupProps {
-  type: "income" | "expense";
+  type: BudgetType;
 }
-const options = {
-  income: [
-    { label: "월급", value: "salary" },
-    { label: "용돈", value: "allowance" },
-    { label: "사업소득", value: "business" },
-    { label: "보너스", value: "bonus" },
-    { label: "이자수익", value: "interest" },
-    { label: "투자수익", value: "investment" },
-    { label: "임대수익", value: "rental" },
-    { label: "정부지원금", value: "government_support" },
-    { label: "프리랜서 수입", value: "freelance" },
-    { label: "기타", value: "others" },
-  ],
-  expense: [
-    { label: "식비", value: "food" },
-    { label: "교통비", value: "transportation" },
-    { label: "문화생활", value: "entertainment" },
-    { label: "의료비", value: "medical" },
-    { label: "교육비", value: "education" },
-    { label: "주거비", value: "housing" },
-    { label: "쇼핑", value: "shopping" },
-    { label: "공과금", value: "utilities" },
-    { label: "여행", value: "travel" },
-    { label: "취미활동", value: "hobbies" },
-    { label: "보험료", value: "insurance" },
-    { label: "기타", value: "others" },
-  ],
-};
 
 interface NewBudgetProps extends PopupProps {
-  type: "income" | "expense";
+  type: BudgetType;
   date?: string; //20241202
-  selBudget: BudgetData | null;
+  selBudget?: BudgetData | null;
 }
 
 interface FormValues {
@@ -61,14 +34,8 @@ interface FormValues {
 }
 
 const NewBudget = (props: NewBudgetProps) => {
-  let deafultCategory = options[props.type][0];
-  if (props.selBudget) {
-    const foundCat = options[props.type].find(
-      (item) => item.value === props.selBudget?.category.value
-    );
-    if (foundCat) deafultCategory = foundCat;
-  }
-  const [category, setCategory] = useState(deafultCategory);
+  const [categoryOptions, setCategoryOptions] = useState<CategoryData[]>([]);
+  const [category, setCategory] = useState<CategoryData | null>(null);
   const [visible, setVisible] = useState(false);
   const [koreaMoney, setKoreaMoney] = useState(
     props.selBudget ? translateToKorean(props.selBudget.amount) : ""
@@ -83,9 +50,34 @@ const NewBudget = (props: NewBudgetProps) => {
   const isDarkMode = useThemeStore((state) => state.theme.isDarkMode);
   const [other, setOther] = useState(props.selBudget?.other || "");
 
+  useEffect(() => {
+    const fetchCategories = async () => {
+      const categories = await api.getCategories();
+      if (categories.length === 0) {
+        message.error("카테고리를 가져오는데 실패했습니다.");
+        return;
+      }
+      setCategoryOptions(categories);
+      const foundCat = categories.find(
+        (item: CategoryData) => item.value === props.selBudget?.category.value
+      );
+      if (foundCat) setCategory(foundCat);
+      else
+        setCategory(
+          categories.filter((item: CategoryData) => item.type === props.type)[0]
+        );
+      console.log("categories", categories);
+    };
+    fetchCategories();
+  }, []);
+
   const onFinish = async (values: FormValues) => {
     if (parseInt(amount) <= 0 || Number.isNaN(parseInt(amount))) {
       message.error("금액을 확인해주세요.");
+      return;
+    }
+    if (!category) {
+      message.error("카테고리를 선택해주세요.");
       return;
     }
     try {
@@ -100,6 +92,7 @@ const NewBudget = (props: NewBudgetProps) => {
         await updateBudget({ ...props.selBudget, ...newBudget });
       } else await saveBudget(newBudget);
     } catch (e) {
+      console.error(e);
       message.error("데이터를 추가하는데 실패했습니다.");
       return;
     }
@@ -175,34 +168,35 @@ const NewBudget = (props: NewBudgetProps) => {
           }
         </DatePicker>
       </Form.Item>
-      <Form.Item
-        label="카테고리"
-        style={{
-          backgroundColor: isDarkMode ? colors.darkBlack : colors.lightWhite,
-          color: isDarkMode ? colors.lightWhite : colors.darkBlack,
-        }}
-        rules={[{ required: true, message: "카테고리를 선택해주세요" }]}
-        onClick={() => setVisible(true)}
-      >
-        <Label name={category.label} />
-        <Cascader
-          options={options[props.type]}
-          visible={visible}
-          confirmText="확인"
-          cancelText="취소"
-          placeholder="카테고리선택"
-          onConfirm={(value: CheckListValue[]) => {
-            setVisible(false);
-            const g = options[props.type].find(
-              (item) => item.value === value[0]
-            );
-            if (g) setCategory(g);
+      {category && (
+        <Form.Item
+          label="카테고리"
+          style={{
+            backgroundColor: isDarkMode ? colors.darkBlack : colors.lightWhite,
+            color: isDarkMode ? colors.lightWhite : colors.darkBlack,
           }}
-          onCancel={() => setVisible(false)}
-          value={[category.value]}
-          defaultValue={[category.value]}
-        />
-      </Form.Item>
+          rules={[{ required: true, message: "카테고리를 선택해주세요" }]}
+          onClick={() => setVisible(true)}
+        >
+          <Label name={category.label} />
+          <Cascader
+            options={categoryOptions.filter((item) => item.type === props.type)}
+            visible={visible}
+            confirmText="확인"
+            cancelText="취소"
+            placeholder="카테고리선택"
+            onConfirm={(value: CheckListValue[]) => {
+              setVisible(false);
+              const g = categoryOptions.find((item) => item.value === value[0]);
+              if (g) setCategory(g);
+            }}
+            onCancel={() => setVisible(false)}
+            value={[category.value]}
+            defaultValue={[category.value]}
+          />
+        </Form.Item>
+      )}
+
       <Form.Item
         label="기타"
         style={{

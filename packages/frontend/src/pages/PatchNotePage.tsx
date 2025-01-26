@@ -30,7 +30,7 @@ const PatchNotePage = () => {
         <List
           itemLayout="horizontal"
           dataSource={patchNotes}
-          renderItem={(item, index) => (
+          renderItem={(item) => (
             <List.Item>
               <List.Item.Meta
                 avatar={

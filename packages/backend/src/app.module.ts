@@ -9,6 +9,8 @@ import { APP_INTERCEPTOR } from "@nestjs/core";
 import { LoggingInterceptor } from "./logger/loggin.interceptor";
 import { PatchNoteModule } from "./patch-note/patch-note.module";
 import { ServeStaticModule } from "@nestjs/serve-static";
+import { Categorymodule } from "./category/category.module";
+import { SeederModule } from "./seeder/seeder.module";
 
 @Module({
   imports: [
@@ -36,7 +38,9 @@ import { ServeStaticModule } from "@nestjs/serve-static";
       }),
       inject: [ConfigService],
     }),
+    SeederModule,
     PatchNoteModule,
+    Categorymodule,
   ],
   controllers: [AppController],
   providers: [

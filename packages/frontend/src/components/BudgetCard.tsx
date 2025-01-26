@@ -1,6 +1,6 @@
 import { MinusOutlined, PlusOutlined } from "@ant-design/icons";
 import { useEffect, useState } from "react";
-import { BudgetData, BudgetSum } from "../types";
+import { BudgetData, BudgetSum, BudgetType } from "../types";
 import { useNavigate } from "react-router-dom";
 import { formatMoney } from "../utils";
 import NewBudget from "../popups/NewBudget";
@@ -13,12 +13,12 @@ import { useThemeStore } from "../store/themeStore";
 import { colors } from "../colors";
 
 const BudgetCard = () => {
-  const [expenseVisible, setExpenseVisible] = useState(false);
-  const [incomeVisible, setIncomeVisible] = useState(false);
+  const [budgetVisible, setBudgetVisible] = useState(false);
   const [monthlyBudget, setmonthlyBudget] = useState<BudgetSum>({
     income: 0,
     expense: 0,
   });
+  const [selType, setSelType] = useState<BudgetType>("income");
 
   const budgets = useBudgetStore((state) => state.budgets);
   const navigate = useNavigate();
@@ -33,7 +33,8 @@ const BudgetCard = () => {
       }}
       onClick={(e) => {
         e.stopPropagation();
-        setExpenseVisible(true);
+        setSelType("expense");
+        setBudgetVisible(true);
       }}
     />,
     <PlusOutlined
@@ -44,12 +45,12 @@ const BudgetCard = () => {
       }}
       onClick={(e) => {
         e.stopPropagation();
-        setIncomeVisible(true);
+        setSelType("income");
+        setBudgetVisible(true);
       }}
     />,
   ];
   useEffect(() => {
-    console.log(budgets);
     const sum: BudgetSum = { income: 0, expense: 0 };
     const firstDayofMonth = dayjs().startOf("month").format("YYYYMMDD");
     const today = dayjs().format("YYYYMMDD");
@@ -65,8 +66,8 @@ const BudgetCard = () => {
     });
     //d.date format '2024/12/14'
     setmonthlyBudget(sum);
-    console.log(sum);
   }, [budgets]);
+
   return (
     <>
       <CustomCard
@@ -84,29 +85,15 @@ const BudgetCard = () => {
         <p>이번달 지출 {formatMoney(monthlyBudget.expense)}원</p>
       </CustomCard>
       <CustomPopup
-        title="지출 기록"
-        height="35vh"
-        visible={expenseVisible}
-        setVisible={setExpenseVisible}
+        title={selType === "income" ? "수입 추가" : "지출 추가"}
+        height="50%"
+        visible={budgetVisible}
+        setVisible={setBudgetVisible}
         children={
           <NewBudget
-            type="expense"
+            type={selType}
             onOk={() => {
-              setExpenseVisible(false);
-            }}
-          />
-        }
-      />
-      <CustomPopup
-        title="수입 기록"
-        height="35vh"
-        visible={incomeVisible}
-        setVisible={setIncomeVisible}
-        children={
-          <NewBudget
-            type="income"
-            onOk={() => {
-              setIncomeVisible(false);
+              setBudgetVisible(false);
             }}
           />
         }
