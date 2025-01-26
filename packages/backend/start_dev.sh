@@ -1,1 +1,0 @@
-pm2 delete all; NODE_ENV=development npm run build; NODE_ENV=development pm2 start ./dist/main.js --name "nest-server"

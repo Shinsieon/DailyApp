@@ -62,35 +62,34 @@ const HomePage = () => {
     checkAndRequestReview();
   }, []);
   return (
-    <>
-      <Flex
-        vertical
-        style={{
-          width: "100%",
-          gap: "10px",
-          overflowY: "auto",
-          padding: "30px 20px",
-        }}
-      >
-        {patchNotes && (
-          <NoticeBar
-            color="info"
-            shape="rounded"
-            bordered={false}
-            className="blinking-text"
-            content={"새로운 기능이 추가되었어요!"}
-            onClick={() => {
-              navigate("/patch-note");
-              localStorage.setItem("patchNote", JSON.stringify(patchNotes));
-            }}
-          />
-        )}
+    <Flex
+      vertical
+      style={{
+        height: "100vh",
+        width: "100%",
+        gap: "10px",
+        overflowY: "auto",
+        padding: "30px 20px",
+      }}
+    >
+      {patchNotes && (
+        <NoticeBar
+          color="info"
+          shape="rounded"
+          bordered={false}
+          className="blinking-text"
+          content={"새로운 기능이 추가되었어요!"}
+          onClick={() => {
+            navigate("/patch-note");
+            localStorage.setItem("patchNote", JSON.stringify(patchNotes));
+          }}
+        />
+      )}
 
-        <MemoCard />
-        <TodoCard />
-        <BudgetCard />
-      </Flex>
-    </>
+      <MemoCard />
+      <TodoCard />
+      <BudgetCard />
+    </Flex>
   );
 };
 
