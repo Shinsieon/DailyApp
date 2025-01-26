@@ -62,7 +62,7 @@ const RenderListItem = ({ budget, type, setSelItem }: RenderListItemProps) => {
   );
 };
 const RenderList = (
-  type: BudgetT,
+  type: BudgetType,
   budgets: BudgetData[],
   setSelItem: (budget: BudgetData) => void
 ) => {
@@ -118,7 +118,7 @@ const BudgetPage = () => {
   }, [selItem]);
 
   return (
-    <Flex vertical>
+    <Flex vertical style={{ height: "100vh" }}>
       <AppHeader title="가계부" />
       <Flex vertical style={{ flex: 1, overflowY: "auto" }}>
         <Flex
