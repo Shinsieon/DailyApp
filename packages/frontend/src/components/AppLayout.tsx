@@ -6,9 +6,11 @@ import { useMemoStore } from "../store/memoStore";
 import { Flex } from "antd";
 import { useThemeStore } from "../store/themeStore";
 import { colors } from "../colors";
+import useIsMobile from "../hooks/useIsMobile";
 
 export const AppLayout = ({ children }: { children: React.ReactElement }) => {
   const isDarkMode = useThemeStore((state) => state.theme.isDarkMode);
+  const isMobile = useIsMobile();
 
   const fetchBudgets = useBudgetStore((state) => state.fetchBudgets);
   const fetchTodos = useTodoStore((state) => state.fetchTodos);
@@ -23,7 +25,6 @@ export const AppLayout = ({ children }: { children: React.ReactElement }) => {
   }, []);
   return (
     <Flex
-      vertical
       style={{
         minHeight: "100vh",
         minWidth: "100vw",
@@ -31,8 +32,11 @@ export const AppLayout = ({ children }: { children: React.ReactElement }) => {
         backgroundColor: isDarkMode ? colors.darkBlack : colors.lightWhite,
         color: isDarkMode ? colors.lightWhite : colors.darkBlack,
       }}
+      justify="center"
     >
-      <ErrorBoundary>{children}</ErrorBoundary>
+      <Flex vertical style={{ width: isMobile ? "100vw" : "640px" }}>
+        <ErrorBoundary>{children}</ErrorBoundary>
+      </Flex>
     </Flex>
   );
 };

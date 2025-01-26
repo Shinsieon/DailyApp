@@ -2,8 +2,13 @@ import { message } from "antd";
 import axios from "axios";
 import { LoginResponse } from "./types";
 
+console.log("node env", process.env.NODE_ENV);
+
 export const http = axios.create({
-  baseURL: "https://bono-dev.click",
+  baseURL:
+    process.env.NODE_ENV === "production"
+      ? "https://bono-dev.click"
+      : "http://localhost:3000",
   withCredentials: true,
   beforeRedirect: () => {
     console.log("Redirecting...");
@@ -41,6 +46,7 @@ const signin = async (
 };
 
 const getPatchNotes = async () => {
+  console.log("getting patch notes");
   const response = await http.get("/api/v1/patch-notes");
   console.log(response);
   return response.data;
