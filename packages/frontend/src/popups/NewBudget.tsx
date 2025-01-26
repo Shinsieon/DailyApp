@@ -81,6 +81,7 @@ const NewBudget = (props: NewBudgetProps) => {
     : "";
   const [amount, setAmount] = useState(defaultAmount);
   const isDarkMode = useThemeStore((state) => state.theme.isDarkMode);
+  const [other, setOther] = useState(props.selBudget?.other || "");
 
   const onFinish = async (values: FormValues) => {
     if (parseInt(amount) <= 0 || Number.isNaN(parseInt(amount))) {
@@ -93,6 +94,7 @@ const NewBudget = (props: NewBudgetProps) => {
         category: category,
         amount: parseInt(amount),
         type: props.type,
+        other: other,
       };
       if (props.selBudget) {
         await updateBudget({ ...props.selBudget, ...newBudget });
@@ -199,6 +201,22 @@ const NewBudget = (props: NewBudgetProps) => {
           onCancel={() => setVisible(false)}
           value={[category.value]}
           defaultValue={[category.value]}
+        />
+      </Form.Item>
+      <Form.Item
+        label="기타"
+        style={{
+          backgroundColor: isDarkMode ? colors.darkBlack : colors.lightWhite,
+          color: isDarkMode ? colors.lightWhite : colors.darkBlack,
+        }}
+        rules={[{ required: false, message: "상세 내역을 남겨주세요" }]}
+      >
+        <Input
+          placeholder="기타 내용"
+          value={other}
+          onChange={(value) => {
+            setOther(value);
+          }}
         />
       </Form.Item>
     </Form>

@@ -6,9 +6,9 @@ import { join } from "path";
 export class AppController {
   constructor(private readonly appService: AppService) {}
 
-  @Get("*")
-  serveFrontend(@Res() res) {
-    const rootPath = join(__dirname, "../", "../frontend/dist");
-    res.sendFile("index.html", { root: rootPath });
+  @Get()
+  getHomepage(): string {
+    // 정적 파일(index.html)을 자동으로 제공하므로 특별한 로직 필요 없음
+    return "Welcome to the homepage!";
   }
 }
