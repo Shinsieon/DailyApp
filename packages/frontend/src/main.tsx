@@ -1,4 +1,3 @@
-import { StrictMode } from "react";
 import { createRoot } from "react-dom/client";
 import "./index.css";
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
@@ -11,6 +10,7 @@ import MemoPage from "./pages/MemoPage.tsx";
 import MemoEditPage from "./pages/MemoEditPage.tsx";
 import SettingsPage from "./pages/SettingsPage.tsx";
 import Index from "./pages/Index.tsx";
+import PatchNotePage from "./pages/PatchNotePage.tsx";
 
 const router = createBrowserRouter([
   {
@@ -44,6 +44,10 @@ const router = createBrowserRouter([
   {
     path: "/settings",
     element: <SettingsPage />,
+  },
+  {
+    path: "/patch-note",
+    element: <PatchNotePage />,
   },
 ]);
 

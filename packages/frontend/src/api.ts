@@ -3,6 +3,7 @@ import axios from "axios";
 import { LoginResponse } from "./types";
 
 export const http = axios.create({
+  baseURL: "http://127.0.0.1:3000",
   withCredentials: true,
   beforeRedirect: () => {
     console.log("Redirecting...");
@@ -39,6 +40,12 @@ const signin = async (
   return response.data;
 };
 
+const getPatchNotes = async () => {
+  const response = await http.get("/api/v1/patch-notes");
+  console.log(response);
+  return response.data;
+};
+
 const getWeather = async (latitude: number, longitude: number) => {
   //const key =
   "P+/y/R84yS9jBDWOea6o+ooWcZ1t9SRKQaKK23tR2DeF8HGCMh+61cTAFpV71qF7HdooH1nZsvvv8MtVGq71Fw==";
@@ -53,4 +60,5 @@ const getWeather = async (latitude: number, longitude: number) => {
 export const api = {
   signin,
   getWeather,
+  getPatchNotes,
 };

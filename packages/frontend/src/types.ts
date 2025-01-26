@@ -15,6 +15,7 @@ export interface BudgetData {
   category: { label: string; value: string };
   amount: number;
   type: BugetModalType;
+  other?: string;
 }
 export type BudgetSum = {
   income: number;
@@ -48,4 +49,12 @@ export interface Menu {
   icon: React.ReactNode;
   selIcon: React.ReactNode;
   element: React.ReactNode;
+}
+
+export interface PatchNote {
+  id: number;
+  title: string;
+  description: string;
+  version: string;
+  created_at: string;
 }
