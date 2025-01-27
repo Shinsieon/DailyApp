@@ -12,31 +12,6 @@ const HomePage = () => {
   const [patchNotes, setPatchNotes] = useState<PatchNote | null>(null);
   const navigate = useNavigate();
   useEffect(() => {
-    const checkAndRequestReview = async () => {
-      try {
-        // 1. 현재 접속 횟수 가져오기
-        const visitCountString = localStorage.getItem("visitCount");
-        const visitCount = visitCountString
-          ? parseInt(visitCountString, 10)
-          : 0;
-
-        // 2. 접속 횟수 증가
-        const newVisitCount = visitCount + 1;
-        localStorage.setItem("visitCount", newVisitCount.toString());
-        console.log(`Current visit count: ${newVisitCount}`);
-
-        // 3. 접속 횟수가 5회 이상인 경우 리뷰 요청
-        if (newVisitCount === 5) {
-          if (window && window.ReactNativeWebView) {
-            window.ReactNativeWebView.postMessage(
-              JSON.stringify({ type: "review" })
-            );
-          }
-        }
-      } catch (error) {
-        console.error("Error handling visit count:", error);
-      }
-    };
     const fetchPatchNotes = async () => {
       try {
         const response = await api.getPatchNotes();
@@ -59,13 +34,12 @@ const HomePage = () => {
       }
     };
     fetchPatchNotes();
-    checkAndRequestReview();
   }, []);
   return (
     <Flex
       vertical
       style={{
-        height: "100vh",
+        height: "100%",
         width: "100%",
         gap: "10px",
         overflowY: "auto",

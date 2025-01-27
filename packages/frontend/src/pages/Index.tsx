@@ -9,8 +9,7 @@ import SettingsPage from "./SettingsPage";
 import { useState } from "react";
 import { Flex } from "antd";
 import { Menu } from "../types";
-import BottomMenu from "../components/BottomMenu";
-import useIsMobile from "../hooks/useIsMobile";
+import { TabBar } from "antd-mobile";
 
 const menus: Menu[] = [
   {
@@ -31,15 +30,28 @@ const menus: Menu[] = [
 ];
 const Index = () => {
   const [selMenu, setSelMenu] = useState(menus[0]);
-  const isMobile = useIsMobile();
   return (
-    <Flex vertical>
-      <Flex style={{ height: isMobile ? "90vh" : "100vh" }}>
-        {selMenu.element}
-      </Flex>
-      {isMobile ? (
-        <BottomMenu menus={menus} selMenu={selMenu} setSelMenu={setSelMenu} />
-      ) : null}
+    <Flex vertical style={{ height: "100vh", overflow: "hidden" }}>
+      <Flex style={{ flex: 1, overflowY: "auto" }}>{selMenu.element}</Flex>
+
+      <TabBar
+        style={{
+          height: "60px", // Fixed height for the BottomMenu
+          borderTop: "solid 1px var(--adm-color-border)",
+          padding: "10px",
+        }}
+      >
+        {menus.map((item) => (
+          <TabBar.Item
+            key={item.path}
+            icon={item.icon}
+            title={item.name}
+            onClick={() => {
+              setSelMenu(item);
+            }}
+          />
+        ))}
+      </TabBar>
     </Flex>
   );
 };
