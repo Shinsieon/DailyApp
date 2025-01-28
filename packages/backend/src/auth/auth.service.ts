@@ -65,6 +65,16 @@ export class AuthService {
     return null;
   }
 
+  // JWT 토큰 검증
+  async validateToken(token: string) {
+    try {
+      const decoded = this.jwtService.verify(token);
+      return await this.findByEmail(decoded.email);
+    } catch (error) {
+      throw new UnauthorizedException("유효하지 않은 토큰입니다.");
+    }
+  }
+
   // JWT 토큰 생성
   async login(user: User) {
     const payload = { sub: user.id, email: user.email };
@@ -75,6 +85,22 @@ export class AuthService {
           email: user.email,
           nickname: user.nickname,
         },
+      },
+    };
+  }
+
+  // 닉네임 변경
+  async updateNickname(userId: number, nickname: string) {
+    const user = await this.userRepository.findOne({ where: { id: userId } });
+    if (!user) {
+      throw new NotFoundException("사용자를 찾을 수 없습니다.");
+    }
+    user.nickname = nickname;
+    await this.userRepository.save(user);
+    return {
+      data: {
+        email: user.email,
+        nickname: user.nickname,
       },
     };
   }

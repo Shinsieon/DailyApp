@@ -1,9 +1,10 @@
-import { Button, Flex, Form, Input, message } from "antd";
+import { Button, Flex, Form, message } from "antd";
 import Title from "../components/Title";
 import { api, showError } from "../api";
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import AppHeader from "../components/AppHeader";
+import { Input } from "antd-mobile";
 
 const RegisterPage = () => {
   const [loading, setLoading] = useState(false);
@@ -15,15 +16,9 @@ const RegisterPage = () => {
   }) => {
     setLoading(true);
     try {
-      const result = await api.signup(
-        values.email,
-        values.password,
-        values.nickname
-      );
-      if (result.success) {
-        message.success("회원가입이 완료되었습니다.");
-        navigate("/login");
-      }
+      await api.signup(values.email, values.password, values.nickname);
+      message.success("회원가입이 완료되었습니다.");
+      navigate("/login");
     } catch (error: any) {
       showError(error);
     } finally {
@@ -51,7 +46,8 @@ const RegisterPage = () => {
             name="password"
             rules={[{ required: true, message: "비밀번호를 입력해주세요" }]}
           >
-            <Input.Password
+            <Input
+              type="password"
               placeholder="Password"
               style={{ height: 50 }}
               autoComplete="current-password"

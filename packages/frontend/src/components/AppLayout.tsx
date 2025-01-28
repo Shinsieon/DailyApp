@@ -29,12 +29,18 @@ export const AppLayout = ({ children }: { children: React.ReactElement }) => {
         minHeight: "100vh",
         minWidth: "100vw",
         overflow: "hidden",
-        backgroundColor: isDarkMode ? colors.darkBlack : colors.lightWhite,
+        backgroundColor: isDarkMode ? colors.darkBlack : colors.lightGray,
         color: isDarkMode ? colors.lightWhite : colors.darkBlack,
       }}
       justify="center"
     >
-      <Flex vertical style={{ width: isMobile ? "100vw" : "640px" }}>
+      <Flex
+        vertical
+        style={{
+          width: isMobile ? "100vw" : "640px",
+          backgroundColor: isDarkMode ? colors.darkBlack : colors.lightWhite,
+        }}
+      >
         <ErrorBoundary>{children}</ErrorBoundary>
       </Flex>
     </Flex>

@@ -4,7 +4,7 @@ import { useMenuStore } from "./store/menuStore";
 import { UserOutline } from "antd-mobile-icons";
 import { useNavigate } from "react-router-dom";
 import { useUserStore } from "./store/userStore";
-import Label from "./components/Label";
+import { colors } from "./colors";
 
 const Index = () => {
   // Load the initial menu from localStorage or default to the first menu
@@ -13,14 +13,16 @@ const Index = () => {
   const navigate = useNavigate();
   console.log(user);
   const right = (
-    <Space>
-      <Label name={user ? user.nickname + "님 반갑습니다!" : ""} />
-      <UserOutline
-        style={{ fontSize: "24px" }}
-        onClick={() => {
-          navigate("/login");
-        }}
-      />
+    <Space style={{ fontSize: "24px" }}>
+      {user ? (
+        <UserOutline color={colors.primary}></UserOutline>
+      ) : (
+        <UserOutline
+          onClick={() => {
+            navigate("/login");
+          }}
+        />
+      )}
     </Space>
   );
   return (
@@ -29,10 +31,9 @@ const Index = () => {
         vertical
         style={{
           flex: 0,
-          padding: "0 20px",
         }}
       >
-        <NavBar backIcon={<></>} right={right}>
+        <NavBar backIcon={<></>} right={right} style={{ padding: "0 20px" }}>
           {""}
         </NavBar>
       </Flex>

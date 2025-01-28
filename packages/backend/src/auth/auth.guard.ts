@@ -12,21 +12,14 @@ export class AuthGuard implements CanActivate {
 
   async canActivate(context: ExecutionContext): Promise<boolean> {
     const request = context.switchToHttp().getRequest();
-    const { email, password } = request.body;
-    // 필수 필드 검증
-    if (!email || !password) {
-      throw new UnauthorizedException("필수 필드가 누락되었습니다.");
-    }
-
-    // 사용자 인증
-    const user = await this.authService.validateUser(email, password);
-    if (!user) {
+    //bearer token
+    const access_token = request.headers.authorization?.split(" ")[1];
+    if (!access_token) {
       throw new UnauthorizedException("유효하지 않은 인증 정보입니다.");
     }
-
+    // 사용자 인증
     // 인증된 사용자 객체를 요청에 추가
-    request.user = user;
-
+    request.user = await this.authService.validateToken(access_token);
     return true;
   }
 }

@@ -15,12 +15,16 @@ export const http = axios.create({
   },
 });
 
-http.interceptors.response.use(
-  (response) => response,
-  (error) => {
-    if (error.response?.status === 403) {
-      window.location.href = "/login";
+// 요청 인터셉터 설정
+http.interceptors.request.use(
+  (config) => {
+    const token = localStorage.getItem("token");
+    if (token) {
+      config.headers.Authorization = `Bearer ${token}`;
     }
+    return config;
+  },
+  (error) => {
     return Promise.reject(error);
   }
 );
@@ -72,6 +76,13 @@ const getCategories = async (): Promise<ApiResponse> => {
   return response.data;
 };
 
+/*
+로그인이 필요한 API 호출
+*/
+const updateNickname = async (nickname: string) => {
+  const response = await http.put("/api/v1/auth/nickname", { nickname });
+  return response.data;
+};
 const getWeather = async (latitude: number, longitude: number) => {
   //const key =
   "P+/y/R84yS9jBDWOea6o+ooWcZ1t9SRKQaKK23tR2DeF8HGCMh+61cTAFpV71qF7HdooH1nZsvvv8MtVGq71Fw==";
@@ -86,6 +97,7 @@ const getWeather = async (latitude: number, longitude: number) => {
 export const api = {
   signin,
   signup,
+  updateNickname,
   getWeather,
   getPatchNotes,
   getCategories,

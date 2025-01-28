@@ -1,15 +1,16 @@
-import { Button, Flex, Form, Input, message } from "antd";
+import { Button, Flex, Form, message } from "antd";
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { api, showError } from "../api";
 import Title from "../components/Title";
 import AppHeader from "../components/AppHeader";
-import { Divider, Image } from "antd-mobile";
+import { Divider, Image, Input } from "antd-mobile";
 import kakao from "../assets/kakao.png";
 import { colors } from "../colors";
 import { KakaoAuthResponse, KakaoUser } from "../types";
 import { useUserStore } from "../store/userStore";
-const LoginForm = () => {
+
+const LoginPage = () => {
   const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
   const setUser = useUserStore((state) => state.setUser);
@@ -40,8 +41,6 @@ const LoginForm = () => {
           setUser(response.data.user);
           message.success("카카오 계정으로 회원가입이 완료되었습니다.");
           navigate("/");
-        } else {
-          navigate("/register");
         }
       }
     } finally {
@@ -90,85 +89,83 @@ const LoginForm = () => {
       },
     });
   };
-
-  return (
-    <Form
-      name="login"
-      onFinish={(values) => handleLogin(values.email, values.password)}
-    >
-      <Title level={5} name="이메일" />
-      <Form.Item
-        name="email"
-        rules={[{ required: true, message: "이메일을 입력해주세요" }]}
-      >
-        <Input
-          placeholder="Email"
-          style={{ height: 50 }}
-          autoComplete="email"
-        />
-      </Form.Item>
-      <Title level={5} name="비밀번호" />
-      <Form.Item
-        name="password"
-        rules={[{ required: true, message: "비밀번호를 입력해주세요" }]}
-      >
-        <Input.Password
-          placeholder="Password"
-          style={{ height: 50 }}
-          autoComplete="current-password"
-        />
-      </Form.Item>
-      <Form.Item>
-        <Button
-          type="primary"
-          htmlType="submit"
-          loading={loading}
-          style={{ width: "100%", height: 50 }}
-        >
-          로그인
-        </Button>
-      </Form.Item>
-      <Flex justify="center">
-        <Button
-          type="link"
-          style={{ color: colors.darkGray }}
-          onClick={() => {
-            navigate("/find-password");
-          }}
-        >
-          비밀번호 찾기
-        </Button>
-        <Divider />
-        <Button
-          type="link"
-          style={{ color: colors.darkGray }}
-          onClick={() => {
-            navigate("/register");
-          }}
-        >
-          회원가입
-        </Button>
-      </Flex>
-      <Divider style={{ marginTop: 30, marginBottom: 30 }} />
-      <Form.Item>
-        <Image
-          src={kakao}
-          width={"100%"}
-          height={50}
-          fit="fill"
-          onClick={handleKakaoLogin}
-        />
-      </Form.Item>
-    </Form>
-  );
-};
-
-const LoginPage = () => {
   return (
     <Flex vertical>
       <AppHeader title="로그인" />
       <Flex style={{ padding: "0 20px" }} vertical>
-        <LoginForm />
+        <Form
+          name="login"
+          onFinish={(values) => handleLogin(values.email, values.password)}
+        >
+          <Title level={5} name="이메일" />
+          <Form.Item
+            name="email"
+            rules={[{ required: true, message: "이메일을 입력해주세요" }]}
+          >
+            <Input
+              placeholder="email@naver.com"
+              style={{ height: 50 }}
+              autoComplete="email"
+            />
+          </Form.Item>
+          <Title level={5} name="비밀번호" />
+          <Form.Item
+            name="password"
+            rules={[{ required: true, message: "비밀번호를 입력해주세요" }]}
+          >
+            <Input
+              placeholder="******"
+              type="password"
+              style={{ height: 50 }}
+              autoComplete="current-password"
+            />
+          </Form.Item>
+          <Form.Item>
+            <Button
+              type="primary"
+              htmlType="submit"
+              loading={loading}
+              style={{
+                width: "100%",
+                height: 50,
+                marginTop: 20,
+                marginBottom: 20,
+              }}
+            >
+              로그인
+            </Button>
+          </Form.Item>
+          <Flex justify="center">
+            <Button
+              type="link"
+              style={{ color: colors.darkGray }}
+              onClick={() => {
+                message.info("비밀번호 찾기 기능은 준비중입니다.");
+              }}
+            >
+              비밀번호 찾기
+            </Button>
+            <Button
+              type="link"
+              style={{ color: colors.darkGray }}
+              onClick={() => {
+                navigate("/register");
+              }}
+            >
+              회원가입
+            </Button>
+          </Flex>
+          <Divider style={{ marginTop: 30, marginBottom: 30 }} />
+          <Form.Item>
+            <Image
+              src={kakao}
+              width={"100%"}
+              height={50}
+              fit="fill"
+              onClick={handleKakaoLogin}
+            />
+          </Form.Item>
+        </Form>
       </Flex>
     </Flex>
   );
