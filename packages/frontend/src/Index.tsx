@@ -1,12 +1,41 @@
 import { Flex } from "antd";
-import { TabBar } from "antd-mobile";
-import { useMenuStore } from "../store/menuStore";
+import { NavBar, Space, TabBar } from "antd-mobile";
+import { useMenuStore } from "./store/menuStore";
+import { UserOutline } from "antd-mobile-icons";
+import { useNavigate } from "react-router-dom";
+import { useUserStore } from "./store/userStore";
+import Label from "./components/Label";
 
 const Index = () => {
   // Load the initial menu from localStorage or default to the first menu
   const { menus, selMenu, setSelMenu } = useMenuStore();
+  const user = useUserStore((state) => state.user);
+  const navigate = useNavigate();
+  console.log(user);
+  const right = (
+    <Space>
+      <Label name={user ? user.nickname + "님 반갑습니다!" : ""} />
+      <UserOutline
+        style={{ fontSize: "24px" }}
+        onClick={() => {
+          navigate("/login");
+        }}
+      />
+    </Space>
+  );
   return (
     <Flex vertical style={{ height: "100vh", overflow: "hidden" }}>
+      <Flex
+        vertical
+        style={{
+          flex: 0,
+          padding: "0 20px",
+        }}
+      >
+        <NavBar backIcon={<></>} right={right}>
+          {""}
+        </NavBar>
+      </Flex>
       <Flex style={{ flex: 1, overflowY: "auto" }}>{selMenu.element}</Flex>
 
       <TabBar

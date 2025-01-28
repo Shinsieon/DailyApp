@@ -1,5 +1,7 @@
-export interface LoginResponse {
+export interface ApiResponse {
   message: string;
+  success: boolean;
+  data: any;
 }
 
 export interface PopupProps {
@@ -63,4 +65,31 @@ export interface PatchNote {
   description: string;
   version: string;
   created_at: string;
+}
+
+export interface KakaoAuthResponse {
+  access_token: string;
+  refresh_token: string;
+  expires_in: number;
+  refresh_token_expires_in: number;
+  id_token: string;
+  scope: string;
+}
+
+export interface KakaoAuth {
+  login: (options: {
+    success: (authObj: KakaoAuthResponse) => void;
+    fail: (error: Error) => void;
+  }) => void;
+  logout: (callback?: () => void) => void;
+}
+
+export interface KakaoUser {
+  id: number;
+  kakao_account: {
+    profile: {
+      nickname: string;
+    };
+    email: string;
+  };
 }

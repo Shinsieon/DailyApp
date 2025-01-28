@@ -9,8 +9,9 @@ import TodoPage from "./pages/TodoPage.tsx";
 import MemoPage from "./pages/MemoPage.tsx";
 import MemoEditPage from "./pages/MemoEditPage.tsx";
 import SettingsPage from "./pages/SettingsPage.tsx";
-import Index from "./pages/Index.tsx";
+import Index from "./Index.tsx";
 import PatchNotePage from "./pages/PatchNotePage.tsx";
+import RegisterPage from "./pages/RegisterPage.tsx";
 
 const router = createBrowserRouter([
   {
@@ -48,6 +49,14 @@ const router = createBrowserRouter([
   {
     path: "/patch-note",
     element: <PatchNotePage />,
+  },
+  {
+    path: "/login",
+    element: <LoginPage />,
+  },
+  {
+    path: "/register",
+    element: <RegisterPage />,
   },
 ]);
 

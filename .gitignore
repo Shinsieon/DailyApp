@@ -50,6 +50,7 @@ packages/backend/logs
 packages/backend/ssl
 packages/frontend/node_modules
 packages/frontend/dist
+packages/frontend/.env*
 
 
 

@@ -24,10 +24,11 @@ const PatchNotePage = () => {
   }, []);
 
   return (
-    <Flex vertical style={{ width: "100%" }}>
+    <Flex vertical>
       <AppHeader title="패치 노트" />
       {patchNotes ? (
         <List
+          style={{ width: "100%", padding: "0 20px", overflowY: "auto" }}
           itemLayout="horizontal"
           dataSource={patchNotes}
           renderItem={(item) => (

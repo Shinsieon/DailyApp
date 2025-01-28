@@ -1,6 +1,6 @@
 import { message } from "antd";
 import axios from "axios";
-import { LoginResponse } from "./types";
+import { ApiResponse } from "./types";
 
 console.log("node env", process.env.NODE_ENV);
 
@@ -28,31 +28,46 @@ http.interceptors.response.use(
 export function showError(error: any) {
   if (error.response) {
     message.error(error.response.data.message);
-  } else {
+  } else if (error.message) {
     message.error(`Network error: ${error.message}`);
+  } else {
+    message.error(error);
   }
 }
 
 const signin = async (
   email: string,
   password: string
-): Promise<LoginResponse> => {
+): Promise<ApiResponse> => {
   const response = await http.post(
-    "/api/v1/signin",
+    "/api/v1/auth/login",
     { email, password },
     { withCredentials: true }
   );
   return response.data;
 };
 
-const getPatchNotes = async () => {
+const signup = async (
+  email: string,
+  password: string,
+  nickname?: string
+): Promise<ApiResponse> => {
+  const response = await http.post("/api/v1/auth/register", {
+    email,
+    password,
+    nickname,
+  });
+  return response.data;
+};
+
+const getPatchNotes = async (): Promise<ApiResponse> => {
   console.log("getting patch notes");
   const response = await http.get("/api/v1/patch-notes");
   console.log(response);
   return response.data;
 };
 
-const getCategories = async () => {
+const getCategories = async (): Promise<ApiResponse> => {
   const response = await http.get("/api/v1/categories");
   return response.data;
 };
@@ -70,6 +85,7 @@ const getWeather = async (latitude: number, longitude: number) => {
 
 export const api = {
   signin,
+  signup,
   getWeather,
   getPatchNotes,
   getCategories,

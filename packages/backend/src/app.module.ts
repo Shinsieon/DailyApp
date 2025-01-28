@@ -11,9 +11,11 @@ import { PatchNoteModule } from "./patch-note/patch-note.module";
 import { ServeStaticModule } from "@nestjs/serve-static";
 import { Categorymodule } from "./category/category.module";
 import { SeederModule } from "./seeder/seeder.module";
+import { AuthModule } from "./auth/auth.module";
 
 @Module({
   imports: [
+    AuthModule,
     ServeStaticModule.forRoot({
       rootPath: join(__dirname, "../", "../frontend/dist"), // 정적 파일 경로
       exclude: ["/api*"], // API 경로 제외
@@ -33,7 +35,7 @@ import { SeederModule } from "./seeder/seeder.module";
         password: configService.get<string>("DB_PASSWORD"),
         database: configService.get<string>("DB_NAME"),
         entities: [join(__dirname, "**", "*.entity.{ts,js}")],
-        synchronize: true,
+        synchronize: false,
         dropSchema: false,
       }),
       inject: [ConfigService],

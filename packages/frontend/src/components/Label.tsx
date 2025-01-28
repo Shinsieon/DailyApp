@@ -4,7 +4,7 @@ import { useThemeStore } from "../store/themeStore";
 import { colors } from "../colors";
 
 interface LabelProps extends TextProps {
-  name: string;
+  name?: string;
 }
 const Label = (props: LabelProps) => {
   const theme = useThemeStore((state) => state.theme);

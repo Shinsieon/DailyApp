@@ -39,11 +39,10 @@ const HomePage = () => {
     <Flex
       vertical
       style={{
-        height: "100%",
         width: "100%",
         gap: "10px",
         overflowY: "auto",
-        padding: "30px 20px",
+        padding: "0 20px",
       }}
     >
       {patchNotes && (
