@@ -23,7 +23,8 @@ export class AuthController {
 
   @Post("login")
   async login(@Req() req: any) {
-    return this.authService.login(req.user);
+    const { email, password } = req.body;
+    return this.authService.login(email, password);
   }
 
   @UseGuards(AuthGuard)

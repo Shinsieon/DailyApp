@@ -76,11 +76,14 @@ export class AuthService {
   }
 
   // JWT 토큰 생성
-  async login(user: User) {
-    const payload = { sub: user.id, email: user.email };
+  async login(email: string, password: string) {
+    const user = await this.validateUser(email, password);
+    if (!user) {
+      throw new UnauthorizedException("로그인 정보가 일치하지 않습니다.");
+    }
     return {
       data: {
-        access_token: this.jwtService.sign(payload),
+        access_token: this.jwtService.sign({ sub: user.id }),
         user: {
           email: user.email,
           nickname: user.nickname,
