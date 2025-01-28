@@ -13,17 +13,18 @@ const Index = () => {
   const navigate = useNavigate();
   console.log(user);
   const right = (
-    <Space style={{ fontSize: "24px" }}>
-      {user ? (
-        <UserOutline color={colors.primary}></UserOutline>
-      ) : (
-        <UserOutline
-          onClick={() => {
-            navigate("/login");
-          }}
-        />
-      )}
-    </Space>
+    // <Space style={{ fontSize: "24px" }}>
+    //   {user ? (
+    //     <UserOutline color={colors.primary}></UserOutline>
+    //   ) : (
+    //     <UserOutline
+    //       onClick={() => {
+    //         navigate("/login");
+    //       }}
+    //     />
+    //   )}
+    // </Space>
+    <></>
   );
   return (
     <Flex vertical style={{ height: "100vh", overflow: "hidden" }}>
