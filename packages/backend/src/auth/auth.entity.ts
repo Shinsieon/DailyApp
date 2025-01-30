@@ -26,3 +26,21 @@ export class User {
   @UpdateDateColumn()
   updatedAt: Date;
 }
+
+@Entity("refresh_tokens")
+export class RefreshToken {
+  @PrimaryGeneratedColumn()
+  id: number;
+
+  @Column()
+  userId: number;
+
+  @Column("text")
+  token: string;
+
+  @CreateDateColumn()
+  createdAt: Date;
+
+  @Column()
+  expiresAt: Date;
+}

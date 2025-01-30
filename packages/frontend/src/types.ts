@@ -1,9 +1,3 @@
-export interface ApiResponse {
-  message: string;
-  success: boolean;
-  data: any;
-}
-
 export interface PopupProps {
   title?: string;
   open?: boolean;

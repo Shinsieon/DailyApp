@@ -4,15 +4,15 @@ import { Category } from "./category.entity";
 
 @Controller("categories")
 export class CategoryController {
-  constructor(private readonly patchNoteService: CategoryService) {}
+  constructor(private readonly categoryService: CategoryService) {}
 
   @Get()
   async getAll(): Promise<Category[]> {
-    return await this.patchNoteService.getAll();
+    return await this.categoryService.getAll();
   }
 
   @Post()
-  async create(@Body() patchNoteData: Partial<Category>): Promise<Category> {
-    return await this.patchNoteService.create(patchNoteData);
+  async create(@Body() categoryData: Partial<Category>): Promise<Category> {
+    return await this.categoryService.create(categoryData);
   }
 }

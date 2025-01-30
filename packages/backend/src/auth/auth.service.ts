@@ -40,6 +40,7 @@ export class AuthService {
       nickname,
     });
     await this.userRepository.save(newUser);
+    console.log("new user", newUser);
     return {
       data: {
         access_token: this.jwtService.sign({ sub: newUser.id }),
@@ -82,12 +83,10 @@ export class AuthService {
       throw new UnauthorizedException("로그인 정보가 일치하지 않습니다.");
     }
     return {
-      data: {
-        access_token: this.jwtService.sign({ sub: user.id }),
-        user: {
-          email: user.email,
-          nickname: user.nickname,
-        },
+      access_token: this.jwtService.sign({ sub: user.id, email: user.email }),
+      user: {
+        email: user.email,
+        nickname: user.nickname,
       },
     };
   }
@@ -101,10 +100,8 @@ export class AuthService {
     user.nickname = nickname;
     await this.userRepository.save(user);
     return {
-      data: {
-        email: user.email,
-        nickname: user.nickname,
-      },
+      email: user.email,
+      nickname: user.nickname,
     };
   }
 }

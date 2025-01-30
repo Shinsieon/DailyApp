@@ -1,8 +1,9 @@
 import { Button, Flex, message } from "antd";
-import { Form, Input } from "antd-mobile";
+import { Form } from "antd-mobile";
 import AppHeader from "../components/AppHeader";
 import { useUserStore } from "../store/userStore";
 import { api, showError } from "../api";
+import TextField from "../components/TextField";
 
 const ChangeNickNamePage = () => {
   const user = useUserStore((state) => state.user);
@@ -11,8 +12,9 @@ const ChangeNickNamePage = () => {
     console.log(values);
     try {
       const newUser = await api.updateNickname(values.newNickName);
+      console.log(newUser);
       message.success("닉네임이 변경되었습니다.");
-      setUser(newUser.data);
+      setUser(newUser);
     } catch (e) {
       showError(e);
     }
@@ -24,7 +26,7 @@ const ChangeNickNamePage = () => {
       <Flex vertical style={{ flex: 1, overflowY: "auto" }}>
         <Form name="form" onFinish={handleChangeNickName} style={{ flex: 1 }}>
           <Form.Item name="prevNickName" label="이전 닉네임">
-            <Input
+            <TextField
               style={{ height: 50 }}
               disabled={true}
               placeholder={user?.nickname}
@@ -36,7 +38,7 @@ const ChangeNickNamePage = () => {
             label="새로운 닉네임"
             rules={[{ required: true, message: "닉네임을 입력해주세요" }]}
           >
-            <Input
+            <TextField
               style={{ height: 50 }}
               placeholder="새로운 닉네임을 입력해주세요"
             />

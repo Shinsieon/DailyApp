@@ -1,6 +1,5 @@
 import { message } from "antd";
 import axios from "axios";
-import { ApiResponse } from "./types";
 
 console.log("node env", process.env.NODE_ENV);
 
@@ -39,10 +38,7 @@ export function showError(error: any) {
   }
 }
 
-const signin = async (
-  email: string,
-  password: string
-): Promise<ApiResponse> => {
+const signin = async (email: string, password: string) => {
   const response = await http.post(
     "/api/v1/auth/login",
     { email, password },
@@ -51,11 +47,7 @@ const signin = async (
   return response.data;
 };
 
-const signup = async (
-  email: string,
-  password: string,
-  nickname?: string
-): Promise<ApiResponse> => {
+const signup = async (email: string, password: string, nickname?: string) => {
   const response = await http.post("/api/v1/auth/register", {
     email,
     password,
@@ -64,14 +56,14 @@ const signup = async (
   return response.data;
 };
 
-const getPatchNotes = async (): Promise<ApiResponse> => {
+const getPatchNotes = async () => {
   console.log("getting patch notes");
   const response = await http.get("/api/v1/patch-notes");
   console.log(response);
   return response.data;
 };
 
-const getCategories = async (): Promise<ApiResponse> => {
+const getCategories = async () => {
   const response = await http.get("/api/v1/categories");
   return response.data;
 };

@@ -7,15 +7,15 @@ import { Category } from "./category.entity";
 export class CategoryService {
   constructor(
     @InjectRepository(Category)
-    private readonly patchNoteRepository: Repository<Category>
+    private readonly categoryRepository: Repository<Category>
   ) {}
 
   async getAll(): Promise<Category[]> {
-    return await this.patchNoteRepository.find();
+    return await this.categoryRepository.find();
   }
 
   async create(patchNoteData: Partial<Category>): Promise<Category> {
-    const newPatchNote = this.patchNoteRepository.create(patchNoteData);
-    return await this.patchNoteRepository.save(newPatchNote);
+    const newPatchNote = this.categoryRepository.create(patchNoteData);
+    return await this.categoryRepository.save(newPatchNote);
   }
 }

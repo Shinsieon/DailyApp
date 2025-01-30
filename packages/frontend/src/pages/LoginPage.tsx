@@ -4,12 +4,12 @@ import { useNavigate } from "react-router-dom";
 import { api, showError } from "../api";
 import Title from "../components/Title";
 import AppHeader from "../components/AppHeader";
-import { Divider, Image, Input } from "antd-mobile";
-import kakao from "../assets/kakao.png";
+import { Checkbox, Divider } from "antd-mobile";
 import { colors } from "../colors";
 import { KakaoAuthResponse, KakaoUser } from "../types";
 import { useUserStore } from "../store/userStore";
-
+import { IoChatbubbleSharp } from "react-icons/io5";
+import TextField from "../components/TextField";
 const LoginPage = () => {
   const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
@@ -25,8 +25,10 @@ const LoginPage = () => {
     try {
       const response = await api.signin(email, password);
       message.success("로그인이 완료되었습니다.");
-      localStorage.setItem("token", response.data.access_token);
-      setUser(response.data.user);
+      if (localStorage.getItem("rememberEmail") === "true")
+        localStorage.setItem("email", email);
+      localStorage.setItem("token", response.access_token);
+      setUser(response.user);
       navigate("/");
     } catch (error: any) {
       //401 Unauthorized
@@ -37,8 +39,8 @@ const LoginPage = () => {
         if (type === "kakao") {
           //자동회원가입 후 로그인까지
           const response = await api.signup(email, password, nickname);
-          localStorage.setItem("token", response.data.access_token);
-          setUser(response.data.user);
+          localStorage.setItem("token", response.access_token);
+          setUser(response.user);
           message.success("카카오 계정으로 회원가입이 완료되었습니다.");
           navigate("/");
         }
@@ -100,25 +102,34 @@ const LoginPage = () => {
           <Title level={5} name="이메일" />
           <Form.Item
             name="email"
+            initialValue={localStorage.getItem("email")}
             rules={[{ required: true, message: "이메일을 입력해주세요" }]}
           >
-            <Input
-              placeholder="email@naver.com"
-              style={{ height: 50 }}
-              autoComplete="email"
-            />
+            <TextField placeholder="email@naver.com" autoComplete="email" />
           </Form.Item>
           <Title level={5} name="비밀번호" />
           <Form.Item
             name="password"
             rules={[{ required: true, message: "비밀번호를 입력해주세요" }]}
           >
-            <Input
+            <TextField
               placeholder="******"
               type="password"
               style={{ height: 50 }}
               autoComplete="current-password"
             />
+          </Form.Item>
+          <Form.Item>
+            <Checkbox
+              defaultChecked={localStorage.getItem("rememberEmail") === "true"}
+              onChange={(value) => {
+                console.log("체크박스 클릭", value);
+                if (value) localStorage.setItem("rememberEmail", "true");
+                else localStorage.removeItem("rememberEmail");
+              }}
+            >
+              로그인 계정 기억하기
+            </Checkbox>
           </Form.Item>
           <Form.Item>
             <Button
@@ -157,13 +168,19 @@ const LoginPage = () => {
           </Flex>
           <Divider style={{ marginTop: 30, marginBottom: 30 }} />
           <Form.Item>
-            <Image
-              src={kakao}
-              width={"100%"}
-              height={50}
-              fit="fill"
+            <Button
+              style={{
+                backgroundColor: "#FEE000",
+                width: "100%",
+                height: 50,
+                border: "none",
+              }}
+              icon={<IoChatbubbleSharp />}
+              name="kakao"
               onClick={handleKakaoLogin}
-            />
+            >
+              카카오로 시작하기
+            </Button>
           </Form.Item>
         </Form>
       </Flex>

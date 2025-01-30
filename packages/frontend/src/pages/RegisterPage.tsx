@@ -4,7 +4,7 @@ import { api, showError } from "../api";
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import AppHeader from "../components/AppHeader";
-import { Input } from "antd-mobile";
+import TextField from "../components/TextField";
 
 const RegisterPage = () => {
   const [loading, setLoading] = useState(false);
@@ -35,21 +35,16 @@ const RegisterPage = () => {
             name="email"
             rules={[{ required: true, message: "이메일을 입력해주세요" }]}
           >
-            <Input
-              placeholder="Email"
-              style={{ height: 50 }}
-              autoComplete="email"
-            />
+            <TextField placeholder="Email" autoComplete="email" />
           </Form.Item>
           <Title level={5} name="비밀번호" />
           <Form.Item
             name="password"
             rules={[{ required: true, message: "비밀번호를 입력해주세요" }]}
           >
-            <Input
+            <TextField
               type="password"
               placeholder="Password"
-              style={{ height: 50 }}
               autoComplete="current-password"
             />
           </Form.Item>
@@ -58,11 +53,7 @@ const RegisterPage = () => {
             name="nickname"
             rules={[{ required: true, message: "닉네임을 입력해주세요" }]}
           >
-            <Input
-              placeholder="Nickname"
-              style={{ height: 50 }}
-              autoComplete="nickname"
-            />
+            <TextField placeholder="Nickname" autoComplete="nickname" />
           </Form.Item>
           <Form.Item style={{ marginTop: 50 }}>
             <Button

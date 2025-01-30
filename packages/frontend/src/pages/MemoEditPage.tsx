@@ -1,7 +1,7 @@
 import { Flex, message } from "antd";
 import AppHeader from "../components/AppHeader";
 import { useLocation, useNavigate } from "react-router-dom";
-import { Cascader, Form, Input, Switch, TextArea } from "antd-mobile";
+import { Cascader, Form, Switch, TextArea } from "antd-mobile";
 import BottomFixedButton from "../components/BottomFixedButton";
 import { MemoData } from "../types";
 import { useMemoStore } from "../store/memoStore";
@@ -11,6 +11,7 @@ import { CheckListValue } from "antd-mobile/es/components/check-list";
 import Label from "../components/Label";
 import { useThemeStore } from "../store/themeStore";
 import { colors } from "../colors";
+import TextField from "../components/TextField";
 
 const MemoEditPage = () => {
   const [groupVisible, setGroupVisible] = useState(false);
@@ -92,7 +93,7 @@ const MemoEditPage = () => {
           rules={[{ required: true, message: "제목을 입력해주세요." }]}
           initialValue={prevMemo?.title}
         >
-          <Input placeholder="제목을 입력해주세요." />
+          <TextField placeholder="제목을 입력해주세요." />
         </Form.Item>
         <Form.Item
           name="content"
@@ -148,7 +149,7 @@ const MemoEditPage = () => {
               color: isDarkMode ? colors.lightWhite : colors.darkBlack,
             }}
           >
-            <Input
+            <TextField
               onChange={setNewGroup}
               placeholder="그룹명을 입력해주세요."
             />

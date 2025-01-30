@@ -17,6 +17,7 @@ import { useThemeStore } from "../store/themeStore";
 import { colors } from "../colors";
 import { translateToKorean } from "../utils";
 import { api } from "../api";
+import TextField from "../components/TextField";
 
 interface NewBudgetProps extends PopupProps {
   type: BudgetType;
