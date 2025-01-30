@@ -35,14 +35,17 @@ const LoginPage = () => {
       if (error.response?.status === 401) {
         showError(error);
       } else if (error.response?.status === 404) {
-        showError("가입되지 않은 이메일입니다.");
         if (type === "kakao") {
           //자동회원가입 후 로그인까지
-          const response = await api.signup(email, password, nickname);
+          let response = await api.signup(email, password, nickname);
+          response = await api.signin(email, password);
           localStorage.setItem("token", response.access_token);
+          console.log(response);
           setUser(response.user);
           message.success("카카오 계정으로 회원가입이 완료되었습니다.");
           navigate("/");
+        } else {
+          showError("가입되지 않은 이메일입니다.");
         }
       }
     } finally {
@@ -102,7 +105,7 @@ const LoginPage = () => {
           <Title level={5} name="이메일" />
           <Form.Item
             name="email"
-            initialValue={localStorage.getItem("email")}
+            initialValue={localStorage.getItem("email") || ""}
             rules={[{ required: true, message: "이메일을 입력해주세요" }]}
           >
             <TextField placeholder="email@naver.com" autoComplete="email" />

@@ -39,17 +39,7 @@ export class AuthService {
       password: await bcrypt.hash(password, 10),
       nickname,
     });
-    await this.userRepository.save(newUser);
-    console.log("new user", newUser);
-    return {
-      data: {
-        access_token: this.jwtService.sign({ sub: newUser.id }),
-        user: {
-          email: newUser.email,
-          nickname: newUser.nickname,
-        },
-      },
-    };
+    return await this.userRepository.save(newUser);
   }
 
   // 사용자 검증
