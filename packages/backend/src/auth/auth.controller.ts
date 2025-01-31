@@ -23,8 +23,9 @@ export class AuthController {
 
   @Post("login")
   async login(@Req() req: any) {
-    const { email, password } = req.body;
-    return this.authService.login(email, password);
+    const { email, password, type } = req.body;
+    console.log("login", email, password, type);
+    return this.authService.login(email, password, type);
   }
 
   @UseGuards(AuthGuard)

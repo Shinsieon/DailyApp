@@ -38,10 +38,10 @@ export function showError(error: any) {
   }
 }
 
-const signin = async (email: string, password: string) => {
+const signin = async (email: string, password: string, type?: string) => {
   const response = await http.post(
     "/api/v1/auth/login",
-    { email, password },
+    { email, password, type },
     { withCredentials: true }
   );
   return response.data;

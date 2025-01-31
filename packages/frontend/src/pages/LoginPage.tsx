@@ -24,7 +24,7 @@ const LoginPage = () => {
   ) => {
     setLoading(true);
     try {
-      const response = await api.signin(email, password);
+      const response = await api.signin(email, password, type);
       message.success("로그인이 완료되었습니다.");
       if (localStorage.getItem("rememberEmail") === "true")
         localStorage.setItem("email", email);

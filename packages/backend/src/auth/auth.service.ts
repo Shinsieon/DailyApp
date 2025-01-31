@@ -67,7 +67,20 @@ export class AuthService {
   }
 
   // JWT 토큰 생성
-  async login(email: string, password: string) {
+  async login(email: string, password: string, type?: string) {
+    if (type === "kakao") {
+      const user = await this.findByEmail(email);
+      if (!user) {
+        throw new NotFoundException("사용자를 찾을 수 없습니다.");
+      }
+      return {
+        access_token: this.jwtService.sign({ sub: user.id, email: user.email }),
+        user: {
+          email: user.email,
+          nickname: user.nickname,
+        },
+      };
+    }
     const user = await this.validateUser(email, password);
     if (!user) {
       throw new UnauthorizedException("로그인 정보가 일치하지 않습니다.");
