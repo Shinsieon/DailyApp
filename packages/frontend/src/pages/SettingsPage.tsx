@@ -39,6 +39,7 @@ const SettingsPage = () => {
             prefix={<NotificationFilled />}
             onClick={() => {
               clearUser();
+              localStorage.removeItem("token");
               message.success("로그아웃되었습니다.");
             }}
           >

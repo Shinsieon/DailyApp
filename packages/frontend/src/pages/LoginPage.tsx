@@ -10,6 +10,7 @@ import { KakaoAuthResponse, KakaoUser } from "../types";
 import { useUserStore } from "../store/userStore";
 import { IoChatbubbleSharp } from "react-icons/io5";
 import TextField from "../components/TextField";
+import useWebViewMessage from "../hooks/useWebViewMessage";
 const LoginPage = () => {
   const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
@@ -52,13 +53,6 @@ const LoginPage = () => {
       setLoading(false);
     }
   };
-  useEffect(() => {
-    // Initialize Kakao SDK
-    if (window.Kakao && !window.Kakao.isInitialized()) {
-      window.Kakao.init(import.meta.env.VITE_KAKAO_APP_KEY); // Replace with your Kakao JavaScript Key
-    }
-  }, []);
-  // 카카오 로그인 처리
   const handleKakaoLogin = () => {
     if (!window.Kakao) {
       message.error("Kakao SDK가 로드되지 않았습니다.");
@@ -74,7 +68,7 @@ const LoginPage = () => {
           success: async (res: KakaoUser) => {
             console.log("User Info:", res);
 
-            // 기존 사용자 로그인 시도
+            //기존 사용자 로그인 시도
             await handleLogin(
               res.kakao_account.email,
               res.id.toString(),
@@ -94,6 +88,28 @@ const LoginPage = () => {
       },
     });
   };
+  useEffect(() => {
+    // Initialize Kakao SDK
+    if (window.Kakao && !window.Kakao.isInitialized()) {
+      window.Kakao.init(import.meta.env.VITE_KAKAO_APP_KEY); // Replace with your Kakao JavaScript Key
+    }
+  }, []);
+  const handleMessage = async (data: any) => {
+    console.log("🔵 Message Received in LoginPage:", data);
+    if (data && data.type === "kakaoAuth") {
+      //기존 사용자 로그인 시도
+      console.log(`🔵 Kakao Auth Response:${data.user}`);
+      await handleLogin(
+        data.user.email,
+        data.user.id.toString(),
+        data.user.nickname,
+        "kakao"
+      );
+    }
+  };
+  useWebViewMessage(handleMessage);
+  // ✅ WebView에서 보낸 메시지를 수신하는 이벤트 리스너 추가
+
   return (
     <Flex vertical>
       <AppHeader title="로그인" />
@@ -180,7 +196,18 @@ const LoginPage = () => {
               }}
               icon={<IoChatbubbleSharp />}
               name="kakao"
-              onClick={handleKakaoLogin}
+              onClick={() => {
+                if (window && window.ReactNativeWebView) {
+                  // window.ReactNativeWebView.postMessage(
+                  //   JSON.stringify({
+                  //     type: "kakaoLogin",
+                  //   })
+                  // );
+                  message.info("카카오 로그인 기능은 준비중입니다.");
+                } else {
+                  handleKakaoLogin();
+                }
+              }}
             >
               카카오로 시작하기
             </Button>

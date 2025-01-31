@@ -47,6 +47,11 @@ const signin = async (email: string, password: string) => {
   return response.data;
 };
 
+const getProfile = async () => {
+  const response = await http.get("/api/v1/auth/me");
+  return response.data;
+};
+
 const signup = async (email: string, password: string, nickname?: string) => {
   const response = await http.post("/api/v1/auth/register", {
     email,
@@ -89,6 +94,7 @@ const getWeather = async (latitude: number, longitude: number) => {
 export const api = {
   signin,
   signup,
+  getProfile,
   updateNickname,
   getWeather,
   getPatchNotes,

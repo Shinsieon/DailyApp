@@ -1,11 +1,10 @@
 import { Flex, message } from "antd";
 import AppHeader from "../components/AppHeader";
 import { useLocation, useNavigate } from "react-router-dom";
-import { Cascader, Form, Switch, TextArea } from "antd-mobile";
-import BottomFixedButton from "../components/BottomFixedButton";
+import { Button, Cascader, Form, Input, Switch, TextArea } from "antd-mobile";
 import { MemoData } from "../types";
 import { useMemoStore } from "../store/memoStore";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import dayjs from "dayjs";
 import { CheckListValue } from "antd-mobile/es/components/check-list";
 import Label from "../components/Label";
@@ -32,7 +31,13 @@ const MemoEditPage = () => {
   );
   const [selGroup, setSelGroup] = useState<string>(prevMemo?.group || "기본");
 
-  console.log(`prevMemo : ${JSON.stringify(prevMemo)}`);
+  useEffect(() => {
+    if (prevMemo) {
+      console.log(prevMemo);
+      updateMemo({ ...prevMemo, showCount: (prevMemo.showCount || 0) + 1 });
+    }
+  }, []);
+
   const onfinish = async () => {
     const values = form.getFieldsValue() as MemoData;
     console.log(values);
@@ -59,6 +64,7 @@ const MemoEditPage = () => {
           group: isNewGroup ? newGroup : selGroup,
           date: dayjs().format("YYYYMMDD"),
           favorite: favorite,
+          showCount: 0,
         });
       }
     } catch (e) {
@@ -68,7 +74,6 @@ const MemoEditPage = () => {
     }
     message.success("메모가 저장되었습니다.");
     navigate(-1);
-    console.log(values);
   };
 
   return (
@@ -78,7 +83,14 @@ const MemoEditPage = () => {
         layout="horizontal"
         form={form}
         footer={
-          <BottomFixedButton type="submit" name="저장"></BottomFixedButton>
+          <Button
+            type="submit"
+            color={"primary"}
+            block
+            style={{ marginTop: "20px" }}
+          >
+            저장
+          </Button>
         }
         onFinish={onfinish}
       >
@@ -93,7 +105,7 @@ const MemoEditPage = () => {
           rules={[{ required: true, message: "제목을 입력해주세요." }]}
           initialValue={prevMemo?.title}
         >
-          <TextField placeholder="제목을 입력해주세요." />
+          <Input placeholder="제목을 입력해주세요." />
         </Form.Item>
         <Form.Item
           name="content"
@@ -113,7 +125,7 @@ const MemoEditPage = () => {
           />
         </Form.Item>
 
-        <Form.Item
+        {/* <Form.Item
           name="secret"
           label="비공개 여부"
           style={{
@@ -125,7 +137,7 @@ const MemoEditPage = () => {
           initialValue={prevMemo?.secret}
         >
           <Switch />
-        </Form.Item>
+        </Form.Item> */}
         <Form.Item
           name="isNewGroup"
           label="그룹생성 여부"

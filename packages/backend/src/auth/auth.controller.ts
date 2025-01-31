@@ -32,4 +32,10 @@ export class AuthController {
   async updateNickname(@Req() req: any, @Body() body: { nickname: string }) {
     return this.authService.updateNickname(req.user.id, body.nickname);
   }
+
+  @UseGuards(AuthGuard)
+  @Get("me")
+  async getProfile(@Req() req) {
+    return req.user;
+  }
 }

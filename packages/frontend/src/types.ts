@@ -39,6 +39,7 @@ export interface MemoData {
   date: string;
   favorite: boolean;
   secret: boolean;
+  showCount?: number;
 }
 
 export interface ThemeData {
@@ -51,6 +52,7 @@ export interface Menu {
   icon: React.ReactNode;
   selIcon: React.ReactNode;
   element: React.ReactNode;
+  loginNeed?: boolean;
 }
 
 export interface PatchNote {

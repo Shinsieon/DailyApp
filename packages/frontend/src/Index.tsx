@@ -1,4 +1,4 @@
-import { Flex } from "antd";
+import { Flex, message } from "antd";
 import { NavBar, Space, TabBar } from "antd-mobile";
 import { useMenuStore } from "./store/menuStore";
 import { UserOutline } from "antd-mobile-icons";
@@ -6,6 +6,8 @@ import { useNavigate } from "react-router-dom";
 import { useUserStore } from "./store/userStore";
 import { colors } from "./colors";
 import Label from "./components/Label";
+import { useEffect } from "react";
+import { api } from "./api";
 
 const Index = () => {
   // Load the initial menu from localStorage or default to the first menu
@@ -13,23 +15,31 @@ const Index = () => {
   const user = useUserStore((state) => state.user);
   const navigate = useNavigate();
   console.log(user);
+  useEffect(() => {
+    if (!user && localStorage.getItem("token")) {
+      api.getProfile().then((data) => {
+        useUserStore.getState().setUser(data);
+      });
+    }
+  });
   const right = (
-    // <Space style={{ fontSize: "24px" }}>
-    //   {user ? (
-    //     <>
-    //       <Label name={user.nickname + "님 반갑습니다"}></Label>
-    //       <UserOutline color={colors.primary}></UserOutline>
-    //     </>
-    //   ) : (
-    //     <UserOutline
-    //       onClick={() => {
-    //         navigate("/login");
-    //       }}
-    //     />
-    //   )}
-    // </Space>
-    <></>
+    <Space style={{ fontSize: "24px" }}>
+      {user ? (
+        <>
+          <Label name={user.nickname + "님 반갑습니다"}></Label>
+          <UserOutline color={colors.primary}></UserOutline>
+        </>
+      ) : (
+        <UserOutline
+          onClick={() => {
+            navigate("/login");
+          }}
+        />
+      )}
+    </Space>
   );
+
+  // 카카오 로그인 처리
   return (
     <Flex vertical style={{ height: "100vh", overflow: "hidden" }}>
       <Flex
@@ -62,6 +72,10 @@ const Index = () => {
               icon={selMenu === item ? item.selIcon : item.icon}
               title={item.name}
               onClick={() => {
+                if (item.loginNeed && !user) {
+                  message.info("로그인이 필요한 서비스입니다.");
+                  return;
+                }
                 setSelMenu(item);
               }}
             />

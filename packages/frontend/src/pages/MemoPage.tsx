@@ -13,6 +13,7 @@ import { EditFill, RightOutline } from "antd-mobile-icons";
 import {
   CopyFilled,
   DeleteFilled,
+  EyeFilled,
   SortDescendingOutlined,
   StarFilled,
   StarOutlined,
@@ -66,25 +67,34 @@ const MemoItem = (props: MemoItemProps) => (
       >
         <Label name={props.memo.content} />
       </Space>
-      <Space
-        style={{
-          paddingTop: "5px",
-          borderTop: "1px solid #e5e5e5",
-          display: "flex",
-          justifyContent: "flex-end",
-          alignItems: "center",
-        }}
-      >
-        <Label name={dayjs(props.memo.date).format("YYYY년 MM월 DD일")} />
+      <Flex justify="space-between">
+        <Flex style={{ alignContent: "center", alignItems: "center" }} gap={5}>
+          <EyeFilled />
+          <Label name={props.memo.showCount || 0} />
+        </Flex>
+        <Space
+          style={{
+            paddingTop: "5px",
+            borderTop: "1px solid #e5e5e5",
+            display: "flex",
+            justifyContent: "flex-end",
+            alignItems: "center",
+          }}
+        >
+          <Label name={dayjs(props.memo.date).format("YYYY년 MM월 DD일")} />
 
-        <Button style={{ border: "none" }} onClick={() => props.onCopyClick()}>
-          <CopyFilled style={{ fontSize: "15px" }} />
-        </Button>
+          <Button
+            style={{ border: "none" }}
+            onClick={() => props.onCopyClick()}
+          >
+            <CopyFilled style={{ fontSize: "15px" }} />
+          </Button>
 
-        <Button onClick={props.onDeleteClick} style={{ border: "none" }}>
-          <DeleteFilled style={{ fontSize: "15px" }} />
-        </Button>
-      </Space>
+          <Button onClick={props.onDeleteClick} style={{ border: "none" }}>
+            <DeleteFilled style={{ fontSize: "15px" }} />
+          </Button>
+        </Space>
+      </Flex>
     </Flex>
   </Card>
 );
