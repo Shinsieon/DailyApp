@@ -14,12 +14,19 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v3
 
-      # 1-1. Github Actions VM 환경의 IP를 받아온다.
+      # 1-1. GitHub Actions에서 최신 Node.js 설정
+      - name: Setup Node.js (Latest)
+        uses: actions/setup-node@v3
+        with:
+          node-version: 18
+          cache: "pnpm"
+
+      # 1-2. Github Actions VM 환경의 IP를 받아온다.
       - name: Get public IP
         id: ip
         uses: haythem/public-ip@v1.3
 
-      # 1-2. AWS 인증 관련 옵션을 추가한다.
+      # 1-3. AWS 인증 관련 옵션을 추가한다.
       - name: Configure AWS credentials
         uses: aws-actions/configure-aws-credentials@v4
         with:
@@ -27,7 +34,7 @@ jobs:
           aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
           aws-region: "ap-northeast-2"
 
-      # 1-3. GitHub Actions VM 환경의 IP를 인바운드 규칙에 추가한다.
+      # 1-4. GitHub Actions VM 환경의 IP를 인바운드 규칙에 추가한다.
       - name: Add GitHub Actions IP
         run: |
           aws ec2 authorize-security-group-ingress \
@@ -44,6 +51,14 @@ jobs:
           username: ${{ secrets.EC2_USER }}
           key: ${{ secrets.EC2_PRIVATE_KEY }}
           script: |
+            # 🔹 EC2에서도 최신 Node.js 설치
+            if ! command -v node &> /dev/null || [ "$(node -v | cut -d. -f1 | cut -c2-)" -lt 18 ]; then
+                echo "Node.js not found or outdated. Installing Node.js 18..."
+                curl -fsSL https://deb.nodesource.com/setup_18.x | sudo -E bash -
+                sudo apt install -y nodejs
+            fi
+
+            # 🔹 EC2에서 pnpm 설치 확인 후 없으면 설치
             if ! command -v pnpm &> /dev/null; then
                 echo "pnpm not found. Installing pnpm..."
                 curl -fsSL https://get.pnpm.io/install.sh | sh -
@@ -51,16 +66,21 @@ jobs:
                 echo 'export PATH=$HOME/.local/share/pnpm:$PATH' >> ~/.bashrc
                 source ~/.bashrc
             fi
+
+            # 🔹 백엔드 배포
+            echo "🚀 Deploying Backend..."
             cd /home/ubuntu/DailyApp2/packages/backend
             git pull origin main
-            pnpm install --frozen-lockfile  # 2-1. 의존성 설치
-            if pnpm build; then            # 2-2. 빌드가 성공하면 PM2 리로드
-              pm2 reload nest-server-prod
+            pnpm install --frozen-lockfile  # 의존성 설치
+            if pnpm build; then
+                echo "✅ Backend build successful. Reloading PM2..."
+                pm2 reload nest-server-prod
             else
-              echo "❌ Build failed. PM2 reload skipped."
-              exit 1  # GitHub Actions에 실패 상태 반환
+                echo "❌ Backend build failed. PM2 reload skipped."
+                exit 1  # GitHub Actions에 실패 상태 반환
             fi
 
+            # 🔹 프론트엔드 배포
             echo "🚀 Deploying Frontend..."
             cd /home/ubuntu/DailyApp2/packages/frontend
             git pull origin main
