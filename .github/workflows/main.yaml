@@ -46,7 +46,13 @@ jobs:
           script: |
             cd /home/ubuntu/DailyApp2/packages/backend
             git pull origin main
-            pm2 reload nest-server-prod
+            pnpm install --frozen-lockfile  # 2-1. 의존성 설치
+            if pnpm build; then            # 2-2. 빌드가 성공하면 PM2 리로드
+              pm2 reload nest-server-prod
+            else
+              echo "❌ Build failed. PM2 reload skipped."
+              exit 1  # GitHub Actions에 실패 상태 반환
+            fi
 
       # 3. GitHub Actions VM 환경의 IP를 인바운드 규칙에서 제거한다.
       - name: Remove GitHub Actions IP
