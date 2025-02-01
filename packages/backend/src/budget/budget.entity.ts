@@ -6,6 +6,7 @@ import {
   Column,
   ManyToOne,
   JoinColumn,
+  CreateDateColumn,
 } from "typeorm";
 
 export enum BudgetType {
@@ -43,4 +44,7 @@ export class Budget {
   })
   @JoinColumn({ name: "category_id" })
   category: Category;
+
+  @CreateDateColumn()
+  createdAt: Date;
 }

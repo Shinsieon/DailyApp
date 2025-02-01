@@ -3,8 +3,7 @@ import {
   NotificationFilled,
   SyncOutlined,
 } from "@ant-design/icons";
-import { List, Modal, NoticeBar, Switch } from "antd-mobile";
-import { deleteDB } from "../db/conn";
+import { List, NoticeBar } from "antd-mobile";
 import { useTodoStore } from "../store/todoStore";
 import { useMemoStore } from "../store/memoStore";
 import { useBudgetStore } from "../store/budgetStore";
@@ -19,12 +18,9 @@ import CustomLoading from "../components/Loading";
 import Label from "../components/Label";
 
 const SettingsPage = () => {
-  const flushTodo = useTodoStore((state) => state.flush);
   const todos = useTodoStore((state) => state.todos);
   const budgets = useBudgetStore((state) => state.budgets);
   const memos = useMemoStore((state) => state.memos);
-  const flushMemo = useMemoStore((state) => state.flush);
-  const flushBudget = useBudgetStore((state) => state.flush);
   const user = useUserStore((state) => state.user);
   const [loading, setLoading] = useState(false);
   const clearUser = useUserStore((state) => state.clearUser);
@@ -64,26 +60,6 @@ const SettingsPage = () => {
       )}
 
       <List mode="card" header="앱 설정">
-        <List.Item
-          prefix={<DeleteFilled />}
-          onClick={() => {
-            Modal.confirm({
-              content:
-                "삭제된 데이터는 다시 복구할 수 없습니다. 계속하시겠습니까?",
-              confirmText: "확인",
-              onConfirm: async () => {
-                deleteDB();
-                flushBudget();
-                flushMemo();
-                flushTodo();
-                message.success("데이터가 초기화되었습니다.");
-              },
-              cancelText: "취소",
-            });
-          }}
-        >
-          데이터 초기화
-        </List.Item>
         <List.Item
           prefix={<SyncOutlined />}
           onClick={async () => {
