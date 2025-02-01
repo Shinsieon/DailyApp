@@ -14,13 +14,6 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v3
 
-      # 1-1. GitHub Actions에서 최신 Node.js 설정
-      - name: Setup Node.js (Latest)
-        uses: actions/setup-node@v3
-        with:
-          node-version: 18
-          cache: "pnpm"
-
       # 1-2. Github Actions VM 환경의 IP를 받아온다.
       - name: Get public IP
         id: ip
