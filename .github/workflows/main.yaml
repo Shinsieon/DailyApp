@@ -61,6 +61,17 @@ jobs:
               exit 1  # GitHub Actions에 실패 상태 반환
             fi
 
+            echo "🚀 Deploying Frontend..."
+            cd /home/ubuntu/DailyApp2/packages/frontend
+            git pull origin main
+            pnpm install --frozen-lockfile  # 프론트엔드 의존성 설치
+            if pnpm build; then
+                echo "✅ Frontend build successful."
+            else
+                echo "❌ Frontend build failed."
+                exit 1  # GitHub Actions에 실패 상태 반환
+            fi
+
       # 3. GitHub Actions VM 환경의 IP를 인바운드 규칙에서 제거한다.
       - name: Remove GitHub Actions IP
         run: |
