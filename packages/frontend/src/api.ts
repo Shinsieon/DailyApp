@@ -1,5 +1,6 @@
 import { message } from "antd";
 import axios from "axios";
+import { BudgetData, MemoData, TodoData } from "./types";
 
 console.log("node env", process.env.NODE_ENV);
 
@@ -61,6 +62,27 @@ const signup = async (email: string, password: string, nickname?: string) => {
   return response.data;
 };
 
+const syncTodos = async (todos: TodoData[], userId: number) => {
+  const response = await http.post(`/api/v1/todos/multiple/${userId}`, {
+    todos,
+  });
+  return response.data;
+};
+
+const syncBudgets = async (budgets: BudgetData[], userId: number) => {
+  const response = await http.post(`/api/v1/budgets/multiple/${userId}`, {
+    budgets,
+  });
+  return response.data;
+};
+
+const syncMemos = async (memos: MemoData[], userId: number) => {
+  const response = await http.post(`/api/v1/memos/multiple/${userId}`, {
+    memos,
+  });
+  return response.data;
+};
+
 const getPatchNotes = async () => {
   console.log("getting patch notes");
   const response = await http.get("/api/v1/patch-notes");
@@ -94,6 +116,9 @@ const getWeather = async (latitude: number, longitude: number) => {
 export const api = {
   signin,
   signup,
+  syncTodos,
+  syncBudgets,
+  syncMemos,
   getProfile,
   updateNickname,
   getWeather,

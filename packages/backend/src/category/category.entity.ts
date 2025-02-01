@@ -1,4 +1,5 @@
-import { Entity, PrimaryGeneratedColumn, Column } from "typeorm";
+import { Budget } from "src/budget/budget.entity";
+import { Entity, PrimaryGeneratedColumn, Column, OneToMany } from "typeorm";
 
 @Entity("category")
 export class Category {
@@ -13,4 +14,7 @@ export class Category {
 
   @Column({ length: 50 })
   value: string;
+
+  @OneToMany(() => Budget, (budget) => budget.category)
+  budgets: Budget[];
 }

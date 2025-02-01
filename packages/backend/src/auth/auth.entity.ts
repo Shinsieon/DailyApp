@@ -1,9 +1,13 @@
+import { Budget } from "src/budget/budget.entity";
+import { Memo } from "src/memo/memo.entity";
+import { Todo } from "src/todo/todo.entity";
 import {
   Column,
   Entity,
   PrimaryGeneratedColumn,
   CreateDateColumn,
   UpdateDateColumn,
+  OneToMany,
 } from "typeorm";
 
 @Entity("users")
@@ -25,22 +29,14 @@ export class User {
 
   @UpdateDateColumn()
   updatedAt: Date;
-}
 
-@Entity("refresh_tokens")
-export class RefreshToken {
-  @PrimaryGeneratedColumn()
-  id: number;
+  @OneToMany(() => Todo, (todo) => todo.user)
+  todos: Todo[];
 
-  @Column()
-  userId: number;
+  // 🔹 Budget 테이블과 1:N 관계 설정
+  @OneToMany(() => Budget, (budget) => budget.user)
+  budgets: Budget[];
 
-  @Column("text")
-  token: string;
-
-  @CreateDateColumn()
-  createdAt: Date;
-
-  @Column()
-  expiresAt: Date;
+  @OneToMany(() => Memo, (memo) => memo.user)
+  memos: Memo[];
 }

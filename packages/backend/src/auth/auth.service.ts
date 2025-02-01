@@ -76,6 +76,7 @@ export class AuthService {
       return {
         access_token: this.jwtService.sign({ sub: user.id, email: user.email }),
         user: {
+          id: user.id,
           email: user.email,
           nickname: user.nickname,
         },
@@ -88,6 +89,7 @@ export class AuthService {
     return {
       access_token: this.jwtService.sign({ sub: user.id, email: user.email }),
       user: {
+        id: user.id,
         email: user.email,
         nickname: user.nickname,
       },
@@ -103,6 +105,7 @@ export class AuthService {
     user.nickname = nickname;
     await this.userRepository.save(user);
     return {
+      id: user.id,
       email: user.email,
       nickname: user.nickname,
     };

@@ -12,6 +12,10 @@ import { ServeStaticModule } from "@nestjs/serve-static";
 import { Categorymodule } from "./category/category.module";
 import { SeederModule } from "./seeder/seeder.module";
 import { AuthModule } from "./auth/auth.module";
+import { FeedModule } from "./feed/feed.module";
+import { TodoModule } from "./todo/todo.module";
+import { BudgetModule } from "./budget/budget.module";
+import { MemoModule } from "./memo/memo.module";
 
 @Module({
   imports: [
@@ -43,6 +47,10 @@ import { AuthModule } from "./auth/auth.module";
     SeederModule,
     PatchNoteModule,
     Categorymodule,
+
+    TodoModule,
+    BudgetModule,
+    MemoModule,
   ],
   controllers: [AppController],
   providers: [

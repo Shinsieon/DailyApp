@@ -60,7 +60,7 @@ export interface PatchNote {
   title: string;
   description: string;
   version: string;
-  created_at: string;
+  createdAt: string;
 }
 
 export interface KakaoAuthResponse {
