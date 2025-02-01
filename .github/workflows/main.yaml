@@ -44,7 +44,13 @@ jobs:
           username: ${{ secrets.EC2_USER }}
           key: ${{ secrets.EC2_PRIVATE_KEY }}
           script: |
-            npm install -g pnpm
+            if ! command -v pnpm &> /dev/null; then
+                echo "pnpm not found. Installing pnpm..."
+                curl -fsSL https://get.pnpm.io/install.sh | sh -
+                export PATH=$HOME/.local/share/pnpm:$PATH
+                echo 'export PATH=$HOME/.local/share/pnpm:$PATH' >> ~/.bashrc
+                source ~/.bashrc
+            fi
             cd /home/ubuntu/DailyApp2/packages/backend
             git pull origin main
             pnpm install --frozen-lockfile  # 2-1. 의존성 설치
