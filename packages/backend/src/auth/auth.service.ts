@@ -17,29 +17,67 @@ export class AuthService {
     private jwtService: JwtService
   ) {}
 
-  // 이메일로 사용자 조회
-  async findByEmail(email: string): Promise<User | undefined> {
-    email = email.toLowerCase();
-    const user = await this.userRepository.findOne({ where: { email } });
-    console.log("find by email", user);
-    return user;
+  async findByEmail(email: string, includeDeleted = false) {
+    if (!includeDeleted) {
+      return await this.userRepository.findOne({ where: { email } });
+    }
+    return await this.userRepository
+      .createQueryBuilder("user")
+      .where("user.email = :email", { email })
+      .withDeleted() // 👈 소프트 삭제된 유저도 포함
+      .getOne();
   }
 
   // 사용자 등록 (이메일/비밀번호)
-  async register(email: string, password: string, nickname: string) {
-    console.log(email, password, nickname);
-    email = email.toLowerCase();
-    const existingUser = await this.findByEmail(email);
-    if (existingUser) {
+  async register(
+    email: string,
+    password: string,
+    nickname: string,
+    type?: "apple" | "kakao" | "email"
+  ) {
+    if (type === "apple") {
+      const decoded = this.jwtService.decode(email) as {
+        email?: string;
+        nickname?: string;
+      };
+
+      if (!decoded?.email) {
+        throw new UnauthorizedException("유효하지 않은 토큰입니다.");
+      }
+
+      email = decoded.email;
+      nickname = decoded.nickname || "Apple User"; // Apple에서 닉네임이 제공되지 않는 경우 대비
+      password = password ? await bcrypt.hash(password, 10) : undefined;
+    } else {
+      email = email.toLowerCase();
+      password = await bcrypt.hash(password, 10);
+    }
+
+    let user = await this.findByEmail(email, true);
+
+    if (user) {
+      if (user.deletedAt) {
+        await this.userRepository.restore(user.id);
+        user.deletedAt = null;
+        user.password = password;
+        user.nickname = nickname;
+        return await this.userRepository.save(user);
+      }
       throw new UnauthorizedException("이미 가입된 계정입니다.");
     }
 
-    const newUser = this.userRepository.create({
-      email,
-      password: await bcrypt.hash(password, 10),
-      nickname,
-    });
-    return await this.userRepository.save(newUser);
+    // 새 유저 생성 및 저장
+    user = this.userRepository.create({ email, password, nickname });
+    await this.userRepository.save(user);
+
+    return {
+      access_token: this.jwtService.sign({ sub: user.id, email: user.email }),
+      user: {
+        id: user.id,
+        email: user.email,
+        nickname: user.nickname,
+      },
+    };
   }
 
   // 사용자 검증
@@ -67,25 +105,31 @@ export class AuthService {
   }
 
   // JWT 토큰 생성
-  async login(email: string, password: string, type?: string) {
-    if (type === "kakao") {
-      const user = await this.findByEmail(email);
-      if (!user) {
-        throw new NotFoundException("사용자를 찾을 수 없습니다.");
+  async login(email: string, password?: string, type?: "apple" | "kakao") {
+    let user;
+
+    if (type === "apple") {
+      const decoded = this.jwtService.decode(email) as { email?: string };
+
+      if (!decoded?.email) {
+        throw new UnauthorizedException("유효하지 않은 토큰입니다.");
       }
-      return {
-        access_token: this.jwtService.sign({ sub: user.id, email: user.email }),
-        user: {
-          id: user.id,
-          email: user.email,
-          nickname: user.nickname,
-        },
-      };
+
+      user = await this.findByEmail(decoded.email);
+    } else {
+      user = await this.findByEmail(email);
     }
-    const user = await this.validateUser(email, password);
+
     if (!user) {
+      throw new NotFoundException("사용자를 찾을 수 없습니다.");
+    }
+
+    // 일반 로그인 시 비밀번호 검증
+    if (!type && !(await this.validateUser(email, password))) {
       throw new UnauthorizedException("로그인 정보가 일치하지 않습니다.");
     }
+
+    // JWT 토큰 생성 및 응답
     return {
       access_token: this.jwtService.sign({ sub: user.id, email: user.email }),
       user: {
@@ -109,5 +153,15 @@ export class AuthService {
       email: user.email,
       nickname: user.nickname,
     };
+  }
+
+  // 사용자 삭제
+  async deleteProfile(userId: number) {
+    const user = await this.userRepository.findOne({ where: { id: userId } });
+    if (!user) {
+      throw new NotFoundException("사용자를 찾을 수 없습니다.");
+    }
+    await this.userRepository.softRemove(user);
+    return user;
   }
 }

@@ -8,7 +8,7 @@ export const http = axios.create({
   baseURL:
     process.env.NODE_ENV === "production"
       ? "https://bono-dev.click"
-      : "http://localhost:3000",
+      : "http://172.30.1.64:3000",
   withCredentials: true,
   beforeRedirect: () => {
     console.log("Redirecting...");
@@ -53,11 +53,22 @@ const getProfile = async () => {
   return response.data;
 };
 
-const signup = async (email: string, password: string, nickname?: string) => {
+const deleteProfile = async () => {
+  const response = await http.delete("/api/v1/auth/me");
+  return response.data;
+};
+
+const signup = async (
+  email: string,
+  password: string,
+  nickname?: string,
+  type?: "apple" | "kakao" | "email"
+) => {
   const response = await http.post("/api/v1/auth/register", {
     email,
     password,
     nickname,
+    type,
   });
   return response.data;
 };
@@ -116,6 +127,7 @@ const getWeather = async (latitude: number, longitude: number) => {
 export const api = {
   signin,
   signup,
+  deleteProfile,
   syncTodos,
   syncBudgets,
   syncMemos,

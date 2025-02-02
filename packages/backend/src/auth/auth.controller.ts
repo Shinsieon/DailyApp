@@ -6,6 +6,7 @@ import {
   UseGuards,
   Req,
   Put,
+  Delete,
 } from "@nestjs/common";
 import { AuthService } from "./auth.service";
 import { AuthGuard } from "./auth.guard";
@@ -16,9 +17,20 @@ export class AuthController {
 
   @Post("register")
   async register(
-    @Body() body: { email: string; password: string; nickname: string }
+    @Body()
+    body: {
+      email: string;
+      password: string;
+      nickname: string;
+      type?: "email" | "kakao" | "apple";
+    }
   ) {
-    return this.authService.register(body.email, body.password, body.nickname);
+    return this.authService.register(
+      body.email,
+      body.password,
+      body.nickname,
+      body.type
+    );
   }
 
   @Post("login")
@@ -37,5 +49,11 @@ export class AuthController {
   @Get("me")
   async getProfile(@Req() req) {
     return req.user;
+  }
+
+  @UseGuards(AuthGuard)
+  @Delete("me")
+  async deleteProfile(@Req() req) {
+    return this.authService.deleteProfile(req.user.id);
   }
 }

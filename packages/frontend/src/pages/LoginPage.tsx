@@ -11,6 +11,7 @@ import { useUserStore } from "../store/userStore";
 import { IoChatbubbleSharp } from "react-icons/io5";
 import TextField from "../components/TextField";
 import useWebViewMessage from "../hooks/useWebViewMessage";
+import { AppleFilled } from "@ant-design/icons";
 const LoginPage = () => {
   const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
@@ -20,7 +21,7 @@ const LoginPage = () => {
     email: string,
     password: string,
     nickname?: string,
-    type?: "kakao" | "email"
+    type?: "kakao" | "email" | "apple"
   ) => {
     setLoading(true);
     try {
@@ -44,6 +45,14 @@ const LoginPage = () => {
           console.log(response);
           setUser(response.user);
           message.success("카카오 계정으로 회원가입이 완료되었습니다.");
+          navigate("/");
+        } else if (type === "apple") {
+          let response = await api.signup(email, password, nickname, type);
+          response = await api.signin(email, password, type);
+          localStorage.setItem("token", response.access_token);
+          console.log(response);
+          setUser(response.user);
+          message.success("애플 계정으로 회원가입이 완료되었습니다.");
           navigate("/");
         } else {
           showError("가입되지 않은 이메일입니다.");
@@ -95,7 +104,7 @@ const LoginPage = () => {
     }
   }, []);
   const handleMessage = async (data: any) => {
-    console.log("🔵 Message Received in LoginPage:", data);
+    console.log("🔵 Message Received in LoginPage:", JSON.stringify(data));
     if (data && data.type === "kakaoAuth") {
       //기존 사용자 로그인 시도
       console.log(`🔵 Kakao Auth Response:${data.user}`);
@@ -104,6 +113,14 @@ const LoginPage = () => {
         data.user.id.toString(),
         data.user.nickname,
         "kakao"
+      );
+    } else if (data && data.type === "appleAuth") {
+      console.log(`🔵 Apple Auth Response:${data.user}`);
+      await handleLogin(
+        data.token,
+        data.user.id.toString(),
+        data.user.nickname,
+        "apple"
       );
     }
   };
@@ -186,13 +203,14 @@ const LoginPage = () => {
             </Button>
           </Flex>
           <Divider style={{ marginTop: 30, marginBottom: 30 }} />
-          <Form.Item>
+          <Form.Item style={{ marginBottom: 10 }}>
             <Button
               style={{
                 backgroundColor: "#FEE000",
                 width: "100%",
                 height: 50,
                 border: "none",
+                fontWeight: "bold",
               }}
               icon={<IoChatbubbleSharp />}
               name="kakao"
@@ -210,6 +228,36 @@ const LoginPage = () => {
               }}
             >
               카카오로 시작하기
+            </Button>
+          </Form.Item>
+          <Form.Item>
+            <Button
+              style={{
+                display: "flex",
+                alignItems: "center",
+                justifyContent: "center",
+                backgroundColor: "black",
+                color: "white",
+                border: "none",
+                fontWeight: "bold",
+                transition: "background 0.3s",
+                width: "100%",
+                height: 50,
+              }}
+              icon={<AppleFilled />}
+              onClick={() => {
+                if (window && window.ReactNativeWebView) {
+                  window.ReactNativeWebView.postMessage(
+                    JSON.stringify({
+                      type: "appleLogin",
+                    })
+                  );
+                } else {
+                  message.info("애플 로그인 기능은 앱에서만 제공됩니다.");
+                }
+              }}
+            >
+              애플로 시작하기
             </Button>
           </Form.Item>
         </Form>
