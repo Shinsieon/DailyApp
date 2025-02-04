@@ -216,12 +216,12 @@ const LoginPage = () => {
               name="kakao"
               onClick={() => {
                 if (window && window.ReactNativeWebView) {
-                  // window.ReactNativeWebView.postMessage(
-                  //   JSON.stringify({
-                  //     type: "kakaoLogin",
-                  //   })
-                  // );
-                  message.info("카카오 로그인 기능은 준비중입니다.");
+                  window.ReactNativeWebView.postMessage(
+                    JSON.stringify({
+                      type: "kakaoLogin",
+                    })
+                  );
+                  //message.info("카카오 로그인 기능은 준비중입니다.");
                 } else {
                   handleKakaoLogin();
                 }
