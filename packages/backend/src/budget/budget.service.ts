@@ -36,7 +36,7 @@ export class BudgetService {
   async getBudgetsByUser(userId: number): Promise<Budget[]> {
     return this.budgetRepository.find({
       where: { user: { id: userId } },
-      relations: ["user"],
+      relations: ["user", "category"],
     });
   }
 
@@ -79,7 +79,6 @@ export class BudgetService {
       if (!category) {
         throw new Error(`Category not found for ID: ${budgetData.category.id}`);
       }
-
       const budget = this.budgetRepository.create({
         ...budgetData,
         user,

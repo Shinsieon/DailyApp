@@ -16,7 +16,7 @@ export class TodoController {
   constructor(private readonly todoService: TodoService) {}
 
   // 🔹 1. 특정 사용자의 모든 할 일 조회 (GET /todos/user/:userId)
-  @Get("user/:userId")
+  @Get(":userId")
   async getUserTodos(
     @Param("userId", ParseIntPipe) userId: number
   ): Promise<Todo[]> {

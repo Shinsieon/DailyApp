@@ -8,8 +8,6 @@ import {
 } from "@ant-design/icons";
 import SettingsPage from "../pages/SettingsPage";
 import HomePage from "../pages/HomePage";
-import { AiOutlineWechat } from "react-icons/ai";
-import SharePage from "../pages/SharePage";
 
 const menus: Menu[] = [
   {

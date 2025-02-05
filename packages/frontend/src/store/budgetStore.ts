@@ -8,6 +8,7 @@ import {
   getAllData,
   updateData,
 } from "../db/operations";
+import dayjs from "dayjs";
 
 type BudgetState = {
   budgets: BudgetData[];
@@ -16,12 +17,18 @@ type BudgetState = {
   saveBudget: (budget: BudgetData) => Promise<void>;
   deleteBudget: (id: number) => Promise<void>;
   updateBudget: (budget: BudgetData) => Promise<void>;
-  flush: () => void;
+  flushBudgets: () => void;
 };
 const storeName = dbStores.budgetStore;
 export const useBudgetStore = create<BudgetState>((set) => ({
   budgets: [],
-  setBudgets: (budgets) => set({ budgets }),
+  setBudgets: (budgets) => {
+    budgets.forEach((budget) => {
+      budget.date = dayjs(budget.date).format("YYYYMMDD");
+      budget.amount = Number(budget.amount);
+    });
+    set({ budgets });
+  },
   fetchBudgets: async () => {
     const budgets = await getAllData<BudgetData>(storeName);
     set({ budgets });
@@ -44,5 +51,5 @@ export const useBudgetStore = create<BudgetState>((set) => ({
       budgets: state.budgets.filter((budget) => budget.id !== id),
     }));
   },
-  flush: async () => set({ budgets: [] }),
+  flushBudgets: async () => set({ budgets: [] }),
 }));

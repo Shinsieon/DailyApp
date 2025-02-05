@@ -23,7 +23,7 @@ export class MemoController {
     return this.memoService.createMemo(userId, memoData);
   }
 
-  @Get("user/:userId")
+  @Get(":userId")
   async getMemosByUser(@Param("userId") userId: number) {
     return this.memoService.getMemosByUser(userId);
   }

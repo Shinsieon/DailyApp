@@ -16,7 +16,7 @@ export class BudgetController {
   constructor(private readonly budgetService: BudgetService) {}
 
   // 🔹 1. 특정 사용자의 모든 할 일 조회 (GET /Budgets/user/:userId)
-  @Get("user/:userId")
+  @Get(":userId")
   async getUserBudgets(
     @Param("userId", ParseIntPipe) userId: number
   ): Promise<Budget[]> {

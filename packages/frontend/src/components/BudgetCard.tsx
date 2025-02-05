@@ -53,9 +53,9 @@ const BudgetCard = () => {
   useEffect(() => {
     const sum: BudgetSum = { income: 0, expense: 0 };
     const firstDayofMonth = dayjs().startOf("month").format("YYYYMMDD");
-    const today = dayjs().format("YYYYMMDD");
+    const lastDayofMonth = dayjs().endOf("month").format("YYYYMMDD");
     const monthBudget = budgets.filter(
-      (item) => item.date >= firstDayofMonth && item.date <= today
+      (item) => item.date >= firstDayofMonth && item.date <= lastDayofMonth
     );
     monthBudget.forEach((item: BudgetData) => {
       if (item.type === "income") {

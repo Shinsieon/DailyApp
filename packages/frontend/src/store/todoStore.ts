@@ -8,6 +8,7 @@ import {
   updateData,
 } from "../db/operations";
 import { TodoData } from "../types";
+import dayjs from "dayjs";
 
 type TodoState = {
   todos: TodoData[];
@@ -16,14 +17,19 @@ type TodoState = {
   saveTodo: (todo: TodoData) => Promise<void>;
   deleteTodo: (id: number) => Promise<void>;
   toggleTodo: (id: number) => Promise<void>;
-  flush: () => void;
+  flushTodos: () => void;
 };
 
 const storeName = dbStores.todoStore;
 
 export const useTodoStore = create<TodoState>((set) => ({
   todos: [],
-  setTodos: (todos) => set({ todos }),
+  setTodos: (todos) => {
+    todos.forEach((todo) => {
+      todo.date = dayjs(todo.date).format("YYYYMMDD");
+    });
+    set({ todos });
+  },
   fetchTodos: async () => {
     const todos = await getAllData<TodoData>(storeName);
     set({ todos });
@@ -50,5 +56,5 @@ export const useTodoStore = create<TodoState>((set) => ({
       }));
     }
   },
-  flush: async () => set({ todos: [] }),
+  flushTodos: async () => set({ todos: [] }),
 }));

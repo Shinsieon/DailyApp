@@ -9,19 +9,28 @@ import {
   getData,
   updateData,
 } from "../db/operations";
+import dayjs from "dayjs";
 
 type MemoState = {
   memos: MemoData[];
   fetchMemos: () => Promise<void>;
+  setMemos: (memos: MemoData[]) => void;
   saveMemo: (memo: MemoData) => Promise<void>;
   deleteMemo: (id: number) => Promise<void>;
   toggleMemo: (id: number) => Promise<void>;
   updateMemo: (memo: MemoData) => Promise<void>;
-  flush: () => void;
+  flushMemos: () => void;
 };
 const storeName = dbStores.memoStore;
 export const useMemoStore = create<MemoState>((set) => ({
   memos: [],
+  setMemos: (memos) => {
+    memos.forEach((memo) => {
+      memo.group = memo.group || "기본";
+      memo.date = dayjs(memo.date).format("YYYYMMDD");
+    });
+    set({ memos });
+  },
   fetchMemos: async () => {
     const memos = (await getAllData<MemoData>(storeName)).map((m) => {
       m.group = m.group || "기본";
@@ -56,5 +65,5 @@ export const useMemoStore = create<MemoState>((set) => ({
       memos: state.memos.map((m) => (m.id === memo.id ? memo : m)),
     }));
   },
-  flush: async () => set({ memos: [] }),
+  flushMemos: async () => set({ memos: [] }),
 }));

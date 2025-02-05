@@ -8,7 +8,7 @@ export const http = axios.create({
   baseURL:
     process.env.NODE_ENV === "production"
       ? "https://bono-dev.click"
-      : "http://172.30.1.64:3000",
+      : "http://172.30.1.5:3000",
   withCredentials: true,
   beforeRedirect: () => {
     console.log("Redirecting...");
@@ -73,6 +73,10 @@ const signup = async (
   return response.data;
 };
 
+const getTodos = async (userId: number) => {
+  const response = await http.get(`/api/v1/todos/${userId}`);
+  return response.data;
+};
 const syncTodos = async (todos: TodoData[], userId: number) => {
   const response = await http.post(`/api/v1/todos/multiple/${userId}`, {
     todos,
@@ -86,11 +90,20 @@ const syncBudgets = async (budgets: BudgetData[], userId: number) => {
   });
   return response.data;
 };
+const getBudgets = async (userId: number) => {
+  const response = await http.get(`/api/v1/budgets/${userId}`);
+  return response.data;
+};
 
 const syncMemos = async (memos: MemoData[], userId: number) => {
   const response = await http.post(`/api/v1/memos/multiple/${userId}`, {
     memos,
   });
+  return response.data;
+};
+
+const getMemos = async (userId: number) => {
+  const response = await http.get(`/api/v1/memos/${userId}`);
   return response.data;
 };
 
@@ -129,6 +142,9 @@ export const api = {
   signup,
   deleteProfile,
   syncTodos,
+  getTodos,
+  getBudgets,
+  getMemos,
   syncBudgets,
   syncMemos,
   getProfile,
