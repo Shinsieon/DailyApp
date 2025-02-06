@@ -3,6 +3,7 @@ import { create } from "zustand";
 import { BudgetData } from "../types";
 import {
   addData,
+  clearData,
   dbStores,
   deleteData,
   getAllData,
@@ -22,10 +23,12 @@ type BudgetState = {
 const storeName = dbStores.budgetStore;
 export const useBudgetStore = create<BudgetState>((set) => ({
   budgets: [],
-  setBudgets: (budgets) => {
+  setBudgets: async (budgets) => {
+    await clearData(storeName);
     budgets.forEach((budget) => {
       budget.date = dayjs(budget.date).format("YYYYMMDD");
       budget.amount = Number(budget.amount);
+      addData(storeName, budget);
     });
     set({ budgets });
   },

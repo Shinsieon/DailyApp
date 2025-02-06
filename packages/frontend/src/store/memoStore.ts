@@ -3,6 +3,7 @@ import { create } from "zustand";
 import { MemoData } from "../types";
 import {
   addData,
+  clearData,
   dbStores,
   deleteData,
   getAllData,
@@ -24,10 +25,12 @@ type MemoState = {
 const storeName = dbStores.memoStore;
 export const useMemoStore = create<MemoState>((set) => ({
   memos: [],
-  setMemos: (memos) => {
+  setMemos: async (memos) => {
+    await clearData(storeName);
     memos.forEach((memo) => {
       memo.group = memo.group || "기본";
       memo.date = dayjs(memo.date).format("YYYYMMDD");
+      addData(storeName, memo);
     });
     set({ memos });
   },

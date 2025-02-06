@@ -1,6 +1,7 @@
 import { create } from "zustand";
 import {
   addData,
+  clearData,
   dbStores,
   deleteData,
   getAllData,
@@ -24,10 +25,14 @@ const storeName = dbStores.todoStore;
 
 export const useTodoStore = create<TodoState>((set) => ({
   todos: [],
-  setTodos: (todos) => {
-    todos.forEach((todo) => {
+  setTodos: async (todos) => {
+    await clearData(storeName);
+
+    todos.forEach(async (todo) => {
       todo.date = dayjs(todo.date).format("YYYYMMDD");
+      await addData(storeName, todo);
     });
+
     set({ todos });
   },
   fetchTodos: async () => {
