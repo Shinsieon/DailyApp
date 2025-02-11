@@ -8,11 +8,17 @@ import { colors } from "./colors";
 import Label from "./components/Label";
 import { useEffect } from "react";
 import { api } from "./api";
+import { useTodoStore } from "./store/todoStore";
+import { useBudgetStore } from "./store/budgetStore";
+import { useMemoStore } from "./store/memoStore";
 
 const Index = () => {
   // Load the initial menu from localStorage or default to the first menu
   const { menus, selMenu, setSelMenu } = useMenuStore();
   const user = useUserStore((state) => state.user);
+  const todos = useTodoStore((state) => state.todos);
+  const budgets = useBudgetStore((state) => state.budgets);
+  const memos = useMemoStore((state) => state.memos);
   const navigate = useNavigate();
   console.log(user);
   useEffect(() => {
@@ -21,7 +27,17 @@ const Index = () => {
         useUserStore.getState().setUser(data);
       });
     }
-  });
+    if (window && window.ReactNativeWebView) {
+      window.ReactNativeWebView.postMessage(
+        JSON.stringify({
+          type: "widgetData",
+          todos: todos.sort((a, b) => (a.date > b.date ? 1 : -1)),
+          budgets: budgets.sort((a, b) => (a.date > b.date ? 1 : -1)),
+          memos: memos.sort((a, b) => (a.date > b.date ? 1 : -1)),
+        })
+      );
+    }
+  }, [todos]);
   const right = (
     <Space style={{ fontSize: "24px" }}>
       {user ? (

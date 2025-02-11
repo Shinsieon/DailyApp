@@ -181,6 +181,7 @@ const SettingsPage = () => {
           }}
         >
           패치 노트
+          {process.env.NODE_ENV === "development" && " (개발)"}
         </List.Item>
       </List>
       {loading && <CustomLoading />}
