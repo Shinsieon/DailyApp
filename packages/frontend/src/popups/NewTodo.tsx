@@ -6,7 +6,6 @@ import { message } from "antd";
 import { PopupProps } from "../types";
 import { useThemeStore } from "../store/themeStore";
 import { colors } from "../colors";
-import TextField from "../components/TextField";
 
 interface NewTodoProps extends PopupProps {
   title?: string;
@@ -78,6 +77,7 @@ const NewTodo = (props: NewTodoProps) => {
       >
         <DatePicker confirmText="확인" cancelText="취소">
           {(value) => {
+            console.log(value);
             return value
               ? dayjs(value).format("YYYY/MM/DD")
               : dayjs(defaultDate, "YYYYMMDD").format("YYYY/MM/DD");

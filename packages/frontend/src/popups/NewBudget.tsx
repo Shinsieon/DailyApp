@@ -20,10 +20,6 @@ import { api } from "../api";
 
 interface NewBudgetProps extends PopupProps {
   type: BudgetType;
-}
-
-interface NewBudgetProps extends PopupProps {
-  type: BudgetType;
   date?: string; //20241202
   selBudget?: BudgetData | null;
 }
@@ -161,11 +157,11 @@ const NewBudget = (props: NewBudgetProps) => {
         trigger="onConfirm"
       >
         <DatePicker confirmText="확인" cancelText="취소">
-          {(value) =>
-            value
+          {(value) => {
+            return value
               ? dayjs(value).format("YYYY/MM/DD")
-              : dayjs(defaultDate, "YYYYMMDD").format("YYYY/MM/DD")
-          }
+              : dayjs(defaultDate, "YYYYMMDD").format("YYYY/MM/DD");
+          }}
         </DatePicker>
       </Form.Item>
       {category && (

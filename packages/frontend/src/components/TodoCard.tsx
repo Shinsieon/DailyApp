@@ -55,7 +55,7 @@ const TodoCard = () => {
                 <Space key={todo.id}>
                   <Tag style={{ fontSize: "15px" }} color="primary">
                     {" "}
-                    {todo.title}
+                    {todo.title.substring(0, 7) + "..."}
                   </Tag>
                 </Space>
               )
@@ -74,7 +74,7 @@ const TodoCard = () => {
                 <Space key={todo.id}>
                   <Tag style={{ fontSize: "15px" }} color="warning">
                     {" "}
-                    {todo.title}
+                    {todo.title.substring(0, 7) + "..."}
                   </Tag>
                 </Space>
               )

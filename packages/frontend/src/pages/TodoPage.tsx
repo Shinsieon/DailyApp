@@ -222,6 +222,7 @@ const TodoPage = () => {
           setVisible={setVisible}
           children={
             <NewTodo
+              date={selDate}
               onOk={() => {
                 setVisible(false);
               }}
