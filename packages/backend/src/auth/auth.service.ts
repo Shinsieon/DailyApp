@@ -8,15 +8,7 @@ import { InjectRepository } from "@nestjs/typeorm";
 import { Repository } from "typeorm";
 import * as bcrypt from "bcryptjs";
 import { User } from "./auth.entity";
-
-interface UserResponse {
-  access_token: string;
-  user: {
-    id: number;
-    email: string;
-    nickname: string;
-  };
-}
+import { UserResponse } from "src/types";
 
 @Injectable()
 export class AuthService {

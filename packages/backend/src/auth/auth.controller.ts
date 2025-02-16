@@ -10,6 +10,7 @@ import {
 } from "@nestjs/common";
 import { AuthService } from "./auth.service";
 import { AuthGuard } from "./auth.guard";
+import { UserResponse } from "src/types";
 
 @Controller("auth")
 export class AuthController {
@@ -24,13 +25,14 @@ export class AuthController {
       nickname: string;
       type?: "email" | "kakao" | "apple";
     }
-  ) {
-    return this.authService.register(
+  ): Promise<UserResponse> {
+    const result = await this.authService.register(
       body.email,
       body.password,
       body.nickname,
       body.type
     );
+    return result;
   }
 
   @Post("login")
