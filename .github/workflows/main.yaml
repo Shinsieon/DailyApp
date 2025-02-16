@@ -31,12 +31,11 @@ jobs:
           pnpm install --frozen-lockfile
           pnpm test  # Jest 실행 (테스트 실패 시 중단)
 
-      # # 4. 🔹 프론트엔드 테스트 (React)
-      # - name: Install dependencies & Run Frontend Tests
-      #   run: |
-      #     cd packages/frontend
-      #     pnpm install --frozen-lockfile
-      #     pnpm test --watchAll=false  # React Testing Library 실행
+      # 4. 🔹 프론트엔드 테스트 (React)
+      - name: Install dependencies & Run Frontend Tests
+        run: |
+          cd packages/frontend
+          pnpm install --frozen-lockfile
 
       # 5. 🔹 백엔드 빌드
       - name: Build Backend
