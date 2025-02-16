@@ -24,32 +24,38 @@ jobs:
           node-version: 18
           cache: "pnpm"
 
+      # 3. 🔹 의존성 설치 (루트에서 실행)
+      - name: Install dependencies (Monorepo)
+        run: pnpm install --frozen-lockfile
+
       # 3. 🔹 백엔드 테스트 (NestJS)
       - name: Install dependencies & Run Backend Tests
         run: |
           cd packages/backend
-          pnpm install --frozen-lockfile
           pnpm test  # Jest 실행 (테스트 실패 시 중단)
 
       # 4. 🔹 프론트엔드 테스트 (React)
       - name: Install dependencies & Run Frontend Tests
         run: |
           cd packages/frontend
-          pnpm install --frozen-lockfile
 
       # 5. 🔹 백엔드 빌드
       - name: Build Backend
         run: |
           cd packages/backend
           pnpm build
-          tar -czf backend.tar.gz dist package.json pnpm-lock.yaml
+          tar -czf backend.tar.gz dist package.json
 
       # 6. 🔹 프론트엔드 빌드
       - name: Build Frontend
         run: |
           cd packages/frontend
           pnpm build
-          tar -czf frontend.tar.gz dist package.json pnpm-lock.yaml
+          tar -czf frontend.tar.gz dist package.json
+
+      # 7. 🔹 pnpm-lock.yaml만 별도 압축
+      - name: Archive pnpm-lock.yaml
+        run: tar -czf pnpm-lock.tar.gz pnpm-lock.yaml
 
       # 7. 🔹 AWS EC2로 빌드된 파일 전송 (SCP)
       # - name: Transfer build files to EC2
