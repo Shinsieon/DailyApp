@@ -57,6 +57,28 @@ jobs:
       - name: Archive pnpm-lock.yaml
         run: tar -czf pnpm-lock.tar.gz pnpm-lock.yaml
 
+      # 8-2. Github Actions VM 환경의 IP를 받아온다.
+      - name: Get public IP
+        id: ip
+        uses: haythem/public-ip@v1.3
+
+      # 1-3. AWS 인증 관련 옵션을 추가한다.
+      - name: Configure AWS credentials
+        uses: aws-actions/configure-aws-credentials@v4
+        with:
+          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          aws-region: "ap-northeast-2"
+
+      # 1-4. GitHub Actions VM 환경의 IP를 인바운드 규칙에 추가한다.
+      - name: Add GitHub Actions IP
+        run: |
+          aws ec2 authorize-security-group-ingress \
+              --group-id ${{ secrets.SECURITY_GROUP_ID }} \
+              --protocol tcp \
+              --port 22 \
+              --cidr ${{ steps.ip.outputs.ipv4 }}/32
+
       # 7. 🔹 AWS EC2로 빌드된 파일 전송 (SCP)
       - name: Transfer build files to EC2
         uses: appleboy/scp-action@master
@@ -66,6 +88,15 @@ jobs:
           key: ${{ secrets.EC2_PRIVATE_KEY }}
           source: "packages/backend/backend.tar.gz,packages/frontend/frontend.tar.gz,pnpm-lock.yaml"
           target: "/home/ubuntu/DailyApp2"
+
+      # 3. GitHub Actions VM 환경의 IP를 인바운드 규칙에서 제거한다.
+      - name: Remove GitHub Actions IP
+        run: |
+          aws ec2 revoke-security-group-ingress \
+              —group-id ${{ secrets.SECURITY_GROUP_ID }} \
+              —protocol tcp \
+              —port 22 \
+              —cidr ${{ steps.ip.outputs.ipv4 }}/32
 
       # # 8. 🔹 EC2에서 배포 및 PM2 재시작
       # - name: Deploy on EC2
