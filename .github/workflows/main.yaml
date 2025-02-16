@@ -7,62 +7,64 @@ on:
 
 jobs:
   test-and-build:
-    runs-on: ubuntu-latest # GitHub Actions에서 실행
+    runs-on: ubuntu-latest
 
     steps:
       # 1. GitHub repository 체크아웃
       - name: Checkout code
         uses: actions/checkout@v3
 
+      # 2. pnpm 설치
       - name: Install pnpm
         run: npm install -g pnpm
 
-      # 2. Node.js & pnpm 설치
+      # 3. Node.js 및 pnpm 설정
       - name: Set up Node.js and pnpm
         uses: actions/setup-node@v3
         with:
           node-version: 18
           cache: "pnpm"
 
-      # 3. 🔹 의존성 설치 (루트에서 실행)
+      # 4. 의존성 설치 (루트에서 실행)
       - name: Install dependencies (Monorepo)
         run: pnpm install --frozen-lockfile
 
-      # 3. 🔹 백엔드 테스트 (NestJS)
-      - name: Install dependencies & Run Backend Tests
+      # 5. 백엔드 테스트 실행 (NestJS)
+      - name: Run Backend Tests
         run: |
           cd packages/backend
-          pnpm test  # Jest 실행 (테스트 실패 시 중단)
+          pnpm test
 
-      # 4. 🔹 프론트엔드 테스트 (React)
-      - name: Install dependencies & Run Frontend Tests
+      # 6. 프론트엔드 테스트 실행 (React)
+      - name: Run Frontend Tests
         run: |
           cd packages/frontend
+          pnpm test
 
-      # 5. 🔹 백엔드 빌드
+      # 7. 백엔드 빌드
       - name: Build Backend
         run: |
           cd packages/backend
           pnpm build
           tar -czf backend.tar.gz dist package.json
 
-      # 6. 🔹 프론트엔드 빌드
+      # 8. 프론트엔드 빌드
       - name: Build Frontend
         run: |
           cd packages/frontend
           pnpm build
           tar -czf frontend.tar.gz dist package.json
 
-      # 7. 🔹 pnpm-lock.yaml만 별도 압축
+      # 9. pnpm-lock.yaml을 별도로 압축
       - name: Archive pnpm-lock.yaml
         run: tar -czf pnpm-lock.tar.gz pnpm-lock.yaml
 
-      # 8-2. Github Actions VM 환경의 IP를 받아온다.
+      # 10. GitHub Actions VM의 퍼블릭 IP 가져오기
       - name: Get public IP
         id: ip
         uses: haythem/public-ip@v1.3
 
-      # 1-3. AWS 인증 관련 옵션을 추가한다.
+      # 11. AWS 자격 증명 설정
       - name: Configure AWS credentials
         uses: aws-actions/configure-aws-credentials@v4
         with:
@@ -70,35 +72,35 @@ jobs:
           aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
           aws-region: "ap-northeast-2"
 
-      # 1-4. GitHub Actions VM 환경의 IP를 인바운드 규칙에 추가한다.
+      # 12. GitHub Actions VM의 IP를 EC2 보안 그룹에 추가 (포트 22 허용)
       - name: Add GitHub Actions IP
         run: |
           aws ec2 authorize-security-group-ingress \
               --group-id ${{ secrets.SECURITY_GROUP_ID }} \
               --protocol tcp \
               --port 22 \
-              --cidr ${{ steps.ip.outputs.ipv4 }}/32
+              --cidr ${{ steps.ip.outputs.ipv4 }}/32 || true
 
-      # 7. 🔹 AWS EC2로 빌드된 파일 전송 (SCP)
+      # 13. AWS EC2로 빌드된 파일 전송 (SCP)
       - name: Transfer build files to EC2
-        uses: appleboy/scp-action@master
-        with:
-          host: ${{ secrets.EC2_HOST }}
-          username: ${{ secrets.EC2_USER }}
-          key: ${{ secrets.EC2_PRIVATE_KEY }}
-          source: "packages/backend/backend.tar.gz,packages/frontend/frontend.tar.gz,pnpm-lock.yaml"
-          target: "/home/ubuntu/DailyApp2"
+        run: |
+          scp -i ~/.ssh/id_rsa \
+              -o StrictHostKeyChecking=no \
+              packages/backend/backend.tar.gz \
+              packages/frontend/frontend.tar.gz \
+              pnpm-lock.yaml \
+              ${{ secrets.EC2_USER }}@${{ secrets.EC2_HOST }}:/home/ubuntu/DailyApp2/
 
-      # 3. GitHub Actions VM 환경의 IP를 인바운드 규칙에서 제거한다.
+      # 14. GitHub Actions VM의 IP를 EC2 보안 그룹에서 제거 (보안 유지)
       - name: Remove GitHub Actions IP
         run: |
           aws ec2 revoke-security-group-ingress \
-              —group-id ${{ secrets.SECURITY_GROUP_ID }} \
-              —protocol tcp \
-              —port 22 \
-              —cidr ${{ steps.ip.outputs.ipv4 }}/32
+              --group-id ${{ secrets.SECURITY_GROUP_ID }} \
+              --protocol tcp \
+              --port 22 \
+              --cidr ${{ steps.ip.outputs.ipv4 }}/32 || true
 
-      # # 8. 🔹 EC2에서 배포 및 PM2 재시작
+      # # 15. EC2에서 배포 및 PM2 재시작
       # - name: Deploy on EC2
       #   uses: appleboy/ssh-action@v0.1.7
       #   with:
@@ -112,9 +114,9 @@ jobs:
       #       tar -xzf backend.tar.gz -C packages/backend
 
       #       echo "🚀 Installing Backend Dependencies..."
-      #       cp pnpm-lock.yaml packages/backend/  # 🔹 pnpm-lock.yaml 복사
+      #       cp pnpm-lock.yaml packages/backend/
       #       cd packages/backend
-      #       pnpm install --frozen-lockfile --production  # 운영환경 의존성 설치
+      #       pnpm install --frozen-lockfile --production
       #       pm2 restart nest-server-prod || pm2 start dist/main.js --name "nest-server-prod"
 
       #       echo "🚀 Extracting and Deploying Frontend..."
@@ -123,7 +125,7 @@ jobs:
       #       tar -xzf frontend.tar.gz -C packages/frontend
 
       #       echo "🚀 Installing Frontend Dependencies..."
-      #       cp pnpm-lock.yaml packages/frontend/  # 🔹 pnpm-lock.yaml 복사
+      #       cp pnpm-lock.yaml packages/frontend/
       #       cd packages/frontend
       #       pnpm install --frozen-lockfile --production
 
