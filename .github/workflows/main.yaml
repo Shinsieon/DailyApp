@@ -83,6 +83,12 @@ jobs:
       # 13. AWS EC2로 빌드된 파일 전송 (SCP)
       - name: Transfer build files to EC2
         run: |
+          echo "🔑 Setting up SSH Key..."
+          mkdir -p ~/.ssh
+          echo "${{ secrets.EC2_PRIVATE_KEY }}" > ~/.ssh/id_rsa
+          chmod 600 ~/.ssh/id_rsa
+
+          echo "🚀 Transferring files to EC2..."
           scp -i ~/.ssh/id_rsa \
               -o StrictHostKeyChecking=no \
               packages/backend/backend.tar.gz \
