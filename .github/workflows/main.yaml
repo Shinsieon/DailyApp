@@ -117,6 +117,15 @@ jobs:
             # 🔹 압축 해제 (기존 dist 폴더 삭제 X)
             tar -xzf backend.tar.gz -C packages/backend
 
+            # 🔹 pnpm 설치
+            if ! command -v pnpm &> /dev/null; then
+              echo "pnpm not found. Installing pnpm..."
+              curl -fsSL https://get.pnpm.io/install.sh | sh -
+              export PATH=$HOME/.local/share/pnpm:$PATH
+              echo 'export PATH=$HOME/.local/share/pnpm:$PATH' >> ~/.bashrc
+              source ~/.bashrc
+            fi
+
             # 🔹 의존성 설치 (빌드 전에 실행)
             echo "📦 Installing Backend Dependencies..."
             cp pnpm-lock.yaml packages/backend/
