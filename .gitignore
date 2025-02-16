@@ -43,7 +43,6 @@ yarn-error.log*
 
 packages/backend/node_modules
 packages/backend/dist
-packages/backend/test
 packages/backend/logs
 
 packages/backend/ssl

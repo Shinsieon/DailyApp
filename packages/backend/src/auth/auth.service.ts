@@ -9,6 +9,15 @@ import { Repository } from "typeorm";
 import * as bcrypt from "bcryptjs";
 import { User } from "./auth.entity";
 
+interface UserResponse {
+  access_token: string;
+  user: {
+    id: number;
+    email: string;
+    nickname: string;
+  };
+}
+
 @Injectable()
 export class AuthService {
   constructor(
@@ -34,7 +43,7 @@ export class AuthService {
     password: string,
     nickname: string,
     type?: "apple" | "kakao" | "email"
-  ) {
+  ): Promise<UserResponse> {
     if (type === "apple") {
       const decoded = this.jwtService.decode(email) as {
         email?: string;
@@ -61,7 +70,18 @@ export class AuthService {
         user.deletedAt = null;
         user.password = password;
         user.nickname = nickname;
-        return await this.userRepository.save(user);
+        await this.userRepository.save(user);
+        return {
+          access_token: this.jwtService.sign({
+            sub: user.id,
+            email: user.email,
+          }),
+          user: {
+            id: user.id,
+            email: user.email,
+            nickname: user.nickname,
+          },
+        };
       }
       throw new UnauthorizedException("이미 가입된 계정입니다.");
     }
