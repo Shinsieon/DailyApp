@@ -96,16 +96,7 @@ jobs:
               pnpm-lock.yaml \
               ${{ secrets.EC2_USER }}@${{ secrets.EC2_HOST }}:/home/ubuntu/DailyApp2/
 
-      # 14. GitHub Actions VM의 IP를 EC2 보안 그룹에서 제거 (보안 유지)
-      - name: Remove GitHub Actions IP
-        run: |
-          aws ec2 revoke-security-group-ingress \
-              --group-id ${{ secrets.SECURITY_GROUP_ID }} \
-              --protocol tcp \
-              --port 22 \
-              --cidr ${{ steps.ip.outputs.ipv4 }}/32 || true
-
-      # 15. EC2에서 배포 및 PM2 재시작
+      # 14. EC2에서 배포 및 PM2 재시작
       - name: Deploy on EC2
         uses: appleboy/ssh-action@v0.1.7
         with:
@@ -178,3 +169,16 @@ jobs:
             fi
 
             echo "✅ Deployment completed."
+
+            # remove tag.gz files
+            rm -f backend.tar.gz
+            rm -f frontend.tar.gz
+
+      # 15. GitHub Actions VM의 IP를 EC2 보안 그룹에서 제거 (보안 유지)
+      - name: Remove GitHub Actions IP
+        run: |
+          aws ec2 revoke-security-group-ingress \
+              --group-id ${{ secrets.SECURITY_GROUP_ID }} \
+              --protocol tcp \
+              --port 22 \
+              --cidr ${{ steps.ip.outputs.ipv4 }}/32 || true
