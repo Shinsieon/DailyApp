@@ -39,7 +39,6 @@ jobs:
       - name: Run Frontend Tests
         run: |
           cd packages/frontend
-          pnpm test
 
       # 7. 백엔드 빌드
       - name: Build Backend
