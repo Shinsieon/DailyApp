@@ -78,7 +78,7 @@ jobs:
             --group-id ${{ secrets.SECURITY_GROUP_ID }} \
             --protocol tcp \
             --port 22 \
-            --cidr ${{ steps.ip.outputs.ipv4 }}/32
+            --cidr ${{ steps.ip.outputs.ipv4 }}/32 || true
 
       # 13. AWS EC2로 빌드된 파일 전송 (SCP)
       - name: Transfer build files to EC2
