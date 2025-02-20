@@ -71,15 +71,6 @@ jobs:
           aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
           aws-region: "ap-northeast-2"
 
-      # 12. GitHub Actions VM의 IP를 EC2 보안 그룹에 추가 (포트 22 허용)
-      - name: Add GitHub Actions IP
-        run: |
-          aws ec2 authorize-security-group-ingress \
-              --group-id ${{ secrets.SECURITY_GROUP_ID }} \
-              --protocol tcp \
-              --port 22 \
-              --cidr ${{ steps.ip.outputs.ipv4 }}/32 || true
-
       # 13. AWS EC2로 빌드된 파일 전송 (SCP)
       - name: Transfer build files to EC2
         run: |
@@ -182,12 +173,3 @@ jobs:
             # remove tag.gz files
             rm -f backend.tar.gz
             rm -f frontend.tar.gz
-
-      # 15. GitHub Actions VM의 IP를 EC2 보안 그룹에서 제거 (보안 유지)
-      - name: Remove GitHub Actions IP
-        run: |
-          aws ec2 revoke-security-group-ingress \
-              --group-id ${{ secrets.SECURITY_GROUP_ID }} \
-              --protocol tcp \
-              --port 22 \
-              --cidr ${{ steps.ip.outputs.ipv4 }}/32 || true
