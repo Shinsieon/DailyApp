@@ -5,13 +5,18 @@ import { colors } from "../colors";
 
 interface LabelProps extends TextProps {
   name?: string | number;
+  placeholder?: boolean;
 }
 const Label = (props: LabelProps) => {
   const theme = useThemeStore((state) => state.theme);
   return (
     <Typography.Text
       style={{
-        color: theme.isDarkMode ? colors.lightWhite : colors.darkBlack,
+        color: props.placeholder
+          ? colors.darkGray
+          : theme.isDarkMode
+            ? colors.lightWhite
+            : colors.darkBlack,
       }}
       {...props}
     >
