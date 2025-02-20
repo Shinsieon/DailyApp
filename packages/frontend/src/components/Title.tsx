@@ -11,10 +11,10 @@ const Title = (props: TitleProps_) => {
   const theme = useThemeStore((state) => state.theme);
   return (
     <Typography.Title
-      {...props}
       style={{
         color: theme.isDarkMode ? colors.lightWhite : colors.darkBlack,
       }}
+      {...props}
     >
       {props.name}
     </Typography.Title>

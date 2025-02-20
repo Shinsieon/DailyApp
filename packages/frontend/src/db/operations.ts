@@ -10,7 +10,6 @@ export const dbStores = {
 export const addData = async <T>(storeName: string, data: T) => {
   const { tx, store } = await getStore(storeName);
   const key = parseInt((await store.add(data)) as unknown as string);
-  console.log(`key : ${key}`);
   await tx.done;
   return key;
 };
@@ -44,10 +43,8 @@ export const getAllData = async <T>(
   startDate?: string,
   endDate?: string
 ): Promise<T[]> => {
-  console.log(`getAllData : ${storeName}`);
   const { tx, store } = await getStore(storeName);
   let data: T[] = [];
-  console.log(`store : ${JSON.stringify(store.indexNames)}`);
   if (startDate && endDate) {
     const range = IDBKeyRange.bound(startDate, endDate);
     data = (await store.index("date").getAll(range)) as unknown as T[];

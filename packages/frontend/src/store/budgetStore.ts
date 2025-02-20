@@ -37,13 +37,11 @@ export const useBudgetStore = create<BudgetState>((set) => ({
     set({ budgets });
   },
   saveBudget: async (budget) => {
-    console.log(budget);
     const key = await addData(storeName, budget);
     set((state) => ({ budgets: [...state.budgets, { ...budget, id: key }] }));
   },
   updateBudget: async (budget) => {
     await updateData(storeName, budget);
-    console.log(budget);
     set((state) => ({
       budgets: state.budgets.map((m) => (m.id === budget.id ? budget : m)),
     }));

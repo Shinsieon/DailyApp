@@ -8,7 +8,7 @@ export const http = axios.create({
   baseURL:
     process.env.NODE_ENV === "production"
       ? "https://bono-dev.click"
-      : "http://172.30.1.85:3000",
+      : "http://172.30.1.44:3000",
   withCredentials: true,
   beforeRedirect: () => {
     console.log("Redirecting...");
@@ -108,9 +108,7 @@ const getMemos = async (userId: number) => {
 };
 
 const getPatchNotes = async () => {
-  console.log("getting patch notes");
   const response = await http.get("/api/v1/patch-notes");
-  console.log(response);
   return response.data;
 };
 
@@ -126,14 +124,10 @@ const updateNickname = async (nickname: string) => {
   const response = await http.put("/api/v1/auth/nickname", { nickname });
   return response.data;
 };
-const getWeather = async (latitude: number, longitude: number) => {
-  //const key =
-  "P+/y/R84yS9jBDWOea6o+ooWcZ1t9SRKQaKK23tR2DeF8HGCMh+61cTAFpV71qF7HdooH1nZsvvv8MtVGq71Fw==";
-  const key =
-    "P%2B%2Fy%2FR84yS9jBDWOea6o%2BooWcZ1t9SRKQaKK23tR2DeF8HGCMh%2B61cTAFpV71qF7HdooH1nZsvvv8MtVGq71Fw%3D%3D";
-  const response = await http.get(
-    `/api?serviceKey=${key}&numOfRows=10&pageNo=1&base_date=20211001&base_time=0500&nx=${latitude}&ny=${longitude}`
-  );
+const getWeather = async (date: string, nx: number, ny: number) => {
+  const response = await http.get("/api/v1/weather", {
+    params: { date, nx, ny },
+  });
   return response.data;
 };
 

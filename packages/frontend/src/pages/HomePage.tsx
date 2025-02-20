@@ -7,10 +7,13 @@ import { PatchNote } from "../types";
 import { api, showError } from "../api";
 import { useNavigate } from "react-router-dom";
 import { Flex } from "antd";
+import WeatherCard from "../components/WeatherCard";
 
 const HomePage = () => {
   const [patchNotes, setPatchNotes] = useState<PatchNote | null>(null);
+
   const navigate = useNavigate();
+
   useEffect(() => {
     const fetchPatchNotes = async () => {
       try {
@@ -28,13 +31,13 @@ const HomePage = () => {
           setPatchNotes(response[0]);
           return;
         }
-        console.log("patchNotes", response);
       } catch (error) {
         showError(error);
       }
     };
     fetchPatchNotes();
   }, []);
+
   return (
     <Flex
       vertical
@@ -58,7 +61,7 @@ const HomePage = () => {
           }}
         />
       )}
-
+      <WeatherCard />
       <MemoCard />
       <TodoCard />
       <BudgetCard />

@@ -50,7 +50,6 @@ export class TodoService {
   ): Promise<Todo[]> {
     const user = await this.userRepository.findOne({ where: { id: userId } });
     if (!user) throw new NotFoundException("User not found");
-    console.log(todos);
 
     await this.todoRepository.delete({ user: { id: userId } });
     const newTodos = todos.map((todo) =>

@@ -51,10 +51,8 @@ export const useTodoStore = create<TodoState>((set) => ({
   },
   toggleTodo: async (id) => {
     const todo = await getData(storeName, id);
-    console.log(todo);
     if (todo) {
       const updatedTodo = { ...todo, completed: !todo.completed };
-      console.log(updatedTodo);
       await updateData(storeName, updatedTodo);
       set((state) => ({
         todos: state.todos.map((t) => (t.id === id ? updatedTodo : t)),

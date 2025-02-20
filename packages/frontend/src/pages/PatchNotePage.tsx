@@ -9,13 +9,11 @@ const PatchNotePage = () => {
   useEffect(() => {
     const fetchPatchNotes = async () => {
       try {
-        console.log("getting patch notes");
         const response = await api.getPatchNotes();
         if (!response || response.length === 0) {
           return;
         }
         setPatchNotes(response);
-        console.log(response);
       } catch (error) {
         showError(error);
       }

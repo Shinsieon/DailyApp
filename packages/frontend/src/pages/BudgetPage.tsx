@@ -53,7 +53,6 @@ const RenderListItem = ({ budget, type, setSelItem }: RenderListItemProps) => {
         />
       }
       onClick={() => {
-        console.log("clicked", budget);
         setSelItem({ ...budget });
       }}
     >

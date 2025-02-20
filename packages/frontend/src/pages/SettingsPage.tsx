@@ -121,9 +121,6 @@ const SettingsPage = () => {
                   const todos = await api.getTodos(user.id);
                   const budgets = await api.getBudgets(user.id);
                   const memos = await api.getMemos(user.id);
-                  console.log(
-                    `todos ${todos}, budgets ${JSON.stringify(budgets)}, memos ${memos}`
-                  );
                   flushMemos();
                   flushBudgets();
                   flushTodos();
@@ -151,7 +148,6 @@ const SettingsPage = () => {
                 },
               });
             } catch (e) {
-              console.log(e);
               showError("데이터 동기화에 실패했습니다.");
               setLoading(false);
             }

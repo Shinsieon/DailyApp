@@ -55,10 +55,14 @@ const MemoItem = (props: MemoItemProps) => (
     onHeaderClick={props.onHeaderClick}
     title={props.memo.title}
     extra={<RightOutline style={{ width: "30px" }} />}
-    style={{ borderRadius: "16px", border: "1px solid #e5e5e5" }}
+    style={{
+      borderRadius: "16px",
+      border: "1px solid #e5e5e5",
+    }}
   >
     <Flex vertical gap={5}>
-      <Space
+      <Flex
+        vertical
         style={{
           maxHeight: "10vh",
           minHeight: "5vh",
@@ -66,19 +70,18 @@ const MemoItem = (props: MemoItemProps) => (
         }}
       >
         <Label name={props.memo.content} />
-      </Space>
+      </Flex>
       <Flex justify="space-between">
         <Flex style={{ alignContent: "center", alignItems: "center" }} gap={5}>
           <EyeFilled />
           <Label name={props.memo.showCount || 0} />
         </Flex>
-        <Space
+        <Flex
+          justify="space-between"
+          align="center"
           style={{
             paddingTop: "5px",
             borderTop: "1px solid #e5e5e5",
-            display: "flex",
-            justifyContent: "flex-end",
-            alignItems: "center",
           }}
         >
           <Label name={dayjs(props.memo.date).format("YYYY년 MM월 DD일")} />
@@ -93,14 +96,13 @@ const MemoItem = (props: MemoItemProps) => (
           <Button onClick={props.onDeleteClick} style={{ border: "none" }}>
             <DeleteFilled style={{ fontSize: "15px" }} />
           </Button>
-        </Space>
+        </Flex>
       </Flex>
     </Flex>
   </Card>
 );
 
 const MemoList = ({ memos }: { memos: MemoData[] }) => {
-  console.log(`MemoList : ${JSON.stringify(memos.map((m) => m.favorite))}`);
   const navigate = useNavigate();
   const deleteMemo = useMemoStore((state) => state.deleteMemo);
   const toggleMemo = useMemoStore((state) => state.toggleMemo);
@@ -119,19 +121,15 @@ const MemoList = ({ memos }: { memos: MemoData[] }) => {
     navigate("/memoEdit", { state: { memoId: memoId } });
   };
   const handleStarClick = (memoId: number) => {
-    console.log(memoId);
     toggleMemo(memoId);
   };
   const handleCopyClick = async (content: string) => {
-    console.log("copy click");
     if (window && window.ReactNativeWebView) {
       window.ReactNativeWebView.postMessage(
         JSON.stringify({ type: "copy", data: content })
       );
     }
-    await navigator.clipboard.writeText(content);
-
-    message.success(`${await navigator.clipboard.readText()} 복사되었습니다.`);
+    message.success(`${content} 복사되었습니다.`);
   };
   return (
     <Flex vertical gap={10} style={{ height: "75vh", overflowY: "auto" }}>

@@ -13,7 +13,6 @@ const MemoCard = () => {
   const navigate = useNavigate();
   const isDarkMode = useThemeStore((state) => state.theme.isDarkMode);
   const memos = useMemoStore((state) => state.memos);
-  console.log(memos);
   return (
     <CustomCard
       title={

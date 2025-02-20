@@ -28,7 +28,6 @@ const RenderListItem = (todo: TodoData) => {
       prefix={
         <Checkbox
           onClick={() => {
-            console.log(todo.id);
             toggleTodo(todo.id!);
           }}
         />
@@ -76,7 +75,6 @@ const TodoPage = () => {
   const completedTodos = todos.filter(
     (todo) => todo.completed && todo.date === selDate
   );
-  console.log(`length : ${completedTodos.length}`);
 
   return (
     <Flex vertical style={{ height: "100vh" }}>

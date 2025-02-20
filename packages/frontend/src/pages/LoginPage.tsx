@@ -10,8 +10,8 @@ import { KakaoAuthResponse, KakaoUser } from "../types";
 import { useUserStore } from "../store/userStore";
 import { IoChatbubbleSharp } from "react-icons/io5";
 import TextField from "../components/TextField";
-import useWebViewMessage from "../hooks/useWebViewMessage";
 import { AppleFilled } from "@ant-design/icons";
+import { isNative, sendToNative } from "../hooks/useNative";
 const LoginPage = () => {
   const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
@@ -42,7 +42,6 @@ const LoginPage = () => {
           let response = await api.signup(email, password, nickname);
           response = await api.signin(email, password);
           localStorage.setItem("token", response.access_token);
-          console.log(response);
           setUser(response.user);
           message.success("카카오 계정으로 회원가입이 완료되었습니다.");
           navigate("/");
@@ -50,7 +49,6 @@ const LoginPage = () => {
           let response = await api.signup(email, password, nickname, type);
           response = await api.signin(email, password, type);
           localStorage.setItem("token", response.access_token);
-          console.log(response);
           setUser(response.user);
           message.success("애플 계정으로 회원가입이 완료되었습니다.");
           navigate("/");
@@ -70,13 +68,9 @@ const LoginPage = () => {
 
     window.Kakao.Auth.login({
       success: async (authObj: KakaoAuthResponse) => {
-        console.log("Kakao login successful:", authObj);
-
         window.Kakao.API.request({
           url: "/v2/user/me",
           success: async (res: KakaoUser) => {
-            console.log("User Info:", res);
-
             //기존 사용자 로그인 시도
             await handleLogin(
               res.kakao_account.email,
@@ -102,31 +96,9 @@ const LoginPage = () => {
     if (window.Kakao && !window.Kakao.isInitialized()) {
       window.Kakao.init(import.meta.env.VITE_KAKAO_APP_KEY); // Replace with your Kakao JavaScript Key
     }
+    console.log("로그인 화면 렌더링");
   }, []);
-  const handleMessage = async (data: any) => {
-    console.log("🔵 Message Received in LoginPage:", JSON.stringify(data));
-    if (data && data.type === "kakaoAuth") {
-      //기존 사용자 로그인 시도
-      console.log(`🔵 Kakao Auth Response:${data.user}`);
-      await handleLogin(
-        data.user.email,
-        data.user.id.toString(),
-        data.user.nickname,
-        "kakao"
-      );
-    } else if (data && data.type === "appleAuth") {
-      console.log(`🔵 Apple Auth Response:${data.user}`);
-      await handleLogin(
-        data.token,
-        data.user.id.toString(),
-        data.user.nickname,
-        "apple"
-      );
-    }
-  };
-  useWebViewMessage(handleMessage);
-  // ✅ WebView에서 보낸 메시지를 수신하는 이벤트 리스너 추가
-
+  console.log("로그인 화면 렌더링[no effect]");
   return (
     <Flex vertical>
       <AppHeader title="로그인" />
@@ -215,12 +187,17 @@ const LoginPage = () => {
               icon={<IoChatbubbleSharp />}
               name="kakao"
               onClick={() => {
-                if (window && window.ReactNativeWebView) {
-                  window.ReactNativeWebView.postMessage(
-                    JSON.stringify({
-                      type: "kakaoLogin",
-                    })
-                  );
+                if (isNative()) {
+                  sendToNative("kakaoLogin", {}, async (data: any) => {
+                    console.log("🔵 카카오 로그인 요청을 전송했습니다.");
+                    console.log(data);
+                    await handleLogin(
+                      data.user.email,
+                      data.user.id.toString(),
+                      data.user.nickname,
+                      "kakao"
+                    );
+                  });
                   //message.info("카카오 로그인 기능은 준비중입니다.");
                 } else {
                   handleKakaoLogin();
@@ -246,15 +223,16 @@ const LoginPage = () => {
               }}
               icon={<AppleFilled />}
               onClick={() => {
-                if (window && window.ReactNativeWebView) {
-                  window.ReactNativeWebView.postMessage(
-                    JSON.stringify({
-                      type: "appleLogin",
-                    })
+                sendToNative("appleLogin", {}, async (data: any) => {
+                  console.log("🔵 애플 로그인 요청을 전송했습니다.");
+                  console.log(data);
+                  await handleLogin(
+                    data.token,
+                    data.user.id.toString(),
+                    data.user.nickname,
+                    "apple"
                   );
-                } else {
-                  message.info("애플 로그인 기능은 앱에서만 제공됩니다.");
-                }
+                });
               }}
             >
               애플로 시작하기

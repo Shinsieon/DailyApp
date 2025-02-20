@@ -11,6 +11,7 @@ import { api } from "./api";
 import { useTodoStore } from "./store/todoStore";
 import { useBudgetStore } from "./store/budgetStore";
 import { useMemoStore } from "./store/memoStore";
+import { sendToNative } from "./hooks/useNative";
 
 const Index = () => {
   // Load the initial menu from localStorage or default to the first menu
@@ -20,24 +21,19 @@ const Index = () => {
   const budgets = useBudgetStore((state) => state.budgets);
   const memos = useMemoStore((state) => state.memos);
   const navigate = useNavigate();
-  console.log(user);
   useEffect(() => {
     if (!user && localStorage.getItem("token")) {
       api.getProfile().then((data) => {
         useUserStore.getState().setUser(data);
       });
     }
-    if (window && window.ReactNativeWebView) {
-      window.ReactNativeWebView.postMessage(
-        JSON.stringify({
-          type: "widgetData",
-          todos: todos.sort((a, b) => (a.date > b.date ? 1 : -1)),
-          budgets: budgets.sort((a, b) => (a.date > b.date ? 1 : -1)),
-          memos: memos.sort((a, b) => (a.date > b.date ? 1 : -1)),
-        })
-      );
-    }
-  }, [todos]);
+    sendToNative("widgetData", {
+      todos: todos.sort((a, b) => (a.date > b.date ? 1 : -1)),
+      budgets: budgets.sort((a, b) => (a.date > b.date ? 1 : -1)),
+      memos: memos.sort((a, b) => (a.date > b.date ? 1 : -1)),
+    });
+  }, []);
+
   const right = (
     <Space style={{ fontSize: "24px" }}>
       {user ? (
@@ -55,7 +51,6 @@ const Index = () => {
     </Space>
   );
 
-  // 카카오 로그인 처리
   return (
     <Flex vertical style={{ height: "100vh", overflow: "hidden" }}>
       <Flex
@@ -81,7 +76,6 @@ const Index = () => {
         activeKey={selMenu.path}
       >
         {menus.map((item) => {
-          console.log(item);
           return (
             <TabBar.Item
               key={item.path}

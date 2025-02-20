@@ -9,10 +9,8 @@ const ChangeNickNamePage = () => {
   const user = useUserStore((state) => state.user);
   const setUser = useUserStore((state) => state.setUser);
   const handleChangeNickName = async (values: any) => {
-    console.log(values);
     try {
       const newUser = await api.updateNickname(values.newNickName);
-      console.log(newUser);
       message.success("닉네임이 변경되었습니다.");
       setUser(newUser);
     } catch (e) {

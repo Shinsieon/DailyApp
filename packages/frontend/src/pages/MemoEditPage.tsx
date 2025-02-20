@@ -33,14 +33,12 @@ const MemoEditPage = () => {
 
   useEffect(() => {
     if (prevMemo) {
-      console.log(prevMemo);
       updateMemo({ ...prevMemo, showCount: (prevMemo.showCount || 0) + 1 });
     }
   }, []);
 
   const onfinish = async () => {
     const values = form.getFieldsValue() as MemoData;
-    console.log(values);
     if (isNewGroup && !newGroup) {
       message.error("그룹명을 입력해주세요.");
       return;
@@ -187,7 +185,6 @@ const MemoEditPage = () => {
               setGroupVisible(false);
               const g = groups.find((item) => item === value[0]);
               if (g) setSelGroup(g);
-              console.log(g);
             }}
             onCancel={() => setGroupVisible(false)}
             value={[selGroup]}

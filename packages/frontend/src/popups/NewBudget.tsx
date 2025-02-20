@@ -62,7 +62,6 @@ const NewBudget = (props: NewBudgetProps) => {
         setCategory(
           categories.filter((item: CategoryData) => item.type === props.type)[0]
         );
-      console.log("categories", categories);
     };
     fetchCategories();
   }, []);

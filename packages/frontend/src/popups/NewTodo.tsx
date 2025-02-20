@@ -25,7 +25,6 @@ const NewTodo = (props: NewTodoProps) => {
         completed: false,
       });
     } catch (e) {
-      console.log(e);
       message.error("데이터를 추가하는데 실패했습니다.");
       return;
     }
@@ -77,7 +76,6 @@ const NewTodo = (props: NewTodoProps) => {
       >
         <DatePicker confirmText="확인" cancelText="취소">
           {(value) => {
-            console.log(value);
             return value
               ? dayjs(value).format("YYYY/MM/DD")
               : dayjs(defaultDate, "YYYYMMDD").format("YYYY/MM/DD");
