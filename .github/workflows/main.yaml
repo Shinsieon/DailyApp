@@ -109,11 +109,6 @@ jobs:
             echo "📂 Preparing Backend Deployment..."
             cd /home/ubuntu/DailyApp2
 
-            # 🔹 기존 dist 백업 (롤백 대비)
-            if [ -d "packages/backend/dist" ]; then
-              mv packages/backend/dist packages/backend/backup_dist
-            fi
-
             # 🔹 압축 해제 (기존 dist 폴더 삭제 X)
             tar -xzf backend.tar.gz -C packages/backend
 
@@ -132,29 +127,12 @@ jobs:
             cd packages/backend
             pnpm install --frozen-lockfile --production
 
-            # 🔹 빌드 실행
-            echo "⚙️ Building Backend..."
-            if pnpm build; then
-              echo "✅ Build Successful. Removing old dist..."
-              rm -rf backup_dist  # 성공 시 백업 삭제
-            else
-              echo "❌ Build Failed! Rolling back..."
-              rm -rf dist
-              mv backup_dist dist  # 실패 시 기존 dist 복구
-              exit 1
-            fi
-
             # 🔹 PM2 서비스 재시작
             echo "🚀 Restarting Backend Server..."
             pm2 restart nest-server-prod || pm2 start dist/main.js --name "nest-server-prod"
 
             echo "📂 Preparing Frontend Deployment..."
             cd /home/ubuntu/DailyApp2
-
-            # 🔹 기존 dist 백업 (롤백 대비)
-            if [ -d "packages/frontend/dist" ]; then
-              mv packages/frontend/dist packages/frontend/backup_dist
-            fi
 
             # 🔹 압축 해제 (기존 dist 폴더 삭제 X)
             tar -xzf frontend.tar.gz -C packages/frontend
@@ -165,20 +143,8 @@ jobs:
             cd packages/frontend
             pnpm install --frozen-lockfile --production
 
-            # 🔹 빌드 실행
-            echo "⚙️ Building Frontend..."
-            if pnpm build; then
-              echo "✅ Build Successful. Removing old dist..."
-              rm -rf backup_dist  # 성공 시 백업 삭제
-            else
-              echo "❌ Build Failed! Rolling back..."
-              rm -rf dist
-              mv backup_dist dist  # 실패 시 기존 dist 복구
-              exit 1
-            fi
-
             echo "✅ Deployment completed."
 
             # remove tag.gz files
-            rm -f backend.tar.gz
-            rm -f frontend.tar.gz
+            rm -rf backend.tar.gz
+            rm -rf frontend.tar.gz
