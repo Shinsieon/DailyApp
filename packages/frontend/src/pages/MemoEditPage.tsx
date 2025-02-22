@@ -118,24 +118,11 @@ const MemoEditPage = () => {
           <TextArea
             placeholder="내용을 입력해주세요."
             maxLength={300}
-            rows={4}
+            rows={10}
             showCount
           />
         </Form.Item>
 
-        {/* <Form.Item
-          name="secret"
-          label="비공개 여부"
-          style={{
-            backgroundColor: isDarkMode ? colors.darkBlack : colors.lightWhite,
-            color: isDarkMode ? colors.lightWhite : colors.darkBlack,
-          }}
-          valuePropName="checked"
-          childElementPosition="right"
-          initialValue={prevMemo?.secret}
-        >
-          <Switch />
-        </Form.Item> */}
         <Form.Item
           name="isNewGroup"
           label="그룹생성 여부"
