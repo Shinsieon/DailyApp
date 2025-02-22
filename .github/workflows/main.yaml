@@ -146,5 +146,6 @@ jobs:
             echo "✅ Deployment completed."
 
             # remove tag.gz files
+            cd /home/ubuntu/DailyApp2
             rm -rf backend.tar.gz
             rm -rf frontend.tar.gz
