@@ -75,123 +75,136 @@ const MemoEditPage = () => {
   };
 
   return (
-    <Flex vertical>
+    <Flex vertical style={{ height: "100vh" }}>
       <AppHeader title={`메모 ${prevMemo ? "수정" : "추가"}`} />
-      <Form
-        layout="horizontal"
-        form={form}
-        footer={
-          <Button
-            type="submit"
-            color={"primary"}
-            block
-            style={{ marginTop: "20px" }}
-          >
-            저장
-          </Button>
-        }
-        onFinish={onfinish}
-      >
-        <Form.Header>메모 편집</Form.Header>
-        <Form.Item
-          name="title"
-          label="제목"
-          style={{
-            backgroundColor: isDarkMode ? colors.darkBlack : colors.lightWhite,
-            color: isDarkMode ? colors.lightWhite : colors.darkBlack,
-          }}
-          rules={[{ required: true, message: "제목을 입력해주세요." }]}
-          initialValue={prevMemo?.title}
+      <Flex vertical style={{ flex: 1, overflowY: "auto" }}>
+        <Form
+          layout="horizontal"
+          form={form}
+          footer={
+            <Button
+              type="submit"
+              color={"primary"}
+              block
+              style={{ marginTop: "20px" }}
+            >
+              저장
+            </Button>
+          }
+          style={{ height: "300px" }}
+          onFinish={onfinish}
         >
-          <Input placeholder="제목을 입력해주세요." />
-        </Form.Item>
-        <Form.Item
-          name="content"
-          label="내용"
-          style={{
-            backgroundColor: isDarkMode ? colors.darkBlack : colors.lightWhite,
-            color: isDarkMode ? colors.lightWhite : colors.darkBlack,
-          }}
-          rules={[{ required: true, message: "내용을 입력해주세요." }]}
-          initialValue={prevMemo?.content}
-        >
-          <TextArea
-            placeholder="내용을 입력해주세요."
-            maxLength={300}
-            rows={10}
-            showCount
-          />
-        </Form.Item>
-
-        <Form.Item
-          name="isNewGroup"
-          label="그룹생성 여부"
-          style={{
-            backgroundColor: isDarkMode ? colors.darkBlack : colors.lightWhite,
-            color: isDarkMode ? colors.lightWhite : colors.darkBlack,
-          }}
-          valuePropName="checked"
-          childElementPosition="right"
-        >
-          <Switch onChange={setIsNewGroup} />
-        </Form.Item>
-        {isNewGroup ? (
+          <Form.Header>메모 편집</Form.Header>
           <Form.Item
-            name="newGroup"
-            label="그룹이름"
+            name="title"
+            label="제목"
             style={{
               backgroundColor: isDarkMode
                 ? colors.darkBlack
                 : colors.lightWhite,
               color: isDarkMode ? colors.lightWhite : colors.darkBlack,
             }}
+            rules={[{ required: true, message: "제목을 입력해주세요." }]}
+            initialValue={prevMemo?.title}
           >
-            <TextField
-              onChange={setNewGroup}
-              placeholder="그룹명을 입력해주세요."
+            <Input placeholder="제목을 입력해주세요." />
+          </Form.Item>
+          <Form.Item
+            name="content"
+            label="내용"
+            style={{
+              backgroundColor: isDarkMode
+                ? colors.darkBlack
+                : colors.lightWhite,
+              color: isDarkMode ? colors.lightWhite : colors.darkBlack,
+            }}
+            rules={[{ required: true, message: "내용을 입력해주세요." }]}
+            initialValue={prevMemo?.content}
+          >
+            <TextArea
+              placeholder="내용을 입력해주세요."
+              maxLength={500}
+              rows={15}
+              showCount
             />
           </Form.Item>
-        ) : null}
-        <Form.Item
-          label="그룹"
-          childElementPosition="right"
-          style={{
-            backgroundColor: isDarkMode ? colors.darkBlack : colors.lightWhite,
-            color: isDarkMode ? colors.lightWhite : colors.darkBlack,
-          }}
-          onClick={() => setGroupVisible(true)}
-        >
-          <Label name={selGroup} />
-          <Cascader
-            options={groups.map((group) => ({ label: group, value: group }))}
-            visible={groupVisible}
-            confirmText="확인"
-            cancelText="취소"
-            placeholder="그룹선택"
-            onConfirm={(value: CheckListValue[]) => {
-              setGroupVisible(false);
-              const g = groups.find((item) => item === value[0]);
-              if (g) setSelGroup(g);
+
+          <Form.Item
+            name="isNewGroup"
+            label="그룹생성 여부"
+            style={{
+              backgroundColor: isDarkMode
+                ? colors.darkBlack
+                : colors.lightWhite,
+              color: isDarkMode ? colors.lightWhite : colors.darkBlack,
             }}
-            onCancel={() => setGroupVisible(false)}
-            value={[selGroup]}
-            defaultValue={[selGroup]}
-          />
-        </Form.Item>
-        <Form.Item
-          name="favorite"
-          style={{
-            backgroundColor: isDarkMode ? colors.darkBlack : colors.lightWhite,
-            color: isDarkMode ? colors.lightWhite : colors.darkBlack,
-          }}
-          label="즐겨찾기 여부"
-          valuePropName="checked"
-          childElementPosition="right"
-          initialValue={prevMemo?.favorite}
-        >
-          <Switch />
-        </Form.Item>
-      </Form>
+            valuePropName="checked"
+            childElementPosition="right"
+          >
+            <Switch onChange={setIsNewGroup} />
+          </Form.Item>
+          {isNewGroup ? (
+            <Form.Item
+              name="newGroup"
+              label="그룹이름"
+              style={{
+                backgroundColor: isDarkMode
+                  ? colors.darkBlack
+                  : colors.lightWhite,
+                color: isDarkMode ? colors.lightWhite : colors.darkBlack,
+              }}
+            >
+              <TextField
+                onChange={setNewGroup}
+                placeholder="그룹명을 입력해주세요."
+              />
+            </Form.Item>
+          ) : null}
+          <Form.Item
+            label="그룹"
+            childElementPosition="right"
+            style={{
+              backgroundColor: isDarkMode
+                ? colors.darkBlack
+                : colors.lightWhite,
+              color: isDarkMode ? colors.lightWhite : colors.darkBlack,
+            }}
+            onClick={() => setGroupVisible(true)}
+          >
+            <Label name={selGroup} />
+            <Cascader
+              options={groups.map((group) => ({ label: group, value: group }))}
+              visible={groupVisible}
+              confirmText="확인"
+              cancelText="취소"
+              placeholder="그룹선택"
+              onConfirm={(value: CheckListValue[]) => {
+                setGroupVisible(false);
+                const g = groups.find((item) => item === value[0]);
+                if (g) setSelGroup(g);
+              }}
+              onCancel={() => setGroupVisible(false)}
+              value={[selGroup]}
+              defaultValue={[selGroup]}
+            />
+          </Form.Item>
+          <Form.Item
+            name="favorite"
+            style={{
+              backgroundColor: isDarkMode
+                ? colors.darkBlack
+                : colors.lightWhite,
+              color: isDarkMode ? colors.lightWhite : colors.darkBlack,
+            }}
+            label="즐겨찾기 여부"
+            valuePropName="checked"
+            childElementPosition="right"
+            initialValue={prevMemo?.favorite}
+          >
+            <Switch />
+          </Form.Item>
+        </Form>
+      </Flex>
     </Flex>
   );
 };
