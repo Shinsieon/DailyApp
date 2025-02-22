@@ -10,7 +10,6 @@ import { CheckListValue } from "antd-mobile/es/components/check-list";
 import Label from "../components/Label";
 import { useThemeStore } from "../store/themeStore";
 import { colors } from "../colors";
-import TextField from "../components/TextField";
 
 const MemoEditPage = () => {
   const [groupVisible, setGroupVisible] = useState(false);
@@ -79,7 +78,6 @@ const MemoEditPage = () => {
       <AppHeader title={`메모 ${prevMemo ? "수정" : "추가"}`} />
       <Flex vertical style={{ flex: 1, overflowY: "auto" }}>
         <Form
-          layout="horizontal"
           form={form}
           footer={
             <Button
@@ -106,6 +104,8 @@ const MemoEditPage = () => {
             }}
             rules={[{ required: true, message: "제목을 입력해주세요." }]}
             initialValue={prevMemo?.title}
+
+            //--prefix-width
           >
             <Input placeholder="제목을 입력해주세요." />
           </Form.Item>
@@ -139,7 +139,6 @@ const MemoEditPage = () => {
               color: isDarkMode ? colors.lightWhite : colors.darkBlack,
             }}
             valuePropName="checked"
-            childElementPosition="right"
           >
             <Switch onChange={setIsNewGroup} />
           </Form.Item>
@@ -154,7 +153,7 @@ const MemoEditPage = () => {
                 color: isDarkMode ? colors.lightWhite : colors.darkBlack,
               }}
             >
-              <TextField
+              <Input
                 onChange={setNewGroup}
                 placeholder="그룹명을 입력해주세요."
               />
@@ -162,7 +161,6 @@ const MemoEditPage = () => {
           ) : null}
           <Form.Item
             label="그룹"
-            childElementPosition="right"
             style={{
               backgroundColor: isDarkMode
                 ? colors.darkBlack
@@ -187,21 +185,6 @@ const MemoEditPage = () => {
               value={[selGroup]}
               defaultValue={[selGroup]}
             />
-          </Form.Item>
-          <Form.Item
-            name="favorite"
-            style={{
-              backgroundColor: isDarkMode
-                ? colors.darkBlack
-                : colors.lightWhite,
-              color: isDarkMode ? colors.lightWhite : colors.darkBlack,
-            }}
-            label="즐겨찾기 여부"
-            valuePropName="checked"
-            childElementPosition="right"
-            initialValue={prevMemo?.favorite}
-          >
-            <Switch />
           </Form.Item>
         </Form>
       </Flex>
