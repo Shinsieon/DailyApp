@@ -1,68 +1,60 @@
 import { Flex, message } from "antd";
-import { NavBar, Space, TabBar } from "antd-mobile";
+import { TabBar } from "antd-mobile";
 import { useMenuStore } from "./store/menuStore";
-import { UserOutline } from "antd-mobile-icons";
-import { useNavigate } from "react-router-dom";
 import { useUserStore } from "./store/userStore";
-import { colors } from "./colors";
-import Label from "./components/Label";
 import { useEffect } from "react";
 import { api } from "./api";
-import { useTodoStore } from "./store/todoStore";
-import { useBudgetStore } from "./store/budgetStore";
-import { useMemoStore } from "./store/memoStore";
 import { sendToNative } from "./hooks/useNative";
+import { dfs_xy_conv } from "./utils";
+import dayjs from "dayjs";
+import { useWeatherStore } from "./store/weatherStore";
+import { WeatherProps } from "./types";
 
 const Index = () => {
   // Load the initial menu from localStorage or default to the first menu
   const { menus, selMenu, setSelMenu } = useMenuStore();
+
   const user = useUserStore((state) => state.user);
-  const todos = useTodoStore((state) => state.todos);
-  const budgets = useBudgetStore((state) => state.budgets);
-  const memos = useMemoStore((state) => state.memos);
-  const navigate = useNavigate();
+  const setWeather = useWeatherStore((state) => state.setWeather);
   useEffect(() => {
     if (!user && localStorage.getItem("token")) {
       api.getProfile().then((data) => {
         useUserStore.getState().setUser(data);
       });
     }
-    sendToNative("widgetData", {
-      todos: todos.sort((a, b) => (a.date > b.date ? 1 : -1)),
-      budgets: budgets.sort((a, b) => (a.date > b.date ? 1 : -1)),
-      memos: memos.sort((a, b) => (a.date > b.date ? 1 : -1)),
-    });
+    const fetchLocation = async () => {
+      sendToNative("getLocation", {}, async (data: any) => {
+        if (!data || !data.latitude || !data.longitude) {
+          return;
+        }
+        let { nx, ny } = dfs_xy_conv(data.latitude, data.longitude);
+        if (nx < 0 || ny < 0 || nx > 200 || ny > 200) {
+          nx = 60;
+          ny = 127;
+        }
+        console.log(`nx: ${nx}, ny: ${ny}`);
+        const items = await api.getWeather(dayjs().format("YYYYMMDD"), nx, ny);
+        //const data = await response.json();
+        console.log(`날씨 items : ${items.length}`);
+        if (!items || !Array.isArray(items)) {
+          console.error("API에서 받은 데이터가 배열이 아닙니다:", items);
+          return;
+        }
+        console.log(items[0]);
+        const filtered = items.filter(
+          (item: WeatherProps) =>
+            Number(item.fcstValue) &&
+            Number(item.fcstValue) > -998 &&
+            Number(item.fcstValue) < 998
+        );
+        setWeather(filtered);
+      });
+    };
+    fetchLocation();
   }, []);
-
-  const right = (
-    <Space style={{ fontSize: "24px" }}>
-      {user ? (
-        <>
-          <Label name={user.nickname + "님 반갑습니다"}></Label>
-          <UserOutline color={colors.primary}></UserOutline>
-        </>
-      ) : (
-        <UserOutline
-          onClick={() => {
-            navigate("/login");
-          }}
-        />
-      )}
-    </Space>
-  );
 
   return (
     <Flex vertical style={{ height: "100vh", overflow: "hidden" }}>
-      <Flex
-        vertical
-        style={{
-          flex: 0,
-        }}
-      >
-        <NavBar backIcon={<></>} right={right} style={{ padding: "0 20px" }}>
-          {""}
-        </NavBar>
-      </Flex>
       <Flex style={{ flex: 1, overflowY: "auto" }}>{selMenu.element}</Flex>
 
       <TabBar

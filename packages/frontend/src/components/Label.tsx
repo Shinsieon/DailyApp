@@ -9,17 +9,15 @@ interface LabelProps extends TextProps {
 }
 const Label = (props: LabelProps) => {
   const theme = useThemeStore((state) => state.theme);
+  const style = {
+    color: props.placeholder
+      ? colors.darkGray
+      : theme.isDarkMode
+        ? colors.lightWhite
+        : colors.darkBlack,
+  };
   return (
-    <Typography.Text
-      style={{
-        color: props.placeholder
-          ? colors.darkGray
-          : theme.isDarkMode
-            ? colors.lightWhite
-            : colors.darkBlack,
-      }}
-      {...props}
-    >
+    <Typography.Text {...props} style={{ ...style, ...props.style }}>
       {props.name}
     </Typography.Text>
   );

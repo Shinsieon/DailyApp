@@ -54,6 +54,9 @@ button:focus,
 button:focus-visible {
   outline: 4px auto -webkit-focus-ring-color;
 }
+.adm-form .adm-form-item-horizontal.adm-list-item {
+  --prefix-width: 100px !important;
+}
 
 @keyframes blink {
   0% {

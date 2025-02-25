@@ -11,6 +11,7 @@ import {
   updateData,
 } from "../db/operations";
 import dayjs from "dayjs";
+import { sendToNative } from "../hooks/useNative";
 
 type MemoState = {
   memos: MemoData[];
@@ -70,3 +71,9 @@ export const useMemoStore = create<MemoState>((set) => ({
   },
   flushMemos: async () => set({ memos: [] }),
 }));
+
+useMemoStore.subscribe((state) => {
+  sendToNative("widgetData", {
+    memos: state.memos,
+  });
+});

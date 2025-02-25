@@ -1,94 +1,66 @@
-import { EditOutlined } from "@ant-design/icons";
+import { EditOutlined, PlusCircleOutlined } from "@ant-design/icons";
 import { Flex } from "antd";
 import { Space, Tag } from "antd-mobile";
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { FillinOutline, RightOutline } from "antd-mobile-icons";
 import { useTodoStore } from "../store/todoStore";
-import CustomPopup from "./CustomPopup";
-import NewTodo from "../popups/NewTodo";
 import dayjs from "dayjs";
 import Label from "./Label";
-import CustomCard from "./Card";
-import { useThemeStore } from "../store/themeStore";
 import { colors } from "../colors";
+import { TodoData } from "../types";
+import CustomPopup from "./CustomPopup";
+import NewTodo from "../popups/NewTodo";
 
 const TodoCard = () => {
   const navigate = useNavigate();
   const [todoVisible, setTodoVisible] = useState(false);
   const todos = useTodoStore((state) => state.todos);
-  const isDarkMode = useThemeStore((state) => state.theme.isDarkMode);
-  const todayTodos = todos.filter(
-    (td) => td.date === dayjs().format("YYYYMMDD")
-  );
-  const uncompletedTodos = todos.filter((td) => !td.completed);
-  const actions: React.ReactNode[] = [
-    <EditOutlined
-      key="edit"
-      onClick={(e) => {
-        e.stopPropagation();
-        setTodoVisible(true);
-      }}
-      style={{
-        fontSize: "20px",
-        color: isDarkMode ? colors.lightWhite : colors.darkBlack,
-      }}
-    />,
-  ];
+  const uncompletedTodos = todos
+    .filter((td) => !td.completed)
+    .sort((a, b) => Number(b.date) - Number(a.date));
+
   return (
-    <CustomCard
-      title={
-        <>
-          <FillinOutline /> 할 일 정리
-        </>
-      }
-      onClick={() => navigate("/todo")}
-      extra={<RightOutline onClick={() => navigate("/todo")} />}
-      actions={actions}
-    >
+    <Flex vertical style={{ backgroundColor: colors.lighterGray, padding: 10 }}>
+      <Flex justify="space-between" style={{ marginBottom: 10 }}>
+        <Label
+          name="Todo"
+          style={{ fontWeight: "bold", fontSize: 20 }}
+          onClick={() => {
+            navigate("todo");
+          }}
+        />
+        <Flex style={{ alignItems: "center" }}>
+          <RightOutline
+            onClick={() => {
+              navigate("todo");
+            }}
+            style={{
+              fontSize: 15,
+              padding: 5,
+              borderRadius: 10,
+              color: colors.lightWhite,
+              backgroundColor: colors.darkGray,
+            }}
+          />
+          <PlusCircleOutlined
+            onClick={() => {
+              setTodoVisible(true);
+            }}
+            style={{
+              fontSize: 20,
+              padding: 5,
+              borderRadius: 10,
+              color: colors.darkBlack,
+            }}
+          />
+        </Flex>
+      </Flex>
       <Flex vertical gap={5}>
-        <Label name="오늘의 할 일" />
-        <Space direction="horizontal">
-          {todayTodos.map(
-            (todo, index: number) =>
-              index < 3 && (
-                <Space key={todo.id}>
-                  <Tag style={{ fontSize: "15px" }} color="primary">
-                    {" "}
-                    {todo.title.length > 7
-                      ? todo.title.substring(0, 7) + "..."
-                      : todo.title}
-                  </Tag>
-                </Space>
-              )
-          )}
-          {todayTodos.length > 3 ? (
-            <Tag style={{ fontSize: "15px" }} color="primary">
-              ...
-            </Tag>
-          ) : null}
-        </Space>
-        <Label name="남은 할 일" />
-        <Space direction="horizontal">
-          {uncompletedTodos.map(
-            (todo, index: number) =>
-              index < 3 && (
-                <Space key={todo.id}>
-                  <Tag style={{ fontSize: "15px" }} color="warning">
-                    {" "}
-                    {todo.title.length > 7
-                      ? todo.title.substring(0, 7) + "..."
-                      : todo.title}
-                  </Tag>
-                </Space>
-              )
-          )}
-          {uncompletedTodos.length > 3 ? (
-            <Tag style={{ fontSize: "15px" }} color="warning">
-              ...
-            </Tag>
-          ) : null}
-        </Space>
+        {uncompletedTodos.map(
+          (todo, index: number) =>
+            index < 3 && <TodoItem key={todo.id} {...todo} />
+        )}
       </Flex>
       <CustomPopup
         title="할 일 기록"
@@ -103,7 +75,48 @@ const TodoCard = () => {
           />
         }
       />
-    </CustomCard>
+    </Flex>
   );
 };
+
+function TodoItem(todo: TodoData) {
+  const navigate = useNavigate();
+  return (
+    <Flex
+      style={{
+        backgroundColor: colors.lightPrimary,
+        padding: 10,
+        borderRadius: 10,
+      }}
+      justify="space-between"
+      align="center"
+      onClick={() => {
+        navigate("todo");
+      }}
+    >
+      <Label
+        name={todo.title}
+        style={{
+          fontWeight: "bold",
+          fontSize: 18,
+          maxWidth: 150, // 제목이 너무 길어지지 않도록 최대 너비 설정
+          overflow: "hidden",
+          whiteSpace: "nowrap", // 한 줄로 유지
+          textOverflow: "ellipsis", // 길면 "..." 표시
+        }}
+      />
+      <Label
+        name={dayjs(todo.date).format("YYYY년 MM월 DD일")}
+        style={{
+          fontSize: 14,
+          maxWidth: 200, // 최대 너비 설정 (조절 가능)
+          overflow: "hidden",
+          whiteSpace: "nowrap",
+          textOverflow: "ellipsis",
+        }}
+        placeholder
+      />
+    </Flex>
+  );
+}
 export default TodoCard;

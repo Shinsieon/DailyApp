@@ -3,10 +3,18 @@ export const colors = {
   lightBlack: "#555",
   lightWhite: "#fff",
   lightGray: "#f0f0f0",
+  lighterGray: "#f8f8f8",
   darkGray: "#666",
   darkBlue: "rgba(0,34,68)",
   lightBlue: "rgba(0,0,255)",
   primary: "#1677ff",
+  secondary: "#ff6f00",
+  success: "#52c41a",
+  warning: "#faad14",
+  error: "#f5222d",
+  info: "#1890ff",
+  lightPrimary: "#cdd9e6",
+  lightGreen: "#cfe2d5",
 };
 
 export const darkStyles = {

@@ -10,6 +10,7 @@ import {
 } from "../db/operations";
 import { TodoData } from "../types";
 import dayjs from "dayjs";
+import { sendToNative } from "../hooks/useNative";
 
 type TodoState = {
   todos: TodoData[];
@@ -61,3 +62,9 @@ export const useTodoStore = create<TodoState>((set) => ({
   },
   flushTodos: async () => set({ todos: [] }),
 }));
+
+useTodoStore.subscribe((state) => {
+  sendToNative("widgetData", {
+    todos: state.todos,
+  });
+});

@@ -1,14 +1,21 @@
 import { message } from "antd";
 import axios from "axios";
 import { BudgetData, MemoData, TodoData } from "./types";
+import { useState } from "react";
 
 console.log("node env", process.env.NODE_ENV);
+// 프로그래스 상태 추가
+export const useApiProgress = () => {
+  const [progress, setProgress] = useState(0);
+  const [isLoading, setIsLoading] = useState(false);
 
+  return { progress, setProgress, isLoading, setIsLoading };
+};
 export const http = axios.create({
   baseURL:
     process.env.NODE_ENV === "production"
       ? "https://bono-dev.click"
-      : "http://172.30.1.44:3000",
+      : "http://172.30.1.97:3000",
   withCredentials: true,
   beforeRedirect: () => {
     console.log("Redirecting...");
@@ -22,6 +29,15 @@ http.interceptors.request.use(
     if (token) {
       config.headers.Authorization = `Bearer ${token}`;
     }
+    // 요청 진행률 추적 (업로드)
+    config.onUploadProgress = (progressEvent) => {
+      if (progressEvent.total) {
+        const percent = Math.round(
+          (progressEvent.loaded * 100) / progressEvent.total
+        );
+        console.log(`Upload Progress: ${percent}%`);
+      }
+    };
     return config;
   },
   (error) => {
@@ -124,9 +140,22 @@ const updateNickname = async (nickname: string) => {
   const response = await http.put("/api/v1/auth/nickname", { nickname });
   return response.data;
 };
-const getWeather = async (date: string, nx: number, ny: number) => {
+const getWeather = async (
+  date: string,
+  nx: number,
+  ny: number,
+  setProgress?: (p: number) => void
+) => {
   const response = await http.get("/api/v1/weather", {
     params: { date, nx, ny },
+    onDownloadProgress: (progressEvent) => {
+      if (progressEvent.total) {
+        const percent = Math.round(
+          (progressEvent.loaded * 100) / progressEvent.total
+        );
+        if (setProgress) setProgress(percent);
+      }
+    },
   });
   return response.data;
 };

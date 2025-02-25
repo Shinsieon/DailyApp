@@ -13,6 +13,7 @@ import Index from "./Index.tsx";
 import PatchNotePage from "./pages/PatchNotePage.tsx";
 import RegisterPage from "./pages/RegisterPage.tsx";
 import ChangeNickNamePage from "./pages/ChangeNickNamePage.tsx";
+import WeatherPage from "./pages/WeatherPage.tsx";
 
 const router = createBrowserRouter([
   {
@@ -62,6 +63,10 @@ const router = createBrowserRouter([
   {
     path: "/change-nickname",
     element: <ChangeNickNamePage />,
+  },
+  {
+    path: "/weather",
+    element: <WeatherPage />,
   },
 ]);
 

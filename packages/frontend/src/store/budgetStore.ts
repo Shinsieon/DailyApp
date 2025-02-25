@@ -10,6 +10,7 @@ import {
   updateData,
 } from "../db/operations";
 import dayjs from "dayjs";
+import { sendToNative } from "../hooks/useNative";
 
 type BudgetState = {
   budgets: BudgetData[];
@@ -54,3 +55,9 @@ export const useBudgetStore = create<BudgetState>((set) => ({
   },
   flushBudgets: async () => set({ budgets: [] }),
 }));
+
+useBudgetStore.subscribe((state) => {
+  sendToNative("widgetData", {
+    budgets: state.budgets,
+  });
+});

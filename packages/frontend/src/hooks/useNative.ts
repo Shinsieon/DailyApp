@@ -1,5 +1,8 @@
 const callbackRegistry: { [key: string]: (data: any) => void } = {};
 window.addEventListener("message", (event) => {
+  if (!window || !window.ReactNativeWebView) {
+    return;
+  }
   try {
     console.log(event.data);
     const { callbackId, data } = JSON.parse(event.data);
@@ -16,7 +19,7 @@ window.addEventListener("message", (event) => {
     console.error("Error processing native message:", error);
   }
 });
-export function sendToNative(
+export async function sendToNative(
   type: string,
   data?: any,
   callback?: (data: any) => void
