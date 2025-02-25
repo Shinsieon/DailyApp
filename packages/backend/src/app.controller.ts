@@ -1,4 +1,4 @@
-import { Controller, Get, Request, Res, UseGuards } from "@nestjs/common";
+import { Controller, Get, Post, Request, Res, UseGuards } from "@nestjs/common";
 import { AppService } from "./app.service";
 import axios from "axios";
 
@@ -44,6 +44,17 @@ export class AppController {
       return res.json(data);
     } catch (error: any) {
       console.error(`❌ 날씨 데이터 요청 실패: ${error}`);
+    }
+  }
+  @Post("survey")
+  async sendSurvey(@Request() req, @Res() res) {
+    const message = req.body.message;
+    try {
+      console.log(`📝 설문 내용: ${message}`);
+      await this.appService.sendSurvey(message);
+      return res.json({ message: "설문이 성공적으로 제출되었습니다." });
+    } catch (error: any) {
+      console.error(`❌ 설문 제출 실패: ${error}`);
     }
   }
 }

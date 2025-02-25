@@ -121,12 +121,7 @@ const MemoEditPage = () => {
             rules={[{ required: true, message: "내용을 입력해주세요." }]}
             initialValue={prevMemo?.content}
           >
-            <TextArea
-              placeholder="내용을 입력해주세요."
-              maxLength={500}
-              rows={15}
-              showCount
-            />
+            <TextArea placeholder="내용을 입력해주세요." rows={15} showCount />
           </Form.Item>
 
           <Form.Item

@@ -160,6 +160,11 @@ const getWeather = async (
   return response.data;
 };
 
+const sendSurvey = async (message: string) => {
+  const response = await http.post("/api/v1/survey", { message });
+  return response.data;
+};
+
 export const api = {
   signin,
   signup,
@@ -175,4 +180,5 @@ export const api = {
   getWeather,
   getPatchNotes,
   getCategories,
+  sendSurvey,
 };

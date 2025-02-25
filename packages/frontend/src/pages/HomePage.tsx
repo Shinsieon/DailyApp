@@ -1,4 +1,4 @@
-import { NoticeBar, Space } from "antd-mobile";
+import { Divider, NoticeBar, Space } from "antd-mobile";
 import BudgetCard from "../components/BudgetCard";
 import TodoCard from "../components/TodoCard";
 import MemoCard from "../components/MemoCard";
@@ -9,6 +9,7 @@ import { useNavigate } from "react-router-dom";
 import { Flex } from "antd";
 import WeatherCard from "../components/WeatherCard";
 import DayCard from "../components/DayCard";
+import HelpCard from "../components/SurveyCard";
 
 const HomePage = () => {
   const [patchNotes, setPatchNotes] = useState<PatchNote | null>(null);
@@ -68,7 +69,7 @@ const HomePage = () => {
         width: "100%",
         gap: "10px",
         overflowY: "auto",
-        padding: "0 20px",
+        padding: "30px 20px",
       }}
     >
       {patchNotes && (
@@ -89,6 +90,8 @@ const HomePage = () => {
       <MemoCard />
       <TodoCard />
       <BudgetCard />
+      <Divider />
+      <HelpCard />
       <Space style={{ height: "100px" }} />
     </Flex>
   );

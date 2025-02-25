@@ -14,6 +14,7 @@ import PatchNotePage from "./pages/PatchNotePage.tsx";
 import RegisterPage from "./pages/RegisterPage.tsx";
 import ChangeNickNamePage from "./pages/ChangeNickNamePage.tsx";
 import WeatherPage from "./pages/WeatherPage.tsx";
+import SurveyPage from "./pages/SurveyPage.tsx";
 
 const router = createBrowserRouter([
   {
@@ -67,6 +68,10 @@ const router = createBrowserRouter([
   {
     path: "/weather",
     element: <WeatherPage />,
+  },
+  {
+    path: "/survey",
+    element: <SurveyPage />,
   },
 ]);
 

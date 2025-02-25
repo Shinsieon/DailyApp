@@ -15,6 +15,7 @@ import { AuthModule } from "./auth/auth.module";
 import { TodoModule } from "./todo/todo.module";
 import { BudgetModule } from "./budget/budget.module";
 import { MemoModule } from "./memo/memo.module";
+import { Survey } from "./app.entity";
 
 @Module({
   imports: [
@@ -50,6 +51,7 @@ import { MemoModule } from "./memo/memo.module";
     TodoModule,
     BudgetModule,
     MemoModule,
+    TypeOrmModule.forFeature([Survey]),
   ],
   controllers: [AppController],
   providers: [
