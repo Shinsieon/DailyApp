@@ -65,7 +65,9 @@ const LoginPage = () => {
       message.error("Kakao SDK가 로드되지 않았습니다.");
       return;
     }
-
+    if (window.Kakao && !window.Kakao.isInitialized()) {
+      window.Kakao.init(import.meta.env.VITE_KAKAO_APP_KEY); // Replace with your Kakao JavaScript Key
+    }
     window.Kakao.Auth.login({
       success: async (authObj: KakaoAuthResponse) => {
         window.Kakao.API.request({
@@ -91,13 +93,6 @@ const LoginPage = () => {
       },
     });
   };
-  useEffect(() => {
-    // Initialize Kakao SDK
-    if (window.Kakao && !window.Kakao.isInitialized()) {
-      window.Kakao.init(import.meta.env.VITE_KAKAO_APP_KEY); // Replace with your Kakao JavaScript Key
-    }
-    console.log("로그인 화면 렌더링");
-  }, []);
   console.log("로그인 화면 렌더링[no effect]");
   return (
     <Flex vertical>
