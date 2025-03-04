@@ -1,25 +1,21 @@
-import { EditOutlined, PlusCircleOutlined } from "@ant-design/icons";
+import { PlusCircleOutlined } from "@ant-design/icons";
 import { Flex } from "antd";
-import { Space, Tag } from "antd-mobile";
-import { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { FillinOutline, RightOutline } from "antd-mobile-icons";
+import { RightOutline } from "antd-mobile-icons";
 import { useTodoStore } from "../store/todoStore";
 import dayjs from "dayjs";
 import Label from "./Label";
 import { colors } from "../colors";
 import { TodoData } from "../types";
-import CustomPopup from "./CustomPopup";
-import NewTodo from "../popups/NewTodo";
 
 const TodoCard = () => {
   const navigate = useNavigate();
-  const [todoVisible, setTodoVisible] = useState(false);
   const todos = useTodoStore((state) => state.todos);
+
   const uncompletedTodos = todos
     .filter((td) => !td.completed)
-    .sort((a, b) => Number(b.date) - Number(a.date));
-
+    .sort((a, b) => Number(a.date) - Number(b.date));
+  console.log(`todos : ${JSON.stringify(uncompletedTodos)}`);
   return (
     <Flex vertical style={{ backgroundColor: colors.lighterGray, padding: 10 }}>
       <Flex justify="space-between" style={{ marginBottom: 10 }}>
@@ -45,7 +41,7 @@ const TodoCard = () => {
           />
           <PlusCircleOutlined
             onClick={() => {
-              setTodoVisible(true);
+              navigate("/editTodo");
             }}
             style={{
               fontSize: 20,
@@ -62,19 +58,6 @@ const TodoCard = () => {
             index < 3 && <TodoItem key={todo.id} {...todo} />
         )}
       </Flex>
-      <CustomPopup
-        title="할 일 기록"
-        height="35vh"
-        visible={todoVisible}
-        setVisible={setTodoVisible}
-        children={
-          <NewTodo
-            onOk={() => {
-              setTodoVisible(false);
-            }}
-          />
-        }
-      />
     </Flex>
   );
 };

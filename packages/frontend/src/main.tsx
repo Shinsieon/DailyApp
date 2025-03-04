@@ -15,6 +15,7 @@ import RegisterPage from "./pages/RegisterPage.tsx";
 import ChangeNickNamePage from "./pages/ChangeNickNamePage.tsx";
 import WeatherPage from "./pages/WeatherPage.tsx";
 import SurveyPage from "./pages/SurveyPage.tsx";
+import TodoEditPage from "./pages/TodoEditPage.tsx";
 
 const router = createBrowserRouter([
   {
@@ -72,6 +73,10 @@ const router = createBrowserRouter([
   {
     path: "/survey",
     element: <SurveyPage />,
+  },
+  {
+    path: "/editTodo",
+    element: <TodoEditPage />,
   },
 ]);
 

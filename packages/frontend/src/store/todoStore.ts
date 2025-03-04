@@ -19,6 +19,7 @@ type TodoState = {
   saveTodo: (todo: TodoData) => Promise<void>;
   deleteTodo: (id: number) => Promise<void>;
   toggleTodo: (id: number) => Promise<void>;
+  updateTodo: (id: number, todo: TodoData) => Promise<void>;
   flushTodos: () => void;
 };
 
@@ -59,6 +60,13 @@ export const useTodoStore = create<TodoState>((set) => ({
         todos: state.todos.map((t) => (t.id === id ? updatedTodo : t)),
       }));
     }
+  },
+  updateTodo: async (id, todo) => {
+    console.log(`updateTodo: ${id}, ${JSON.stringify(todo)}`);
+    await updateData(storeName, todo);
+    set((state) => ({
+      todos: state.todos.map((t) => (t.id === id ? todo : t)),
+    }));
   },
   flushTodos: async () => set({ todos: [] }),
 }));

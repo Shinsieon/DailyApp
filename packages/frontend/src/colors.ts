@@ -13,8 +13,11 @@ export const colors = {
   warning: "#faad14",
   error: "#f5222d",
   info: "#1890ff",
-  lightPrimary: "#cdd9e6",
+  lightPrimary: "#e2ebfa",
   lightGreen: "#cfe2d5",
+  tomato: "#ff6347",
+  lightTomato: "#f08080",
+  gold: "#ffd700",
 };
 
 export const darkStyles = {
