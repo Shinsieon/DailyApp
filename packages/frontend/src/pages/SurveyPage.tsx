@@ -38,10 +38,10 @@ const SurveyPage = () => {
             rows={10}
           />
           <BottomFixedButton
-            name="보내기"
-            onClick={() => {
-              handleSend();
-            }}
+            type="single"
+            onConfirm={handleSend}
+            confirmName="전송"
+            confirmDisabled={!survey}
           />
         </Flex>
       </Flex>

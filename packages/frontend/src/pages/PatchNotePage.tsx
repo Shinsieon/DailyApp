@@ -1,8 +1,9 @@
-import { Avatar, Empty, Flex, List } from "antd";
+import { Avatar, Flex, List } from "antd";
 import AppHeader from "../components/AppHeader";
 import { PatchNote } from "../types";
 import { useEffect, useState } from "react";
 import { api, showError } from "../api";
+import Empty from "../components/Empty";
 
 const PatchNotePage = () => {
   const [patchNotes, setPatchNotes] = useState<PatchNote[] | null>(null);
@@ -44,7 +45,7 @@ const PatchNotePage = () => {
           )}
         />
       ) : (
-        <Empty description="패치 노트가 없습니다." />
+        <Empty />
       )}
     </Flex>
   );

@@ -5,7 +5,7 @@ import {
   CreateDateColumn,
 } from "typeorm";
 
-@Entity("patch_notes")
+@Entity("feeds")
 export class Feed {
   @PrimaryGeneratedColumn()
   id: number;

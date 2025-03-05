@@ -71,3 +71,10 @@ export function dfs_xy_conv(v1: number, v2: number) {
     ny: Math.floor(ro - ra * Math.cos(theta) + YO + 0.5),
   };
 }
+
+export function generateLightColor() {
+  const r = Math.floor(Math.random() * 76) + 180; // 180~255
+  const g = Math.floor(Math.random() * 76) + 180; // 180~255
+  const b = Math.floor(Math.random() * 76) + 180; // 180~255
+  return `rgb(${r}, ${g}, ${b})`;
+}

@@ -1,8 +1,9 @@
-import { Empty, Flex, message } from "antd";
+import { Flex, message } from "antd";
 import AppHeader from "../components/AppHeader";
 import {
   Button,
   Card,
+  ErrorBlock,
   FloatingBubble,
   Modal,
   SearchBar,
@@ -24,6 +25,7 @@ import { useMemoStore } from "../store/memoStore";
 import { useState } from "react";
 import dayjs from "dayjs";
 import Label from "../components/Label";
+import Empty from "../components/Empty";
 
 const DEFAULT_GROUP = "전체";
 
@@ -145,7 +147,7 @@ const MemoList = ({ memos }: { memos: MemoData[] }) => {
           />
         ))
       ) : (
-        <Empty description="메모가 없습니다." />
+        <Empty />
       )}
     </Flex>
   );

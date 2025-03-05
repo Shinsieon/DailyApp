@@ -3,10 +3,18 @@ import { useTodoStore } from "../store/todoStore";
 import { RefObject, useEffect, useState } from "react";
 import { Flex, message } from "antd";
 import AppHeader from "../components/AppHeader";
-import { DatePicker, DatePickerRef, Form, Input, Picker } from "antd-mobile";
+import {
+  Button,
+  DatePicker,
+  DatePickerRef,
+  Form,
+  Input,
+  Picker,
+} from "antd-mobile";
 import { TodoData } from "../types";
 import dayjs from "dayjs";
 import BottomFixedButton from "../components/BottomFixedButton";
+import { FaRegTrashAlt } from "react-icons/fa";
 
 const timeColumns = [
   [
@@ -122,12 +130,16 @@ const timeColumns = [
 const TodoEditPage = () => {
   const location = useLocation();
   const todoId = location.state?.todoId;
+  const selDate = location.state?.date;
   const navigate = useNavigate();
-  const { saveTodo, updateTodo, todos } = useTodoStore();
+  const { saveTodo, updateTodo, deleteTodo, todos } = useTodoStore();
   const prevTodo = todos.find((todo) => todo.id === todoId);
+
   const defaultTodo: TodoData = {
     title: "",
-    date: dayjs().format("YYYYMMDD"),
+    date: selDate
+      ? dayjs(selDate).format("YYYYMMDD")
+      : dayjs().format("YYYYMMDD"),
     time: "00:00",
     completed: false,
   };
@@ -158,10 +170,22 @@ const TodoEditPage = () => {
         <Form
           form={form}
           footer={
-            <BottomFixedButton
-              name={prevTodo ? "수정" : "저장"}
-              type="submit"
-            />
+            <Flex>
+              <BottomFixedButton
+                type="double"
+                onConfirm={onfinish}
+                onCancel={() => {
+                  if (prevTodo) {
+                    console.log(`deleting todo : ${JSON.stringify(prevTodo)}`);
+                    deleteTodo(prevTodo.id!);
+                    message.success(`할 일이 삭제되었습니다.`);
+                  }
+                  navigate(-1);
+                }}
+                confirmName={prevTodo ? "수정" : "저장"}
+                cancelName={prevTodo ? "삭제" : "취소"}
+              />
+            </Flex>
           }
           style={{ height: "300px" }}
           onFinish={onfinish}
