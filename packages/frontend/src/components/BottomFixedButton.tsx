@@ -18,7 +18,7 @@ const BottomFixedButton = (props: BottomFixedButtonProps) => {
     <Flex
       style={{
         position: "fixed",
-        bottom: 0,
+        bottom: 50,
         left: 0,
         right: 0,
         justifyContent: "center",
@@ -35,7 +35,7 @@ const BottomFixedButton = (props: BottomFixedButtonProps) => {
           color="primary"
           size="large"
         >
-          {props.name}
+          {props.confirmName}
         </Button>
       ) : (
         <Flex style={{ width: "100%" }} gap={10}>

@@ -15,7 +15,7 @@ export const http = axios.create({
   baseURL:
     process.env.NODE_ENV === "production"
       ? "https://bono-dev.click"
-      : "http://172.30.1.97:3000",
+      : "http://172.30.1.82:3000",
   withCredentials: true,
   beforeRedirect: () => {
     console.log("Redirecting...");
