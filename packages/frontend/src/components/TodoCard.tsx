@@ -13,7 +13,7 @@ const TodoCard = () => {
   const todos = useTodoStore((state) => state.todos);
 
   const uncompletedTodos = todos
-    .filter((td) => !td.completed)
+    .filter((td) => !td.completed && td.date >= dayjs().format("YYYYMMDD"))
     .sort((a, b) => Number(a.date) - Number(b.date));
   console.log(`todos : ${JSON.stringify(uncompletedTodos)}`);
   return (

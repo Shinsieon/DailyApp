@@ -48,7 +48,7 @@ const MemoCard = () => {
       </Flex>
       <Flex vertical gap={5}>
         {memos
-          .sort((a, b) => b.id! - a.id!)
+          .sort((a, b) => a.title.localeCompare(b.title, "ko-KR"))
           .map(
             (memo, index: number) =>
               index < 3 && <MemoItem key={memo.id} {...memo} />

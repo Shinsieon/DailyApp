@@ -18,7 +18,7 @@ const BottomFixedButton = (props: BottomFixedButtonProps) => {
     <Flex
       style={{
         position: "fixed",
-        bottom: 50,
+        bottom: 30,
         left: 0,
         right: 0,
         justifyContent: "center",
@@ -42,23 +42,23 @@ const BottomFixedButton = (props: BottomFixedButtonProps) => {
           <Flex style={{ flex: 1 }}>
             <Button
               block
-              color="primary"
-              size="large"
-              onClick={props.onConfirm}
-              disabled={props.confirmDisabled}
-            >
-              {props.confirmName}
-            </Button>
-          </Flex>
-          <Flex style={{ flex: 1 }}>
-            <Button
-              block
               color="default"
               size="large"
               onClick={props.onCancel}
               disabled={props.cancelDisabled}
             >
               {props.cancelName}
+            </Button>
+          </Flex>
+          <Flex style={{ flex: 1 }}>
+            <Button
+              block
+              color="primary"
+              size="large"
+              onClick={props.onConfirm}
+              disabled={props.confirmDisabled}
+            >
+              {props.confirmName}
             </Button>
           </Flex>
         </Flex>

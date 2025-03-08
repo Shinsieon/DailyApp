@@ -180,7 +180,7 @@ const SettingsPage = () => {
           패치 노트
           {process.env.NODE_ENV === "development" && " (개발)"}
         </List.Item>
-        <List.Item prefix={<InfoCircleOutlined />} extra="1.1.3">
+        <List.Item prefix={<InfoCircleOutlined />} extra="1.1.4">
           앱 버전
         </List.Item>
       </List>
