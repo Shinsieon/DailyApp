@@ -16,6 +16,8 @@ import { TodoModule } from "./todo/todo.module";
 import { BudgetModule } from "./budget/budget.module";
 import { MemoModule } from "./memo/memo.module";
 import { Survey } from "./app.entity";
+import { NotiModule } from "./noti/noti.module";
+import { PushModule } from "./push/push.module";
 
 @Module({
   imports: [
@@ -51,6 +53,8 @@ import { Survey } from "./app.entity";
     TodoModule,
     BudgetModule,
     MemoModule,
+    NotiModule,
+    PushModule,
     TypeOrmModule.forFeature([Survey]),
   ],
   controllers: [AppController],

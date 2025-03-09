@@ -1,4 +1,5 @@
 import {
+  BellFilled,
   DeleteOutlined,
   InfoCircleOutlined,
   LogoutOutlined,
@@ -6,7 +7,7 @@ import {
   SyncOutlined,
   UserDeleteOutlined,
 } from "@ant-design/icons";
-import { List, Modal, NoticeBar } from "antd-mobile";
+import { List, Modal, NoticeBar, Switch } from "antd-mobile";
 import { useTodoStore } from "../store/todoStore";
 import { useMemoStore } from "../store/memoStore";
 import { useBudgetStore } from "../store/budgetStore";
@@ -14,12 +15,14 @@ import { Flex, message } from "antd";
 import { useNavigate } from "react-router-dom";
 import { colors } from "../colors";
 import { useUserStore } from "../store/userStore";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import dayjs from "dayjs";
 import { api, showError } from "../api";
 import CustomLoading from "../components/Loading";
 import Label from "../components/Label";
 import { UserCircleOutline } from "antd-mobile-icons";
+import { sendToNative } from "../hooks/useNative";
+import useGranted from "../hooks/useGranted";
 
 const SettingsPage = () => {
   const { memos, flushMemos, setMemos } = useMemoStore();
@@ -30,7 +33,48 @@ const SettingsPage = () => {
   const [loading, setLoading] = useState(false);
   const clearUser = useUserStore((state) => state.clearUser);
   const [syncDb, setSyncDb] = useState(localStorage.getItem("syncDb") || "");
+  const [appVersion, setAppVersion] = useState("");
+  const [acceptPush, setAcceptPush] = useState(false);
   const navigate = useNavigate();
+  const isGranted = useGranted();
+
+  useEffect(() => {
+    sendToNative("getAppVersion", {}, (data: any) => {
+      console.log(`appVersion: ${data.appVersion}`);
+      setAppVersion(data.appVersion);
+    });
+    if (isGranted.isNativeGranted && isGranted.isServerGranted) {
+      setAcceptPush(true);
+    }
+  }, []);
+
+  const handleNotiToggle = async (value: boolean) => {
+    if (!user) {
+      message.error("로그인 후 사용해주세요.");
+      return;
+    }
+    if (value) {
+      if (!isGranted.isNativeGranted) {
+        message.info("알림을 허용해주세요.", 1, () => {
+          sendToNative("goToSettings", {}, (data: any) => {
+            console.log(data);
+          });
+        });
+        return;
+      }
+    }
+    sendToNative("getFCMToken", {}, async (data: any) => {
+      console.log(`fcmToken: ${data.fcmToken}`);
+      const deviceId = data.fcmToken;
+      const result = await api.setNotificationGranted(user.id, deviceId, value);
+      if (result) {
+        setAcceptPush(value);
+      } else {
+        message.error("알림 설정에 실패했습니다.");
+      }
+      message.success("알림 설정이 변경되었습니다.");
+    });
+  };
 
   return (
     <Flex
@@ -41,49 +85,62 @@ const SettingsPage = () => {
         gap: 10,
       }}
     >
-      {user && (
-        <List mode="card" header="사용자 설정">
-          <List.Item
-            prefix={<UserCircleOutline />}
-            onClick={() => {
-              navigate("/change-nickname");
-            }}
-          >
-            닉네임 변경
-          </List.Item>
-          <List.Item
-            prefix={<LogoutOutlined />}
-            onClick={() => {
-              clearUser();
-              localStorage.removeItem("token");
-              message.success("로그아웃되었습니다.");
-            }}
-          >
-            로그아웃
-          </List.Item>
-          <List.Item
-            prefix={<UserDeleteOutlined />}
-            onClick={() => {
-              Modal.confirm({
-                content: "정말 탈퇴하시겠습니까?",
-                confirmText: "확인",
-                async onConfirm() {
-                  await api.deleteProfile();
-                  clearUser();
-                  localStorage.removeItem("token");
-                  flushMemos();
-                  flushBudgets();
-                  flushTodos();
-                  message.success("탈퇴되었습니다.");
-                },
-                cancelText: "취소",
-              });
-            }}
-          >
-            계정탈퇴
-          </List.Item>
-        </List>
-      )}
+      <List mode="card" header="사용자 설정">
+        {user ? (
+          <>
+            <List.Item
+              prefix={<UserCircleOutline />}
+              onClick={() => {
+                navigate("/change-nickname");
+              }}
+            >
+              닉네임 변경
+            </List.Item>
+            <List.Item
+              prefix={<LogoutOutlined />}
+              onClick={() => {
+                clearUser();
+                localStorage.removeItem("token");
+                message.success("로그아웃되었습니다.");
+              }}
+            >
+              로그아웃
+            </List.Item>
+            <List.Item
+              prefix={<UserDeleteOutlined />}
+              onClick={() => {
+                Modal.confirm({
+                  content: "정말 탈퇴하시겠습니까?",
+                  confirmText: "확인",
+                  async onConfirm() {
+                    await api.deleteProfile();
+                    clearUser();
+                    localStorage.removeItem("token");
+                    flushMemos();
+                    flushBudgets();
+                    flushTodos();
+                    message.success("탈퇴되었습니다.");
+                  },
+                  cancelText: "취소",
+                });
+              }}
+            >
+              계정탈퇴
+            </List.Item>
+          </>
+        ) : (
+          <>
+            <List.Item
+              prefix={<UserCircleOutline />}
+              onClick={() => {
+                navigate("/login");
+              }}
+            >
+              로그인
+            </List.Item>
+          </>
+        )}
+      </List>
 
       <List mode="card" header="앱 설정">
         <List.Item
@@ -180,8 +237,16 @@ const SettingsPage = () => {
           패치 노트
           {process.env.NODE_ENV === "development" && " (개발)"}
         </List.Item>
-        <List.Item prefix={<InfoCircleOutlined />} extra="1.1.4">
+        <List.Item prefix={<InfoCircleOutlined />} extra={appVersion}>
           앱 버전
+        </List.Item>
+      </List>
+      <List mode="card" header="알림 설정">
+        <List.Item
+          prefix={<BellFilled />}
+          extra={<Switch checked={acceptPush} onChange={handleNotiToggle} />}
+        >
+          앱 푸시
         </List.Item>
       </List>
       {loading && <CustomLoading />}

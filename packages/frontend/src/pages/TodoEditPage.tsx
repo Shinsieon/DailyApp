@@ -4,17 +4,20 @@ import { RefObject, useEffect, useState } from "react";
 import { Flex, message } from "antd";
 import AppHeader from "../components/AppHeader";
 import {
-  Button,
   DatePicker,
   DatePickerRef,
   Form,
   Input,
+  Modal,
   Picker,
+  Selector,
 } from "antd-mobile";
 import { TodoData } from "../types";
 import dayjs from "dayjs";
 import BottomFixedButton from "../components/BottomFixedButton";
-import { FaRegTrashAlt } from "react-icons/fa";
+import useGranted from "../hooks/useGranted";
+import { api } from "../api";
+import { useUserStore } from "../store/userStore";
 
 const timeColumns = [
   [
@@ -134,6 +137,8 @@ const TodoEditPage = () => {
   const navigate = useNavigate();
   const { saveTodo, updateTodo, deleteTodo, todos } = useTodoStore();
   const prevTodo = todos.find((todo) => todo.id === todoId);
+  const user = useUserStore((state) => state.user);
+  const isGranted = useGranted();
 
   const defaultTodo: TodoData = {
     title: "",
@@ -141,11 +146,12 @@ const TodoEditPage = () => {
       ? dayjs(selDate).format("YYYYMMDD")
       : dayjs().format("YYYYMMDD"),
     time: "00:00",
+    notification: "",
     completed: false,
   };
   const [todoForm, setTodoForm] = useState<TodoData>(prevTodo || defaultTodo);
+
   const [form] = Form.useForm();
-  useEffect(() => {}, []);
   const onfinish = async () => {
     console.log(`todoForm : ${JSON.stringify(todoForm)}`);
     try {
@@ -155,6 +161,9 @@ const TodoEditPage = () => {
       } else {
         console.log(`saving todo : ${JSON.stringify(todoForm)}`);
         await saveTodo(todoForm);
+      }
+      if (todoForm.notification && user) {
+        await api.createTodo(user?.id, todoForm); //서버 : 기존 있던 투두도 업데이트 됩니다.
       }
     } catch (e) {
       message.error("데이터를 저장하는데 실패했습니다.");
@@ -176,11 +185,19 @@ const TodoEditPage = () => {
                 onConfirm={onfinish}
                 onCancel={() => {
                   if (prevTodo) {
-                    console.log(`deleting todo : ${JSON.stringify(prevTodo)}`);
-                    deleteTodo(prevTodo.id!);
-                    message.success(`할 일이 삭제되었습니다.`);
+                    Modal.confirm({
+                      content: "할 일을 삭제하시겠습니까?",
+                      confirmText: "삭제",
+                      cancelText: "취소",
+                      onConfirm: async () => {
+                        deleteTodo(prevTodo.id!);
+                        message.success(`할 일이 삭제되었습니다.`);
+                        navigate(-1);
+                      },
+                    });
+                  } else {
+                    navigate(-1);
                   }
-                  navigate(-1);
                 }}
                 confirmName={prevTodo ? "수정" : "저장"}
                 cancelName={prevTodo ? "삭제" : "취소"}
@@ -251,6 +268,83 @@ const TodoEditPage = () => {
               }}
             >
               {() => todoForm.time || "00:00"}
+            </Picker>
+          </Form.Item>
+          <Form.Item
+            name="notificationAccepted"
+            label="알림 허용"
+            initialValue={todoForm.notification ? "1" : "0"}
+          >
+            <Selector
+              options={[
+                { label: "알림 거부", value: "0" },
+                { label: "알림 허용", value: "1" },
+              ]}
+              value={[todoForm.notification ? "1" : "0"]}
+              onChange={(arr) => {
+                console.log(`notificationAccepted : ${arr[0]}`);
+                if (arr[0] === "1") {
+                  if (!isGranted.isUser) {
+                    message.error("로그인 후 사용해주세요.");
+                    arr[0] = "0";
+                    return;
+                  }
+                  if (
+                    !isGranted.isNativeGranted ||
+                    !isGranted.isServerGranted
+                  ) {
+                    message.error("설정 > 알림 권한을 허용해주세요.");
+                    arr[0] = "0";
+                    return;
+                  }
+                }
+                setTodoForm({
+                  ...todoForm,
+                  notification: arr[0] === "1" ? "00:00" : "",
+                });
+              }}
+            />
+          </Form.Item>
+
+          <Form.Item
+            name="notification"
+            label="알림"
+            onClick={(_, ref) => {
+              ref.current.open();
+            }}
+            disabled={!todoForm.notification}
+          >
+            <Picker
+              style={{
+                "--title-font-size": "13px",
+                "--header-button-font-size": "13px",
+                "--item-font-size": "13px",
+                "--item-height": "30px",
+              }}
+              columns={timeColumns}
+              confirmText="확인"
+              cancelText="취소"
+              onConfirm={(value) => {
+                if (
+                  todoForm.time!.replace(":", "") <
+                  value.join(":").replace(":", "")
+                ) {
+                  message.error(
+                    "알림 시간은 설정한 시간 이전으로 설정해주세요."
+                  );
+                  setTodoForm({
+                    ...todoForm,
+                    notification: "00:00",
+                  });
+                  return;
+                }
+                setTodoForm({
+                  ...todoForm,
+                  notification: value.join(":"),
+                });
+              }}
+            >
+              {() => todoForm.notification || "00:00"}
             </Picker>
           </Form.Item>
         </Form>

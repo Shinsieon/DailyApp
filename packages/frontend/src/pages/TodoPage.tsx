@@ -1,7 +1,7 @@
 import { Flex, message } from "antd";
 import AppHeader from "../components/AppHeader";
 import { Badge, Button, Checkbox, Tabs } from "antd-mobile";
-import { useReducer, useRef, useState } from "react";
+import { useState } from "react";
 import dayjs, { ManipulateType } from "dayjs";
 import { DeleteTwoTone, PlusOutlined } from "@ant-design/icons";
 import { useTodoStore } from "../store/todoStore";
@@ -221,31 +221,6 @@ const TodoPage = () => {
           )}
         </Flex>
       </Flex>
-      {/* <Flex
-        style={{
-          position: "fixed",
-          bottom: 20,
-          width: "100%",
-          backgroundColor: "transparent",
-        }}
-        justify="center"
-      >
-        <Button
-          block
-          shape="rounded"
-          style={{
-            width: "200px",
-          }}
-          fill="outline"
-          color="primary"
-          onClick={() => {}}
-        >
-          <Flex justify="center" align="center">
-            <CiViewTable />
-            <span>시간표로 보기</span>
-          </Flex>
-        </Button>
-      </Flex> */}
     </Flex>
   );
 };

@@ -15,7 +15,7 @@ export const http = axios.create({
   baseURL:
     process.env.NODE_ENV === "production"
       ? "https://bono-dev.click"
-      : "http://172.30.1.82:3000",
+      : "http://172.30.1.77:3000",
   withCredentials: true,
   beforeRedirect: () => {
     console.log("Redirecting...");
@@ -86,6 +86,11 @@ const signup = async (
     nickname,
     type,
   });
+  return response.data;
+};
+
+const createTodo = async (userId: number, todo: TodoData) => {
+  const response = await http.post(`/api/v1/todos/${userId}`, todo);
   return response.data;
 };
 
@@ -165,11 +170,35 @@ const sendSurvey = async (message: string) => {
   return response.data;
 };
 
+const getNotificationGranted = async (userId: number) => {
+  const response = await http.get(`/api/v1/noti/${userId}`);
+  return response.data;
+};
+
+const setNotificationGranted = async (
+  userId: number,
+  deviceId: string,
+  isGranted: boolean
+) => {
+  console.log(`isGranted: ${isGranted}`);
+  if (isGranted) {
+    const response = await http.post(`/api/v1/noti/`, {
+      userId,
+      deviceId,
+    });
+    return response.data;
+  } else {
+    const response = await http.delete(`/api/v1/noti/${userId}`);
+    return response.data;
+  }
+};
+
 export const api = {
   signin,
   signup,
   deleteProfile,
   syncTodos,
+  createTodo,
   getTodos,
   getBudgets,
   getMemos,
@@ -180,5 +209,7 @@ export const api = {
   getWeather,
   getPatchNotes,
   getCategories,
+  getNotificationGranted,
+  setNotificationGranted,
   sendSurvey,
 };

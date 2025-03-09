@@ -1,3 +1,5 @@
+import { Noti } from "@src/noti/noti.entity";
+import { Push } from "@src/push/push.entity";
 import { Budget } from "src/budget/budget.entity";
 import { Memo } from "src/memo/memo.entity";
 import { Todo } from "src/todo/todo.entity";
@@ -9,6 +11,7 @@ import {
   UpdateDateColumn,
   OneToMany,
   DeleteDateColumn,
+  OneToOne,
 } from "typeorm";
 
 @Entity("users")
@@ -43,4 +46,10 @@ export class User {
 
   @OneToMany(() => Memo, (memo) => memo.user)
   memos: Memo[];
+
+  @OneToMany(() => Push, (push) => push.user)
+  pushes: Push[];
+
+  @OneToOne(() => Noti, (noti) => noti.user)
+  noti: Noti;
 }
