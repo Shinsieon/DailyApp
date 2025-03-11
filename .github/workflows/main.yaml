@@ -25,9 +25,17 @@ jobs:
           node-version: 18
           cache: "pnpm"
 
-      # 4. 의존성 설치 (루트에서 실행)
-      - name: Install dependencies (Monorepo)
-        run: pnpm install --frozen-lockfile
+      # 4-1. 백엔드 의존성 설치
+      - name: Install Backend Dependencies
+        run: |
+          cd packages/backend
+          pnpm install --frozen-lockfile
+
+      # 4-2. 프론트엔드 의존성 설치
+      - name: Install Frontend Dependencies
+        run: |
+          cd packages/frontend
+          pnpm install --frozen-lockfile
 
       # 5. 백엔드 테스트 실행 (NestJS)
       - name: Run Backend Tests
@@ -129,7 +137,7 @@ jobs:
 
             # 🔹 PM2 서비스 재시작
             echo "🚀 Restarting Backend Server..."
-            pm2 restart nest-server-prod || pm2 start dist/main.js --name "nest-server-prod"
+            pm2 restart nest-server-prod || pm2 start ecosystem.config.js --env production
 
             echo "📂 Preparing Frontend Deployment..."
             cd /home/ubuntu/DailyApp2

@@ -241,14 +241,14 @@ const SettingsPage = () => {
           앱 버전
         </List.Item>
       </List>
-      {/* <List mode="card" header="알림 설정">
+      <List mode="card" header="알림 설정">
         <List.Item
           prefix={<BellFilled />}
           extra={<Switch checked={acceptPush} onChange={handleNotiToggle} />}
         >
           앱 푸시
         </List.Item>
-      </List> */}
+      </List>
       {loading && <CustomLoading />}
     </Flex>
   );
