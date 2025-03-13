@@ -7,7 +7,7 @@ async function bootstrap() {
     origin: [
       "http://localhost:3000",
       "http://localhost:3001",
-      "http://172.30.1.77:3001",
+      "http://172.30.1.11:3001",
     ],
     methods: "GET,HEAD,PUT,PATCH,POST,DELETE",
     credentials: true,
