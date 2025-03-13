@@ -96,56 +96,46 @@ jobs:
               pnpm-lock.yaml \
               ${{ secrets.EC2_USER }}@${{ secrets.EC2_HOST }}:/home/ubuntu/DailyApp2/
 
-      # 14. EC2에서 배포 및 PM2 재시작
-      # - name: Deploy on EC2
-      #   uses: appleboy/ssh-action@v0.1.7
-      #   with:
-      #     host: ${{ secrets.EC2_HOST }}
-      #     username: ${{ secrets.EC2_USER }}
-      #     key: ${{ secrets.EC2_PRIVATE_KEY }}
-      #     script: |
-      #       echo "🚀 Starting Safe Deployment..."
+      #14. EC2에서 배포 및 PM2 재시작
+      - name: Deploy on EC2
+        uses: appleboy/ssh-action@v0.1.7
+        with:
+          host: ${{ secrets.EC2_HOST }}
+          username: ${{ secrets.EC2_USER }}
+          key: ${{ secrets.EC2_PRIVATE_KEY }}
+          script: |
+            echo "🚀 Starting Safe Deployment..."
 
-      #       echo "📂 Preparing Backend Deployment..."
-      #       cd /home/ubuntu/DailyApp2
+            echo "📂 Preparing Backend Deployment..."
+            cd /home/ubuntu/DailyApp2
 
-      #       # 🔹 압축 해제 (기존 dist 폴더 삭제 X)
-      #       tar -xzf backend.tar.gz -C packages/backend
+            # 🔹 압축 해제 (기존 dist 폴더 삭제 X)
+            tar -xzf backend.tar.gz -C packages/backend
 
-      #       # 🔹 pnpm 설치
-      #       if ! command -v pnpm &> /dev/null; then
-      #         echo "pnpm not found. Installing pnpm..."
-      #         curl -fsSL https://get.pnpm.io/install.sh | sh -
-      #         export PATH=$HOME/.local/share/pnpm:$PATH
-      #         echo 'export PATH=$HOME/.local/share/pnpm:$PATH' >> ~/.bashrc
-      #         source ~/.bashrc
-      #       fi
+            # 🔹 pnpm 설치
+            if ! command -v pnpm &> /dev/null; then
+              echo "pnpm not found. Installing pnpm..."
+              curl -fsSL https://get.pnpm.io/install.sh | sh -
+              export PATH=$HOME/.local/share/pnpm:$PATH
+              echo 'export PATH=$HOME/.local/share/pnpm:$PATH' >> ~/.bashrc
+              source ~/.bashrc
+            fi
 
-      #       # 🔹 의존성 설치 (빌드 전에 실행)
-      #       echo "📦 Installing Backend Dependencies..."
-      #       cp pnpm-lock.yaml packages/backend/
-      #       cd packages/backend
-      #       pnpm install --frozen-lockfile --production
+            # 🔹 의존성 설치 (빌드 전에 실행)
+            echo "📦 Installing Dependencies..."
+            pnpm install --frozen-lockfile --production
 
-      #       # 🔹 PM2 서비스 재시작
-      #       echo "🚀 Restarting Backend Server..."
-      #       pm2 restart nest-server-prod || pm2 start ecosystem.config.js --env production
+            # 🔹 PM2 서비스 재시작
+            echo "🚀 Restarting Backend Server..."
+            pm2 restart nest-server-prod || pm2 start ecosystem.config.js --env production
 
-      #       echo "📂 Preparing Frontend Deployment..."
-      #       cd /home/ubuntu/DailyApp2
+            echo "📂 Preparing Frontend Deployment..."
+            cd /home/ubuntu/DailyApp2
 
-      #       # 🔹 압축 해제 (기존 dist 폴더 삭제 X)
-      #       tar -xzf frontend.tar.gz -C packages/frontend
+            # 🔹 압축 해제 (기존 dist 폴더 삭제 X)
+            tar -xzf frontend.tar.gz -C packages/frontend
 
-      #       # 🔹 의존성 설치 (빌드 전에 실행)
-      #       echo "📦 Installing Frontend Dependencies..."
-      #       cp pnpm-lock.yaml packages/frontend/
-      #       cd packages/frontend
-      #       pnpm install --frozen-lockfile --production
-
-      #       echo "✅ Deployment completed."
-
-      #       # remove tag.gz files
-      #       cd /home/ubuntu/DailyApp2
-      #       rm -rf backend.tar.gz
-      #       rm -rf frontend.tar.gz
+            # remove tag.gz files
+            cd /home/ubuntu/DailyApp2
+            rm -rf backend.tar.gz
+            rm -rf frontend.tar.gz

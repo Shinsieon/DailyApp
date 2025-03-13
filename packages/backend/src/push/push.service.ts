@@ -2,8 +2,8 @@ import { Injectable, Logger, NotFoundException } from "@nestjs/common";
 import { InjectRepository } from "@nestjs/typeorm";
 import { In, Repository } from "typeorm";
 import { Push } from "./push.entity";
-import admin from "./firebase";
 import { Noti } from "@src/noti/noti.entity";
+import { FirebaseAdmin } from "./firebase.service";
 
 @Injectable()
 export class PushService {
@@ -14,7 +14,9 @@ export class PushService {
     private pushRepository: Repository<Push>,
 
     @InjectRepository(Noti)
-    private notiRepository: Repository<Noti>
+    private notiRepository: Repository<Noti>,
+
+    private firebaseAdmin: FirebaseAdmin
   ) {}
 
   // 🔹 푸시 알림 보내기
@@ -37,7 +39,10 @@ export class PushService {
     };
 
     try {
-      const response = await admin.messaging().send(message);
+      const response = await this.firebaseAdmin
+        .getInstance()
+        .messaging()
+        .send(message);
       this.logger.log(`✅ Push Notification sent: ${response}`);
 
       // 🔹 푸시 알림을 DB에 저장
