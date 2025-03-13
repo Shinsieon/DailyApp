@@ -43,10 +43,11 @@ const SettingsPage = () => {
       console.log(`appVersion: ${data.appVersion}`);
       setAppVersion(data.appVersion);
     });
+    console.log(`settingspage isGranted: ${isGranted.isNativeGranted}`);
     if (isGranted.isNativeGranted && isGranted.isServerGranted) {
       setAcceptPush(true);
     }
-  }, []);
+  }, [isGranted]);
 
   const handleNotiToggle = async (value: boolean) => {
     if (!user) {
@@ -54,6 +55,7 @@ const SettingsPage = () => {
       return;
     }
     if (value) {
+      console.log(`settingspage isGranted: ${isGranted.isNativeGranted}`);
       if (!isGranted.isNativeGranted) {
         message.info("알림을 허용해주세요.", 1, () => {
           sendToNative("goToSettings", {}, (data: any) => {

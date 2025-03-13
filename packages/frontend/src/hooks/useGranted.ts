@@ -12,6 +12,7 @@ const useGranted = () => {
   });
   useEffect(() => {
     sendToNative("checkNotificationGranted", {}, async (data: any) => {
+      console.log(`useGranted: ${data.isGranted}`);
       if (!user) {
         setIsGranted({
           isNativeGranted: data.isGranted,
