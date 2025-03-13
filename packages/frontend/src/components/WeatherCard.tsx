@@ -4,12 +4,13 @@ import snow from "../assets/snow.png";
 import rain from "../assets/rainy.png";
 import cloudy from "../assets/cloudy.png";
 import sun from "../assets/sun.png";
-import { Image, Segmented } from "antd-mobile";
+import { Button, Image, Segmented } from "antd-mobile";
 import Label from "./Label";
 import { colors } from "../colors";
 import { WeatherMap, WeatherProps } from "../types";
 import { useNavigate } from "react-router-dom";
 import { useWeatherStore } from "../store/weatherStore";
+import { sendToNative } from "../hooks/useNative";
 
 //PTY(강수형태): 없음(0), 비(1), 비/눈(2), 눈(3), 소나기(4), 빗방울(5), 빗방울/눈날림(6), 눈날림(7)
 const getWeatherImage = (PTY: string) => {
@@ -56,11 +57,16 @@ const filterWeatherData = (data: WeatherProps[]) => {
 };
 const timeArray = ["오전6시", "오전12시", "오후6시", "오전0시"];
 const WeatherCard = () => {
-  const weather = useWeatherStore((state) => state.weather);
+  const { weather, fetchWeather } = useWeatherStore();
   const [selType, setSelType] = useState<string | number>("기온");
   const [timeWeather, setTimeWeather] = useState<WeatherMap[]>([]);
   const navigate = useNavigate();
+  const [locationGranted, setLocationGranted] = useState("");
   useEffect(() => {
+    sendToNative("checkLocationGranted", {}, (data: any) => {
+      setLocationGranted(data);
+      console.log(data);
+    });
     setTimeWeather(filterWeatherData(weather));
   }, [weather]);
   return (
@@ -77,59 +83,93 @@ const WeatherCard = () => {
           style={{ fontSize: 12 }}
         />
       </Flex>
-      <Flex
-        vertical
-        style={{
-          border: "1px solid #e8e8e8",
-          borderRadius: 10,
-          padding: "10px 0px",
-        }}
-        onClick={() => {
-          navigate("weather");
-        }}
-      >
-        {timeWeather.length === 0 ? (
-          <Flex vertical gap="middle" style={{ padding: 5 }}>
-            <Progress percent={0} />
-            <Label
-              name="날씨 정보를 불러오는 중입니다."
-              style={{ width: "100%", textAlign: "center" }}
-            />
+      {locationGranted === "denied" ? (
+        <>
+          <Flex
+            style={{
+              backgroundColor: colors.lighterGray,
+              borderRadius: 10,
+              padding: "10px 30px",
+            }}
+            justify="space-between"
+            onClick={() => {
+              navigate("weather");
+            }}
+          >
+            <Label name="위치 정보를 허용해주세요" style={{ fontSize: 14 }} />
+
+            <Button
+              color="primary"
+              size="mini"
+              onClick={(e) => {
+                e.stopPropagation();
+                sendToNative("goToSettings", {}, (data: any) => {
+                  console.log(data);
+                  fetchWeather();
+                });
+              }}
+            >
+              설정 바로가기
+            </Button>
           </Flex>
-        ) : (
-          <>
-            <Flex style={{ justifyContent: "space-between", padding: 10 }}>
-              {timeArray.map((item, index) => (
-                <WeatherComp
-                  imageSrc={getWeatherImage(timeWeather[index].PTY)}
-                  TIME={item}
-                  value={
-                    selType === "기온"
-                      ? timeWeather[index].TMP + "°C"
-                      : selType === "습도"
-                        ? timeWeather[index].REH + "%"
-                        : selType === "강수확률"
-                          ? timeWeather[index].POP + "%"
-                          : selType === "풍속"
-                            ? timeWeather[index].WSD + "m/s"
-                            : ""
-                  }
+        </>
+      ) : (
+        <>
+          <Flex
+            vertical
+            style={{
+              border: "1px solid #e8e8e8",
+              borderRadius: 10,
+              padding: "10px 0px",
+            }}
+            onClick={() => {
+              navigate("weather");
+            }}
+          >
+            {timeWeather.length === 0 ? (
+              <Flex vertical gap="middle" style={{ padding: 5 }}>
+                <Progress percent={0} />
+                <Label
+                  name="날씨 정보를 불러오는 중입니다."
+                  style={{ width: "100%", textAlign: "center" }}
                 />
-              ))}
-            </Flex>
-            <Flex justify="center">
-              <Segmented
-                options={["기온", "습도", "강수확률", "풍속"]}
-                value={selType}
-                onChange={setSelType}
-                onClick={(e) => {
-                  e.stopPropagation();
-                }}
-              />
-            </Flex>
-          </>
-        )}
-      </Flex>
+              </Flex>
+            ) : (
+              <>
+                <Flex style={{ justifyContent: "space-between", padding: 10 }}>
+                  {timeArray.map((item, index) => (
+                    <WeatherComp
+                      imageSrc={getWeatherImage(timeWeather[index].PTY)}
+                      TIME={item}
+                      value={
+                        selType === "기온"
+                          ? timeWeather[index].TMP + "°C"
+                          : selType === "습도"
+                            ? timeWeather[index].REH + "%"
+                            : selType === "강수확률"
+                              ? timeWeather[index].POP + "%"
+                              : selType === "풍속"
+                                ? timeWeather[index].WSD + "m/s"
+                                : ""
+                      }
+                    />
+                  ))}
+                </Flex>
+                <Flex justify="center">
+                  <Segmented
+                    options={["기온", "습도", "강수확률", "풍속"]}
+                    value={selType}
+                    onChange={setSelType}
+                    onClick={(e) => {
+                      e.stopPropagation();
+                    }}
+                  />
+                </Flex>
+              </>
+            )}
+          </Flex>
+        </>
+      )}
     </Flex>
   );
 };
