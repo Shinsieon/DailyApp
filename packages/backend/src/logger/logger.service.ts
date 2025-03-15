@@ -1,6 +1,7 @@
-import { LoggerService, Injectable } from '@nestjs/common';
-import * as winston from 'winston';
-import 'winston-daily-rotate-file';
+import { LoggerService, Injectable } from "@nestjs/common";
+import moment from "moment-timezone";
+import * as winston from "winston";
+import "winston-daily-rotate-file";
 
 @Injectable()
 export class CustomLogger implements LoggerService {
@@ -8,21 +9,23 @@ export class CustomLogger implements LoggerService {
 
   constructor() {
     this.logger = winston.createLogger({
-      level: 'info',
+      level: "info",
       format: winston.format.combine(
-        winston.format.timestamp(),
-        winston.format.printf(({ timestamp, level, message }) => {
-          return `${timestamp} [${level}]: ${message}`;
-        }),
+        winston.format.printf(({ level, message }) => {
+          const timestamp = moment()
+            .tz("Asia/Seoul")
+            .format("YYYY-MM-DD HH:mm:ss");
+          return `${timestamp} [${level.toUpperCase()}]: ${message}`;
+        })
       ),
       transports: [
         new winston.transports.Console(),
         new winston.transports.DailyRotateFile({
-          filename: 'logs/application-%DATE%.log',
-          datePattern: 'YYYY-MM-DD',
+          filename: "logs/application-%DATE%.log",
+          datePattern: "YYYY-MM-DD",
           zippedArchive: true,
-          maxSize: '20m',
-          maxFiles: '14d',
+          maxSize: "20m",
+          maxFiles: "14d",
         }),
       ],
     });
