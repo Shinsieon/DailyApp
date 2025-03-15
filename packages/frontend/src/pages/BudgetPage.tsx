@@ -119,7 +119,7 @@ const BudgetPage = () => {
   return (
     <Flex vertical style={{ height: "100vh" }}>
       {/* 100vh 지우지말것 */}
-      <AppHeader title="가계부" />
+      <AppHeader title="가계부 정리" />
       <Flex vertical style={{ flex: 1, overflowY: "auto" }}>
         <Flex
           vertical
