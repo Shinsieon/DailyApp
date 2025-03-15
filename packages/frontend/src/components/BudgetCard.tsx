@@ -62,7 +62,9 @@ const BudgetCard = () => {
 
           <PlusCircleOutlined
             onClick={() => {
-              navigate("/editBudget", { state: { type: "income" } });
+              navigate("/editBudget", {
+                state: { type: "income", date: dayjs().format("YYYYMMDD") },
+              });
             }}
             style={{
               fontSize: 20,
@@ -73,7 +75,9 @@ const BudgetCard = () => {
           />
           <MinusCircleOutline
             onClick={() => {
-              navigate("/editBudget", { state: { type: "expense" } });
+              navigate("/editBudget", {
+                state: { type: "expense", date: dayjs().format("YYYYMMDD") },
+              });
             }}
             style={{
               fontSize: 20,
