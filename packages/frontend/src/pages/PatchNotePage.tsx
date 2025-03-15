@@ -1,9 +1,11 @@
-import { Avatar, Flex, List } from "antd";
+import { Avatar, Flex } from "antd";
 import AppHeader from "../components/AppHeader";
 import { PatchNote } from "../types";
 import { useEffect, useState } from "react";
 import { api, showError } from "../api";
 import Empty from "../components/Empty";
+import { List } from "antd-mobile";
+import Label from "../components/Label";
 
 const PatchNotePage = () => {
   const [patchNotes, setPatchNotes] = useState<PatchNote[] | null>(null);
@@ -23,28 +25,27 @@ const PatchNotePage = () => {
   }, []);
 
   return (
-    <Flex vertical>
+    <Flex vertical style={{ height: "100vh" }}>
       <AppHeader title="패치 노트" />
       <Flex vertical style={{ flex: 1, overflow: "auto" }}>
         {patchNotes ? (
-          <List
-            style={{ width: "100%", padding: "0 20px", overflowY: "auto" }}
-            itemLayout="horizontal"
-            dataSource={patchNotes}
-            renderItem={(item) => (
-              <List.Item>
-                <List.Item.Meta
-                  avatar={
-                    <Avatar
-                      src={`https://api.dicebear.com/7.x/miniavs/svg?seed=1`}
-                    />
-                  }
-                  title={item.title}
-                  description={item.description}
-                />
+          <List mode="card">
+            {patchNotes.map((item) => (
+              <List.Item
+                prefix={
+                  <Avatar
+                    src={`https://api.dicebear.com/7.x/mini
+avs/svg?seed=1`}
+                  />
+                }
+              >
+                <Flex vertical>
+                  <div>{item.title}</div>
+                  <Label name={item.description} placeholder />
+                </Flex>
               </List.Item>
-            )}
-          />
+            ))}
+          </List>
         ) : (
           <Empty />
         )}
