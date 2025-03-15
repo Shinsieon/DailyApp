@@ -1,5 +1,5 @@
 import { LoggerService, Injectable } from "@nestjs/common";
-import moment from "moment-timezone";
+import * as moment from "moment-timezone";
 import * as winston from "winston";
 import "winston-daily-rotate-file";
 
