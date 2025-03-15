@@ -25,28 +25,30 @@ const PatchNotePage = () => {
   return (
     <Flex vertical>
       <AppHeader title="패치 노트" />
-      {patchNotes ? (
-        <List
-          style={{ width: "100%", padding: "0 20px", overflowY: "auto" }}
-          itemLayout="horizontal"
-          dataSource={patchNotes}
-          renderItem={(item) => (
-            <List.Item>
-              <List.Item.Meta
-                avatar={
-                  <Avatar
-                    src={`https://api.dicebear.com/7.x/miniavs/svg?seed=1`}
-                  />
-                }
-                title={item.title}
-                description={item.description}
-              />
-            </List.Item>
-          )}
-        />
-      ) : (
-        <Empty />
-      )}
+      <Flex vertical style={{ flex: 1, overflow: "auto" }}>
+        {patchNotes ? (
+          <List
+            style={{ width: "100%", padding: "0 20px", overflowY: "auto" }}
+            itemLayout="horizontal"
+            dataSource={patchNotes}
+            renderItem={(item) => (
+              <List.Item>
+                <List.Item.Meta
+                  avatar={
+                    <Avatar
+                      src={`https://api.dicebear.com/7.x/miniavs/svg?seed=1`}
+                    />
+                  }
+                  title={item.title}
+                  description={item.description}
+                />
+              </List.Item>
+            )}
+          />
+        ) : (
+          <Empty />
+        )}
+      </Flex>
     </Flex>
   );
 };
