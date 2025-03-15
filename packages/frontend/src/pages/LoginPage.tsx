@@ -131,7 +131,7 @@ const LoginPage = () => {
                 else localStorage.removeItem("rememberEmail");
               }}
             >
-              로그인 계정 기억하기
+              로그인 정보 기억하기
             </Checkbox>
           </Form.Item>
           <Form.Item>

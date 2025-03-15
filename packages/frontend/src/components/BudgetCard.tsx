@@ -3,10 +3,8 @@ import { useEffect, useState } from "react";
 import { BudgetData, BudgetSum, BudgetType } from "../types";
 import { useNavigate } from "react-router-dom";
 import { formatMoney } from "../utils";
-import NewBudget from "../popups/NewBudget";
 import { useBudgetStore } from "../store/budgetStore";
 import dayjs from "dayjs";
-import CustomPopup from "./CustomPopup";
 import { MinusCircleOutline, RightOutline } from "antd-mobile-icons";
 import { colors } from "../colors";
 import { Flex } from "antd";
@@ -14,13 +12,10 @@ import Label from "./Label";
 import CountUp from "react-countup";
 
 const BudgetCard = () => {
-  const [budgetVisible, setBudgetVisible] = useState(false);
   const [todayBudget, settodayBudget] = useState<BudgetSum>({
     income: 0,
     expense: 0,
   });
-  const [selType, setSelType] = useState<BudgetType>("income");
-
   const budgets = useBudgetStore((state) => state.budgets);
   const navigate = useNavigate();
 
@@ -38,6 +33,7 @@ const BudgetCard = () => {
     });
     //d.date format '2024/12/14'
     settodayBudget(sum);
+    console.log(`render BudgetCard`);
   }, [budgets]);
 
   return (
@@ -66,8 +62,7 @@ const BudgetCard = () => {
 
           <PlusCircleOutlined
             onClick={() => {
-              setSelType("income");
-              setBudgetVisible(true);
+              navigate("/editBudget", { state: { type: "income" } });
             }}
             style={{
               fontSize: 20,
@@ -78,8 +73,7 @@ const BudgetCard = () => {
           />
           <MinusCircleOutline
             onClick={() => {
-              setSelType("expense");
-              setBudgetVisible(true);
+              navigate("/editBudget", { state: { type: "expense" } });
             }}
             style={{
               fontSize: 20,
@@ -95,6 +89,7 @@ const BudgetCard = () => {
           <Label name="수입" style={{ fontSize: 15, fontWeight: "bold" }} />
           <Flex>
             <CountUp
+              start={todayBudget.income - 10}
               end={todayBudget.income}
               formattingFn={formatMoney}
               style={{ fontSize: 15 }}
@@ -106,6 +101,7 @@ const BudgetCard = () => {
           <Label name="지출" style={{ fontSize: 15, fontWeight: "bold" }} />
           <Flex>
             <CountUp
+              start={todayBudget.expense - 10}
               end={todayBudget.expense}
               formattingFn={formatMoney}
               style={{ fontSize: 15 }}
@@ -114,20 +110,6 @@ const BudgetCard = () => {
           </Flex>
         </Flex>
       </Flex>
-      <CustomPopup
-        title={selType === "income" ? "수입 추가" : "지출 추가"}
-        height="50%"
-        visible={budgetVisible}
-        setVisible={setBudgetVisible}
-        children={
-          <NewBudget
-            type={selType}
-            onOk={() => {
-              setBudgetVisible(false);
-            }}
-          />
-        }
-      />
     </Flex>
   );
 };
