@@ -5,7 +5,6 @@ module.exports = {
       script: "/home/ubuntu/DailyApp2/packages/backend/dist/main.js",
       env: {
         NODE_ENV: "production",
-        TZ: "Asia/Seoul",
       },
     },
   ],

@@ -5,6 +5,7 @@ import { Todo } from "./todo.entity";
 import { User } from "src/auth/auth.entity";
 import { Noti } from "@src/noti/noti.entity";
 import { PushService } from "@src/push/push.service";
+import * as moment from "moment-timezone";
 
 @Injectable()
 export class TodoService {
@@ -20,9 +21,12 @@ export class TodoService {
   ) {}
 
   async findTodosForNotification() {
-    const now = new Date();
-    const nowString = now.toISOString().split("T")[0];
-    const nowTime = now.toTimeString().split(" ")[0].substring(0, 5);
+    // const now = new Date();
+    // const nowString = now.toISOString().split("T")[0];
+    // const nowTime = now.toTimeString().split(" ")[0].substring(0, 5);
+    const now = moment().tz("Asia/Seoul");
+    const nowString = now.format("YYYY-MM-DD");
+    const nowTime = now.format("HH:mm");
     // 1️⃣ 알림이 필요한 Todo 조회
     const todos = await this.todoRepository.find({
       where: { date: nowString, notification: nowTime },

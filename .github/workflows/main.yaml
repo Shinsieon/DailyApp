@@ -45,7 +45,7 @@ jobs:
         run: |
           cd packages/backend
           pnpm build
-          tar -czf backend.tar.gz dist package.json
+          tar -czf backend.tar.gz dist package.json ecosystem.config.js
 
       # 8. 프론트엔드 빌드
       - name: Build Frontend
