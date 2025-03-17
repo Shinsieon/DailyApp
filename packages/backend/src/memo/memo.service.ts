@@ -21,7 +21,11 @@ export class MemoService {
       throw new Error("User not found");
     }
 
-    const memo = this.memoRepository.create({ ...memoData, user });
+    const memo = this.memoRepository.create({
+      ...memoData,
+      user,
+      relatedMemoIds: memoData.relatedMemoIds || [],
+    });
     return this.memoRepository.save(memo);
   }
 

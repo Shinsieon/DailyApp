@@ -47,6 +47,10 @@ const BudgetEditPage = () => {
   const [categoryOptions, setCategoryOptions] = useState<CategoryData[]>([]);
   const onfinish = async () => {
     console.log(`budgetForm : ${JSON.stringify(budgetForm)}`);
+    if (!budgetForm.amount || budgetForm.amount <= 0) {
+      message.error("금액을 입력해주세요.");
+      return;
+    }
     try {
       if (prevBudget) {
         await updateBudget(budgetForm);

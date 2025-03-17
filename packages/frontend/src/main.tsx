@@ -17,6 +17,8 @@ import WeatherPage from "./pages/WeatherPage.tsx";
 import SurveyPage from "./pages/SurveyPage.tsx";
 import TodoEditPage from "./pages/TodoEditPage.tsx";
 import BudgetEditPage from "./pages/BudgetEditPage.tsx";
+import MyPage from "./pages/MyPage.tsx";
+import MemoDetailPage from "./pages/MemoDetailPage.tsx";
 
 const router = createBrowserRouter([
   {
@@ -82,6 +84,14 @@ const router = createBrowserRouter([
   {
     path: "/editBudget",
     element: <BudgetEditPage />,
+  },
+  {
+    path: "/myPage",
+    element: <MyPage />,
+  },
+  {
+    path: "/memoDetail",
+    element: <MemoDetailPage />,
   },
 ]);
 

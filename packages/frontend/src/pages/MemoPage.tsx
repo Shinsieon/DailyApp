@@ -15,6 +15,7 @@ import {
   CopyFilled,
   DeleteFilled,
   EyeFilled,
+  FolderOutlined,
   SortDescendingOutlined,
   StarFilled,
   StarOutlined,
@@ -26,6 +27,7 @@ import { useState } from "react";
 import dayjs from "dayjs";
 import Label from "../components/Label";
 import Empty from "../components/Empty";
+import { colors } from "../colors";
 
 const DEFAULT_GROUP = "전체";
 
@@ -37,72 +39,112 @@ interface MemoItemProps {
   onCopyClick: () => void;
 }
 
-const MemoItem = (props: MemoItemProps) => (
-  <Card
-    icon={
-      <Button
-        style={{ border: "none", width: "30px" }}
-        onClick={(e) => {
-          e.stopPropagation();
-          props.onStarClick();
-        }}
-      >
-        {props.memo.favorite ? (
-          <StarFilled style={{ color: "gold" }} />
-        ) : (
-          <StarOutlined style={{ color: "gold" }}></StarOutlined>
-        )}
-      </Button>
-    }
-    onHeaderClick={props.onHeaderClick}
-    title={props.memo.title}
-    extra={<RightOutline style={{ width: "30px" }} />}
-    style={{
-      borderRadius: "16px",
-      border: "1px solid #e5e5e5",
-    }}
-  >
-    <Flex vertical gap={5}>
-      <Flex
-        vertical
-        style={{
-          maxHeight: "10vh",
-          minHeight: "5vh",
-          overflow: "hidden",
-        }}
-      >
-        <Label name={props.memo.content} />
-      </Flex>
-      <Flex justify="space-between">
-        <Flex style={{ alignContent: "center", alignItems: "center" }} gap={5}>
-          <EyeFilled />
-          <Label name={props.memo.showCount || 0} />
-        </Flex>
-        <Flex
-          justify="space-between"
-          align="center"
-          style={{
-            paddingTop: "5px",
-            borderTop: "1px solid #e5e5e5",
+const MemoItem = (props: MemoItemProps) => {
+  const memos = useMemoStore((state) => state.memos);
+  const relatedMemos = memos.filter((m) =>
+    props.memo.relatedMemoIds?.includes(m.id!)
+  );
+  const navigate = useNavigate();
+  return (
+    <Card
+      icon={
+        <Button
+          style={{ border: "none", width: "30px" }}
+          onClick={(e) => {
+            e.stopPropagation();
+            props.onStarClick();
           }}
         >
-          <Label name={dayjs(props.memo.date).format("YYYY년 MM월 DD일")} />
-
-          <Button
-            style={{ border: "none" }}
-            onClick={() => props.onCopyClick()}
+          {props.memo.favorite ? (
+            <StarFilled style={{ color: "gold" }} />
+          ) : (
+            <StarOutlined style={{ color: "gold" }}></StarOutlined>
+          )}
+        </Button>
+      }
+      onHeaderClick={props.onHeaderClick}
+      title={props.memo.title}
+      extra={<RightOutline style={{ width: "30px" }} />}
+      style={{
+        borderRadius: "16px",
+        border: "1px solid #e5e5e5",
+      }}
+    >
+      <Flex vertical gap={5}>
+        <Flex
+          vertical
+          style={{
+            maxHeight: "10vh",
+            minHeight: "5vh",
+            overflow: "hidden",
+          }}
+        >
+          <Label name={props.memo.content} />
+        </Flex>
+        {relatedMemos.length > 0 && (
+          <Flex gap={5} align="center">
+            <Label name="연결된 메모" style={{ fontWeight: "bold" }} />
+            {relatedMemos.map((memo) => (
+              <Button
+                shape="rounded"
+                style={{ backgroundColor: colors.lightGray, border: "none" }}
+                onClick={() => {
+                  navigate("/memoDetail", { state: { memoId: memo.id } });
+                }}
+              >
+                <Space key={memo.id}>
+                  <FolderOutlined />
+                  <span>{memo.title}</span>
+                  <Label
+                    name={
+                      memo.content.length > 10
+                        ? memo.content.substring(0, 10) + "..."
+                        : memo.content
+                    }
+                    placeholder
+                  />
+                </Space>
+              </Button>
+            ))}
+          </Flex>
+        )}
+        <Flex
+          justify="space-between"
+          style={{
+            padding: "5px",
+            backgroundColor: colors.lighterGray,
+            borderRadius: "10px",
+          }}
+        >
+          <Flex
+            style={{ alignContent: "center", alignItems: "center" }}
+            gap={5}
           >
-            <CopyFilled style={{ fontSize: "15px" }} />
-          </Button>
+            <EyeFilled />
+            <Label name={props.memo.showCount || 0} />
+          </Flex>
+          <Flex justify="space-between" align="center">
+            <Label name={dayjs(props.memo.date).format("YYYY년 MM월 DD일")} />
 
-          <Button onClick={props.onDeleteClick} style={{ border: "none" }}>
-            <DeleteFilled style={{ fontSize: "15px" }} />
-          </Button>
+            <Button
+              style={{ border: "none", backgroundColor: "transparent" }}
+              onClick={() => props.onCopyClick()}
+            >
+              <CopyFilled style={{ fontSize: "15px" }} />
+            </Button>
+
+            <Button
+              onClick={props.onDeleteClick}
+              style={{ border: "none", backgroundColor: "transparent" }}
+            >
+              <DeleteFilled style={{ fontSize: "15px" }} />
+            </Button>
+          </Flex>
         </Flex>
       </Flex>
-    </Flex>
-  </Card>
-);
+    </Card>
+  );
+};
 
 const MemoList = ({ memos }: { memos: MemoData[] }) => {
   const navigate = useNavigate();
@@ -120,7 +162,7 @@ const MemoList = ({ memos }: { memos: MemoData[] }) => {
     });
   };
   const handleHeaderClick = (memoId: number) => {
-    navigate("/memoEdit", { state: { memoId: memoId } });
+    navigate("/memoDetail", { state: { memoId: memoId } });
   };
   const handleStarClick = (memoId: number) => {
     toggleMemo(memoId);
@@ -206,14 +248,10 @@ const MemoPage = () => {
   const [showFavorite, setShowFavorite] = useState(false);
 
   return (
-    <Flex vertical style={{ width: "100%" }}>
+    <Flex vertical style={{ height: "100vh" }}>
       <AppHeader title="메모 정리" />
-      <Space direction="vertical">
-        <Tabs
-          defaultActiveKey={selGroup}
-          style={{ width: "100vw" }}
-          onChange={(key) => setSelGroup(key)}
-        >
+      <Flex vertical>
+        <Tabs defaultActiveKey={selGroup} onChange={(key) => setSelGroup(key)}>
           <Tabs.Tab title={DEFAULT_GROUP} key={DEFAULT_GROUP}>
             <SearchBarCustom
               showFavorite={showFavorite}
@@ -271,7 +309,7 @@ const MemoPage = () => {
         >
           <EditFill fontSize={32} />
         </FloatingBubble>
-      </Space>
+      </Flex>
     </Flex>
   );
 };

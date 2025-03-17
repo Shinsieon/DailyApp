@@ -37,7 +37,10 @@ const CustomPopup = (props: CustomPopupProps) => {
       }}
     >
       <AppHeader title={props.title} backIcon={false} />
-      <div key={key}>{props.children}</div>
+
+      <div key={key} style={{ overflow: "auto", height: "80%" }}>
+        {props.children}
+      </div>
     </Popup>
   );
 };

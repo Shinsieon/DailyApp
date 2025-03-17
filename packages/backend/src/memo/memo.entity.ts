@@ -48,4 +48,7 @@ export class Memo {
 
   @UpdateDateColumn()
   updatedAt: Date;
+
+  @Column({ type: "json", nullable: true })
+  relatedMemoIds: number[];
 }

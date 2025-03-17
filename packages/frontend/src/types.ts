@@ -42,6 +42,7 @@ export interface MemoData {
   favorite: boolean;
   secret: boolean;
   showCount?: number;
+  relatedMemoIds?: number[];
 }
 
 export interface ThemeData {
