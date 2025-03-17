@@ -6,7 +6,7 @@ import { api, showError } from "../api";
 import Empty from "../components/Empty";
 import { List } from "antd-mobile";
 import Label from "../components/Label";
-
+import avatar_man from "../assets/avatar_man.svg";
 const PatchNotePage = () => {
   const [patchNotes, setPatchNotes] = useState<PatchNote[] | null>(null);
   useEffect(() => {
@@ -31,14 +31,7 @@ const PatchNotePage = () => {
         {patchNotes ? (
           <List mode="card">
             {patchNotes.map((item) => (
-              <List.Item
-                prefix={
-                  <Avatar
-                    src={`https://api.dicebear.com/7.x/mini
-avs/svg?seed=1`}
-                  />
-                }
-              >
+              <List.Item prefix={<Avatar src={avatar_man} />}>
                 <Flex vertical>
                   <div>{item.title}</div>
                   <Label name={item.description} placeholder />
