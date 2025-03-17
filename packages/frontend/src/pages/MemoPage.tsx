@@ -87,6 +87,7 @@ const MemoItem = (props: MemoItemProps) => {
             {relatedMemos.map((memo) => (
               <Button
                 shape="rounded"
+                size="small"
                 style={{ backgroundColor: colors.lightGray, border: "none" }}
                 onClick={() => {
                   navigate("/memoDetail", { state: { memoId: memo.id } });

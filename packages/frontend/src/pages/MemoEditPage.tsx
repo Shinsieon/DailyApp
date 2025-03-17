@@ -3,7 +3,6 @@ import AppHeader from "../components/AppHeader";
 import { useLocation, useNavigate } from "react-router-dom";
 import {
   Button,
-  Card,
   Cascader,
   Input,
   Space,
@@ -21,8 +20,8 @@ import CustomPopup from "../components/CustomPopup";
 import LinkMemo from "../popups/LinkMemo";
 import sizes from "../sizes";
 import { CheckListValue } from "antd-mobile/es/components/check-list";
-import { AddCircleOutline, FolderOutline } from "antd-mobile-icons";
-import { FolderOutlined, PaperClipOutlined } from "@ant-design/icons";
+import { AddCircleOutline } from "antd-mobile-icons";
+import { FolderOutlined } from "@ant-design/icons";
 
 const MemoEditPage = () => {
   const [groupVisible, setGroupVisible] = useState(false);
@@ -50,11 +49,6 @@ const MemoEditPage = () => {
         relatedMemoIds: [],
       } as MemoData)
   );
-  // const [relatedMemos, setRelatedMemos] = useState<MemoData[]>(
-  //   prevMemo?.relatedMemoIds
-  //     ? memos.filter((memo) => prevMemo.relatedMemoIds?.includes(memo.id!))
-  //     : []
-  // );
   const [relatedMemos, setRelatedMemos] = useState<MemoData[]>([]);
   useEffect(() => {
     if (prevMemo) {
@@ -78,17 +72,14 @@ const MemoEditPage = () => {
       return;
     }
     try {
+      const uMemo = {
+        ...updatedMemo,
+        relatedMemoIds: relatedMemos.map((m) => m.id!),
+      };
       if (prevMemo) {
-        updateMemo({
-          ...prevMemo,
-          ...updatedMemo,
-          relatedMemoIds: relatedMemos.map((m) => m.id!),
-        });
+        await updateMemo(uMemo);
       } else {
-        saveMemo({
-          ...updatedMemo,
-          relatedMemoIds: relatedMemos.map((m) => m.id!),
-        });
+        await saveMemo(uMemo);
       }
     } catch (e) {
       message.error("메모 저장에 실패했습니다.");

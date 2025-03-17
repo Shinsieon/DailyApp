@@ -1,4 +1,4 @@
-import { Flex, Input, Switch } from "antd";
+import { Flex, Input } from "antd";
 import AppHeader from "../components/AppHeader";
 import { useLocation, useNavigate } from "react-router-dom";
 import { useMemoStore } from "../store/memoStore";
@@ -17,20 +17,18 @@ const MemoDetailPage = () => {
   const memoId = location.state.memoId;
   const { memos, updateMemo } = useMemoStore();
   const memo = memos.find((m) => m.id === memoId);
-  console.log(`memoId: ${memoId}`);
   const navigate = useNavigate();
   const [relatedMemos, setRelatedMemos] = useState<MemoData[]>([]);
   useEffect(() => {
     if (memo) {
-      console.log(`memo.relatedMemoIds: ${memo.relatedMemoIds}`);
       const relatedMemoIds = memo.relatedMemoIds;
       const relatedMemos = memos.filter((m) => relatedMemoIds?.includes(m.id!));
       setRelatedMemos(relatedMemos);
     }
-  }, [memo]);
+  }, [memo, memos]);
   useEffect(() => {
     if (memo) updateMemo({ ...memo, showCount: (memo.showCount || 0) + 1 });
-  }, []);
+  }, [memoId]);
   if (!memo) return <Empty />;
   return (
     <Flex vertical style={{ height: "100vh" }}>
