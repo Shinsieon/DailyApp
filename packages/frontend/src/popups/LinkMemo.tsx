@@ -8,7 +8,7 @@ import { useState } from "react";
 import { MemoData } from "../types";
 
 interface LinkMemoProps {
-  selMemos: MemoData[];
+  selMemo: MemoData;
   setSelMemo: (memo: MemoData) => void;
 }
 const LinkMemo = (props: LinkMemoProps) => {
@@ -27,7 +27,9 @@ const LinkMemo = (props: LinkMemoProps) => {
       {memos.length === 0 && <Empty />}
       {memos
         .filter(
-          (memo) => memo.content.includes(search) || memo.title.includes(search)
+          (memo) =>
+            props.selMemo?.id !== memo.id &&
+            (memo.content.includes(search) || memo.title.includes(search))
         )
         .map((memo) => (
           <Flex

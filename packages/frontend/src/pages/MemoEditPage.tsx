@@ -309,7 +309,7 @@ const MemoEditPage = () => {
         height="40vh"
         children={
           <LinkMemo
-            selMemos={relatedMemos}
+            selMemo={prevMemo || updatedMemo}
             setSelMemo={(memo) => {
               if (relatedMemos.find((m) => m.id === memo.id)) {
                 message.error("이미 연결된 메모입니다.");
