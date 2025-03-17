@@ -86,10 +86,6 @@ const router = createBrowserRouter([
     element: <BudgetEditPage />,
   },
   {
-    path: "/myPage",
-    element: <MyPage />,
-  },
-  {
     path: "/memoDetail",
     element: <MemoDetailPage />,
   },
