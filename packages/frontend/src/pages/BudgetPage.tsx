@@ -1,85 +1,39 @@
-import { Empty, Flex, message, Space } from "antd";
+import { Empty, Flex, message, Segmented } from "antd";
 import AppHeader from "../components/AppHeader";
 import dayjs, { ManipulateType } from "dayjs";
 import { useEffect, useState } from "react";
 import { BudgetData, BudgetType } from "../types";
 import { formatMoney } from "../utils";
 import { useBudgetStore } from "../store/budgetStore";
-import { Button, List, Tabs } from "antd-mobile";
+import { Button, Divider } from "antd-mobile";
 import { colors } from "../colors";
-import { DeleteTwoTone, MinusOutlined, PlusOutlined } from "@ant-design/icons";
+import { MinusOutlined, PlusOutlined } from "@ant-design/icons";
 import CustomCalendar from "../components/CustomCalendar";
 import Label from "../components/Label";
 import { useNavigate } from "react-router-dom";
-
-const RenderList = (type: BudgetType, budgets: BudgetData[]) => {
-  const deleteBudget = useBudgetStore((state) => state.deleteBudget);
-  const navigate = useNavigate();
-  return (
-    <Space
-      direction="vertical"
-      style={{ width: "100%", height: "35vh", overflowY: "auto" }}
-    >
-      {budgets.length === 0 ? (
-        <Empty
-          style={{ color: colors.lightGray }}
-          description={
-            type === "income"
-              ? "수입 데이터가 없습니다"
-              : "지출 데이터가 없습니다"
-          }
-        />
-      ) : (
-        <>
-          <List key={"budgetlist"}>
-            {budgets.map((budget) => (
-              <List.Item
-                key={budget.id}
-                arrowIcon={<></>}
-                extra={
-                  <DeleteTwoTone
-                    onClick={(e) => {
-                      e.stopPropagation();
-                      deleteBudget(budget.id!);
-                      message.success(
-                        type === "income"
-                          ? "수입이 삭제되었습니다."
-                          : "지출이 삭제되었습니다."
-                      );
-                    }}
-                  />
-                }
-                onClick={() => {
-                  navigate("/editBudget", {
-                    state: { budgetId: budget.id },
-                  });
-                }}
-              >
-                {budget.category.label +
-                  " " +
-                  formatMoney(budget.amount) +
-                  "원"}
-              </List.Item>
-            ))}
-          </List>
-        </>
-      )}
-    </Space>
-  );
-};
+import { DeleteOutline } from "antd-mobile-icons";
 
 const BudgetPage = () => {
   const [selDate, setSelDate] = useState<string>(dayjs().format("YYYYMMDD"));
-  const [selTab, setSelTab] = useState<BudgetType>("income");
+  const [selTab, setSelTab] = useState<BudgetType>("all");
   const [dayType, setDayType] = useState<ManipulateType>("day");
   const navigate = useNavigate();
-  const budget = useBudgetStore((state) => state.budgets);
-  const incomes = budget.filter(
-    (item) => item.type === "income" && item.date === selDate
-  );
-  const expenses = budget.filter(
-    (item) => item.type === "expense" && item.date === selDate
-  );
+  const { budgets, deleteBudget } = useBudgetStore();
+  const [filteredBudgets, setFilteredBudgets] = useState<BudgetData[]>([]);
+  useEffect(() => {
+    const isSameDay = (date: string) => date === selDate;
+    const isSameMonth = (date: string) =>
+      date.substring(0, 6) === selDate.substring(0, 6);
+
+    const filtered = budgets.filter((item) => {
+      const isMatchingDate =
+        dayType === "day" ? isSameDay(item.date) : isSameMonth(item.date);
+      const isMatchingType = selTab === "all" || item.type === selTab;
+      return isMatchingDate && isMatchingType;
+    });
+
+    setFilteredBudgets(filtered);
+  }, [budgets, selTab, selDate, dayType]);
 
   return (
     <Flex vertical style={{ height: "100vh" }}>
@@ -88,7 +42,7 @@ const BudgetPage = () => {
       <Flex vertical style={{ flex: 1, overflowY: "auto" }}>
         <CustomCalendar
           selDate={selDate}
-          checkDates={budget.map((bd) => bd.date)}
+          checkDates={budgets.map((bd) => bd.date)}
           onClick={(date) => {
             console.log("seldate changed!");
             setSelDate(date);
@@ -97,7 +51,7 @@ const BudgetPage = () => {
             setDayType(type);
           }}
         />
-        <Flex vertical style={{ padding: "0 20px" }}>
+        <Flex vertical style={{ padding: "0 20px" }} gap={20}>
           <Flex justify="between" align="center">
             <Flex vertical style={{ flex: 1 }}>
               <Label
@@ -146,96 +100,113 @@ const BudgetPage = () => {
               </Button>
             </Flex>
           </Flex>
-          <Tabs
-            style={{ flex: 1 }}
-            onChange={(tab) => {
-              setSelTab(tab as BudgetType);
+
+          <Segmented
+            block
+            options={[
+              { label: "전체", value: "all" },
+
+              { label: "수입", value: "income" },
+              { label: "지출", value: "expense" },
+            ]}
+            value={selTab}
+            onChange={(value) => {
+              setSelTab(value as BudgetType);
             }}
-            activeKey={selTab}
+          />
+          <Flex
+            vertical
+            style={{ width: "100%", height: "35vh", overflowY: "auto" }}
           >
-            <Tabs.Tab title="수입" key="income">
-              {RenderList("income", incomes)}
-            </Tabs.Tab>
-            <Tabs.Tab title="지출" key="expense">
-              {RenderList("expense", expenses)}
-            </Tabs.Tab>
-          </Tabs>
+            {filteredBudgets.length === 0 ? (
+              <Empty style={{ color: colors.lightGray }} />
+            ) : (
+              <Flex vertical key={"budgetlist"} gap={8}>
+                {filteredBudgets.map((budget) => (
+                  <Flex
+                    align="center"
+                    justify="space-between"
+                    style={{
+                      backgroundColor: colors.lighterGray,
+                      borderRadius: 10,
+                      border: `none`,
+                    }}
+                    key={budget.id}
+                    onClick={() => {
+                      navigate("/editBudget", {
+                        state: { budgetId: budget.id },
+                      });
+                    }}
+                  >
+                    <Flex
+                      style={{
+                        backgroundColor:
+                          budget.type === "income"
+                            ? colors.lightPrimary
+                            : colors.lightTomato,
+                        padding: 10,
+                        borderRadius: "10px 0 0 10px",
+                      }}
+                      align="center"
+                    >
+                      <Label
+                        name={budget.type === "income" ? "수입" : "지출"}
+                        style={{
+                          color:
+                            budget.type === "income"
+                              ? colors.primary
+                              : colors.lightWhite,
+                        }}
+                      />
+                    </Flex>
+                    <Flex style={{ padding: 10, flex: 1 }} align="center">
+                      <Label name={budget.category.label} />
+                      <Divider direction="vertical" />
+                      <Label name={formatMoney(budget.amount) + "원"} />
+
+                      {budget.other && (
+                        <>
+                          <Divider direction="vertical" />
+                          <Label name={budget.other} placeholder />
+                        </>
+                      )}
+                      <Divider direction="vertical" />
+                      <Label
+                        name={dayjs(budget.date).format("D일")}
+                        placeholder
+                      />
+                    </Flex>
+                    <Flex
+                      style={{
+                        height: "100%",
+                      }}
+                    >
+                      <Button
+                        style={{
+                          border: "none",
+                          backgroundColor: colors.darkBlue,
+                        }}
+                        onClick={(e) => {
+                          e.stopPropagation();
+                          deleteBudget(budget.id!);
+                          message.success(
+                            budget.type === "income"
+                              ? "수입이 삭제되었습니다."
+                              : "지출이 삭제되었습니다."
+                          );
+                        }}
+                      >
+                        <DeleteOutline color={colors.lightWhite} />
+                      </Button>
+                    </Flex>
+                  </Flex>
+                ))}
+              </Flex>
+            )}
+          </Flex>
         </Flex>
       </Flex>
     </Flex>
   );
 };
 export default BudgetPage;
-{
-  /* <Calendar
-            style={{ width: "100%", position: "relative" }}
-            className={
-              calenderFolded === true
-                ? "slideup"
-                : calenderFolded === false
-                  ? "slidedown"
-                  : ""
-            }
-            fullscreen={false}
-            onSelect={(date: Dayjs) => {
-              setSelDate(date.format("YYYYMMDD"));
-            }}
-            cellRender={(props) => {
-              if (budget.find((bud) => bud.date === props.format("YYYYMMDD"))) {
-                return (
-                  <div
-                    style={{
-                      width: "8px",
-                      height: "8px",
-                      backgroundColor: "red",
-                      borderRadius: "50%",
-                      margin: "0 auto",
-                    }}
-                  ></div>
-                );
-              }
-            }}
-            headerRender={({ value, type, onChange }) => {
-              const nowMonth = value.month();
-              const monthNames = [
-                "January",
-                "February",
-                "March",
-                "April",
-                "May",
-                "June",
-                "July",
-                "August",
-                "September",
-                "October",
-                "November",
-                "December",
-              ];
-              const monthText = monthNames[nowMonth];
-              return (
-                <Flex
-                  justify="center"
-                  align="center"
-                  gap={10}
-                  style={{ height: "50px" }}
-                >
-                  <LeftCircleFilled
-                    style={{ fontSize: "25px", color: "rgba(0,34,68)" }}
-                    onClick={() => {
-                      onChange(value.add(-1, "month"));
-                    }}
-                  />
-                  <Typography style={{ fontSize: "25px", fontWeight: "bold" }}>
-                    {monthText}
-                  </Typography>
-                  <RightCircleFilled
-                    style={{ fontSize: "25px", color: "rgba(0,34,68)" }}
-                    onClick={() => {
-                      onChange(value.add(1, "month"));
-                    }}
-                  />
-                </Flex>
-              );
-            }}
-          /> */
-}

@@ -216,9 +216,15 @@ const SettingsPage = () => {
             <>{syncDb && <Label name={syncDb} color={colors.primary} />}</>
           }
         >
-          데이터 동기화
+          <Flex vertical>
+            데이터 동기화
+            <Label
+              name="서버에 데이터를 저장하면 여러 기기에서 동일한 데이터를 사용할 수 있습니다."
+              placeholder
+            />
+          </Flex>
         </List.Item>
-        <List.Item>
+        {/* <List.Item>
           <NoticeBar
             color="info"
             wrap
@@ -229,7 +235,7 @@ const SettingsPage = () => {
               " 동일한 데이터를 사용할 수 있습니다."
             }
           />
-        </List.Item>
+        </List.Item> */}
         <List.Item
           prefix={<NotificationOutlined />}
           onClick={() => {

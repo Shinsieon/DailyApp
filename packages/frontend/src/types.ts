@@ -4,7 +4,7 @@ export interface PopupProps {
   onOk?: () => void;
   onCancel?: () => void;
 }
-export type BudgetType = "income" | "expense";
+export type BudgetType = "income" | "expense" | "all";
 export interface BudgetData {
   id?: number;
   date: string;

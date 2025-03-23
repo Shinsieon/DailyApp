@@ -170,6 +170,10 @@ const TodoEditPage = () => {
   const [form] = Form.useForm();
   const onfinish = async () => {
     console.log(`todoForm : ${JSON.stringify(todoForm)}`);
+    if (!todoForm.title) {
+      message.error("할 일을 입력해주세요.");
+      return;
+    }
     try {
       if (prevTodo) {
         console.log(`updating todo : ${JSON.stringify(todoForm)}`);

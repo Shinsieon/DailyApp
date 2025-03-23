@@ -93,7 +93,7 @@ const BudgetCard = () => {
           <Label name="수입" style={{ fontSize: 15, fontWeight: "bold" }} />
           <Flex>
             <CountUp
-              start={todayBudget.income - 10}
+              start={todayBudget.income > 10 ? todayBudget.income - 10 : 0}
               end={todayBudget.income}
               formattingFn={formatMoney}
               style={{ fontSize: 15 }}
@@ -105,7 +105,7 @@ const BudgetCard = () => {
           <Label name="지출" style={{ fontSize: 15, fontWeight: "bold" }} />
           <Flex>
             <CountUp
-              start={todayBudget.expense - 10}
+              start={todayBudget.expense > 10 ? todayBudget.expense - 10 : 0}
               end={todayBudget.expense}
               formattingFn={formatMoney}
               style={{ fontSize: 15 }}
