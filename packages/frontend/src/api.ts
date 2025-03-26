@@ -2,6 +2,7 @@ import { message } from "antd";
 import axios from "axios";
 import { BudgetData, MemoData, TodoData } from "./types";
 import { useState } from "react";
+import { sendToTelegram } from "./telegram";
 
 console.log("node env", process.env.NODE_ENV);
 // 프로그래스 상태 추가
@@ -15,7 +16,7 @@ export const http = axios.create({
   baseURL:
     process.env.NODE_ENV === "production"
       ? "https://bono-dev.click"
-      : "http://172.30.1.11:3000",
+      : "http://192.168.45.98:3000",
   withCredentials: true,
   beforeRedirect: () => {
     console.log("Redirecting...");
@@ -46,14 +47,27 @@ http.interceptors.request.use(
 );
 
 export function showError(error: any) {
+  let errorMsg = "Unknown error";
+
   if (error.response) {
-    message.error(error.response.data.message);
+    errorMsg = error.response.data.message;
+    message.error(errorMsg);
   } else if (error.message) {
-    message.error(`Network error: ${error.message}`);
+    errorMsg = `Network error: ${error.message}`;
+    message.error(errorMsg);
   } else {
-    message.error(error);
+    errorMsg = JSON.stringify(error);
+    message.error(errorMsg);
   }
+
+  // 텔레그램 전송 추가
+  sendToTelegram(errorMsg);
 }
+
+const getUsers = async () => {
+  const response = await http.get("/api/v1/auth/users");
+  return response.data;
+};
 
 const signin = async (email: string, password: string, type?: string) => {
   const response = await http.post(
@@ -194,6 +208,7 @@ const setNotificationGranted = async (
 };
 
 export const api = {
+  getUsers,
   signin,
   signup,
   deleteProfile,
