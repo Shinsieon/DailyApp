@@ -17,8 +17,10 @@ import WeatherPage from "./pages/WeatherPage.tsx";
 import SurveyPage from "./pages/SurveyPage.tsx";
 import TodoEditPage from "./pages/TodoEditPage.tsx";
 import BudgetEditPage from "./pages/BudgetEditPage.tsx";
-import MyPage from "./pages/MyPage.tsx";
 import MemoDetailPage from "./pages/MemoDetailPage.tsx";
+import AdminPage from "./pages/AdminPage.tsx";
+import MyPage from "./pages/MyPage.tsx";
+import CategoryListPage from "./pages/CategoryListPage.tsx";
 
 const router = createBrowserRouter([
   {
@@ -88,6 +90,18 @@ const router = createBrowserRouter([
   {
     path: "/memoDetail",
     element: <MemoDetailPage />,
+  },
+  {
+    path: "/admin",
+    element: <AdminPage />,
+  },
+  {
+    path: "/myPage",
+    element: <MyPage />,
+  },
+  {
+    path: "/categoryList",
+    element: <CategoryListPage />,
   },
 ]);
 
