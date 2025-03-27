@@ -1,6 +1,6 @@
 import { Flex, message } from "antd";
 import AppHeader from "../components/AppHeader";
-import { CapsuleTabs, Grid, Input, Modal } from "antd-mobile";
+import { Button, CapsuleTabs, Grid, Input, Modal } from "antd-mobile";
 import { BudgetType, CategoryData } from "../types";
 import { useEffect, useState } from "react";
 import { api } from "../api";
@@ -8,7 +8,7 @@ import { useUserStore } from "../store/userStore";
 import Label from "../components/Label";
 import sizes from "../sizes";
 import { colors } from "../colors";
-import { TiDelete } from "react-icons/ti";
+import { TiDelete, TiTrash } from "react-icons/ti";
 
 const CategoryListPage = () => {
   const [defaultCategory, setDefaultCategory] = useState<CategoryData[]>([]);
@@ -89,7 +89,7 @@ const CategoryListPage = () => {
           <CapsuleTabs.Tab title="기본 카테고리" key="default">
             <Flex vertical gap={10}>
               <Flex vertical gap={10}>
-                <Flex style={{ flex: 1, borderRight: "1px solid #f0f0f0" }}>
+                <Flex>
                   <Label
                     name="수입"
                     style={{
@@ -99,7 +99,7 @@ const CategoryListPage = () => {
                     }}
                   />
                 </Flex>
-                <Grid columns={3} gap={20} style={{ flex: 8 }}>
+                <Grid columns={3} gap={20}>
                   {defaultCategory
                     .filter((item) => item.type === "income")
                     .map((category) => (
@@ -116,7 +116,7 @@ const CategoryListPage = () => {
                 </Grid>
               </Flex>
               <Flex vertical gap={10}>
-                <Flex style={{ flex: 1, borderRight: "1px solid #f0f0f0" }}>
+                <Flex>
                   <Label
                     name="지출"
                     style={{
@@ -126,7 +126,7 @@ const CategoryListPage = () => {
                     }}
                   />
                 </Flex>
-                <Grid columns={3} gap={20} style={{ flex: 8 }}>
+                <Grid columns={3} gap={20}>
                   {defaultCategory
                     .filter((item) => item.type === "expense")
                     .map((category) => (
@@ -146,17 +146,16 @@ const CategoryListPage = () => {
           <CapsuleTabs.Tab title="내 카테고리" key="my">
             <Flex vertical gap={10}>
               <Flex vertical gap={10}>
-                <Flex style={{ flex: 1, borderRight: "1px solid #f0f0f0" }}>
+                <Flex>
                   <Label
                     name="수입"
                     style={{
                       fontSize: sizes.font.xlarge,
                       fontWeight: "bold",
-                      minWidth: 50,
                     }}
                   />
                 </Flex>
-                <Grid columns={3} gap={20} style={{ flex: 8 }}>
+                <Grid columns={2} gap={5}>
                   {myCategory
                     .filter((item) => item.type === "income")
                     .map((category) => (
@@ -168,11 +167,13 @@ const CategoryListPage = () => {
                             color: colors.lightWhite,
                             padding: 5,
                             borderRadius: 5,
+                            minWidth: 50,
                           }}
                           onClick={() => {
                             handleUpdateClick(category);
                           }}
                         />
+
                         <TiDelete
                           style={{ fontSize: 20 }}
                           onClick={(e) => {
@@ -199,17 +200,16 @@ const CategoryListPage = () => {
                 </Grid>
               </Flex>
               <Flex vertical gap={10}>
-                <Flex style={{ flex: 1, borderRight: "1px solid #f0f0f0" }}>
+                <Flex>
                   <Label
                     name="지출"
                     style={{
                       fontSize: sizes.font.xlarge,
                       fontWeight: "bold",
-                      minWidth: 50,
                     }}
                   />
                 </Flex>
-                <Grid columns={3} gap={20} style={{ flex: 8 }}>
+                <Grid columns={2} gap={5}>
                   {myCategory
                     .filter((item) => item.type === "expense")
                     .map((category) => (
@@ -220,6 +220,7 @@ const CategoryListPage = () => {
                             backgroundColor: colors.lightPrimary,
                             padding: 5,
                             borderRadius: 5,
+                            minWidth: 50,
                           }}
                           onClick={() => {
                             handleUpdateClick(category);
