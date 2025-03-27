@@ -141,6 +141,7 @@ const WeatherCard = () => {
                     <WeatherComp
                       imageSrc={getWeatherImage(timeWeather[index].PTY)}
                       TIME={item}
+                      key={index}
                       value={
                         selType === "기온"
                           ? timeWeather[index].TMP + "°C"

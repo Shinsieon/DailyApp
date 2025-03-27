@@ -69,9 +69,13 @@ const BudgetEditPage = () => {
   useEffect(() => {
     const fetchCategories = async () => {
       const categories = await api.getCategories();
+      console.log(`categories : ${JSON.stringify(categories)}`);
       if (categories.length === 0) {
         message.error("카테고리를 가져오는데 실패했습니다.");
         return;
+      }
+      for (let i = 0; i < categories.length; i++) {
+        categories[i].value = categories[i].label;
       }
       setCategoryOptions(categories);
       const foundCat = categories.find(
@@ -195,6 +199,7 @@ const BudgetEditPage = () => {
                 cancelText="취소"
                 placeholder="카테고리선택"
                 onConfirm={(value: CheckListValue[]) => {
+                  console.log(value);
                   setVisible(false);
                   const g = categoryOptions.find(
                     (item) => item.value === value[0]
@@ -208,12 +213,9 @@ const BudgetEditPage = () => {
             </Form.Item>
           )}
 
-          <Form.Item
-            label="기타"
-            rules={[{ required: false, message: "상세 내역을 남겨주세요" }]}
-          >
+          <Form.Item label="상세">
             <Input
-              placeholder="기타 내용"
+              placeholder="상세 내용"
               value={budgetForm.other}
               onChange={(value) => {
                 setBudgetForm({ ...budgetForm, other: value });

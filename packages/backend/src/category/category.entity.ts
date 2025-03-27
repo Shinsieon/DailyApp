@@ -1,5 +1,13 @@
+import { User } from "@src/auth/auth.entity";
 import { Budget } from "src/budget/budget.entity";
-import { Entity, PrimaryGeneratedColumn, Column, OneToMany } from "typeorm";
+import {
+  Entity,
+  PrimaryGeneratedColumn,
+  Column,
+  OneToMany,
+  ManyToOne,
+  JoinColumn,
+} from "typeorm";
 
 @Entity("category")
 export class Category {
@@ -13,8 +21,15 @@ export class Category {
   label: string;
 
   @Column({ length: 50 })
-  value: string;
+  value: string | null;
 
   @OneToMany(() => Budget, (budget) => budget.category)
   budgets: Budget[];
+
+  @ManyToOne(() => User, (user) => user.categories, {
+    nullable: true,
+    onDelete: "CASCADE",
+  })
+  @JoinColumn({ name: "user_id" })
+  user: User | null;
 }

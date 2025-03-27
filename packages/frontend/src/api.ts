@@ -1,6 +1,12 @@
 import { message } from "antd";
 import axios from "axios";
-import { BudgetData, MemoData, TodoData } from "./types";
+import {
+  BudgetData,
+  BudgetType,
+  CategoryData,
+  MemoData,
+  TodoData,
+} from "./types";
 import { useState } from "react";
 import { sendToTelegram } from "./telegram";
 
@@ -147,8 +153,35 @@ const getPatchNotes = async () => {
   return response.data;
 };
 
-const getCategories = async () => {
-  const response = await http.get("/api/v1/categories");
+const getCategories = async (userId?: number) => {
+  console.log(`userId: ${userId}`);
+  const url = userId ? `/api/v1/categories/${userId}` : `/api/v1/categories`;
+  const response = await http.get(url);
+  return response.data;
+};
+
+const createCategory = async (userId: number, category: CategoryData) => {
+  const response = await http.post(`/api/v1/categories/${userId}`, {
+    type: category.type,
+    name: category.label,
+  });
+  return response.data;
+};
+
+const updateCategory = async (
+  userId: number,
+  id: number,
+  category: CategoryData
+) => {
+  const response = await http.patch(`/api/v1/categories/${userId}/${id}`, {
+    type: category.type,
+    name: category.label, // label, value
+  });
+  return response.data;
+};
+
+const deleteCategory = async (userId: number, id: number) => {
+  const response = await http.delete(`/api/v1/categories/${userId}/${id}`);
   return response.data;
 };
 
@@ -224,6 +257,9 @@ export const api = {
   getWeather,
   getPatchNotes,
   getCategories,
+  deleteCategory,
+  createCategory,
+  updateCategory,
   getNotificationGranted,
   setNotificationGranted,
   sendSurvey,

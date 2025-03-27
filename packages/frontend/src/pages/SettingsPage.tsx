@@ -7,7 +7,7 @@ import {
   SyncOutlined,
   UserDeleteOutlined,
 } from "@ant-design/icons";
-import { List, Modal, NoticeBar, Switch } from "antd-mobile";
+import { List, Modal, Switch } from "antd-mobile";
 import { useTodoStore } from "../store/todoStore";
 import { useMemoStore } from "../store/memoStore";
 import { useBudgetStore } from "../store/budgetStore";
@@ -143,7 +143,14 @@ const SettingsPage = () => {
           </>
         )}
       </List>
-
+      <List mode="card" header="알림 설정">
+        <List.Item
+          prefix={<BellFilled />}
+          extra={<Switch checked={acceptPush} onChange={handleNotiToggle} />}
+        >
+          앱 푸시
+        </List.Item>
+      </List>
       <List mode="card" header="앱 설정">
         <List.Item
           prefix={<DeleteOutlined />}
@@ -212,9 +219,6 @@ const SettingsPage = () => {
               setLoading(false);
             }
           }}
-          extra={
-            <>{syncDb && <Label name={syncDb} color={colors.primary} />}</>
-          }
         >
           <Flex vertical>
             데이터 동기화
@@ -222,20 +226,10 @@ const SettingsPage = () => {
               name="서버에 데이터를 저장하면 여러 기기에서 동일한 데이터를 사용할 수 있습니다."
               placeholder
             />
+            <>{syncDb && <Label name={syncDb} color={colors.primary} />}</>
           </Flex>
         </List.Item>
-        {/* <List.Item>
-          <NoticeBar
-            color="info"
-            wrap
-            bordered={false}
-            content={
-              "서버에 데이터를 저장하면 여러 기기에서" +
-              "\n" +
-              " 동일한 데이터를 사용할 수 있습니다."
-            }
-          />
-        </List.Item> */}
+
         <List.Item
           prefix={<NotificationOutlined />}
           onClick={() => {
@@ -249,14 +243,7 @@ const SettingsPage = () => {
           앱 버전
         </List.Item>
       </List>
-      <List mode="card" header="알림 설정">
-        <List.Item
-          prefix={<BellFilled />}
-          extra={<Switch checked={acceptPush} onChange={handleNotiToggle} />}
-        >
-          앱 푸시
-        </List.Item>
-      </List>
+
       {loading && <CustomLoading />}
     </Flex>
   );

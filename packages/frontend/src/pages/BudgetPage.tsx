@@ -170,11 +170,15 @@ const BudgetPage = () => {
                           <Label name={budget.other} placeholder />
                         </>
                       )}
-                      <Divider direction="vertical" />
-                      <Label
-                        name={dayjs(budget.date).format("D일")}
-                        placeholder
-                      />
+                      {dayType === "month" && (
+                        <>
+                          <Divider direction="vertical" />
+                          <Label
+                            name={dayjs(budget.date).format("D일")}
+                            placeholder
+                          />
+                        </>
+                      )}
                     </Flex>
                     <Flex
                       style={{
