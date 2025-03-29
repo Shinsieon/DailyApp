@@ -1,6 +1,6 @@
 import { Flex, Statistic, StatisticProps } from "antd";
 import AppHeader from "../components/AppHeader";
-import { Divider, ImageUploaderRef, ImageUploadItem } from "antd-mobile";
+import { Divider, List } from "antd-mobile";
 import Label from "../components/Label";
 import sizes from "../sizes";
 import { useUserStore } from "../store/userStore";
@@ -11,8 +11,7 @@ import { useBudgetStore } from "../store/budgetStore";
 import { colors } from "../colors";
 import { EditFilled } from "@ant-design/icons";
 import { useNavigate } from "react-router-dom";
-import { useRef, useState } from "react";
-import { CiCircleChevRight } from "react-icons/ci";
+import { useState } from "react";
 
 const formatter: StatisticProps["formatter"] = (value) => (
   <CountUp end={value as number} separator="," />
@@ -24,6 +23,9 @@ const MyPage = () => {
   const todos = useTodoStore((state) => state.todos);
   const budgets = useBudgetStore((state) => state.budgets);
   const navigate = useNavigate();
+  const [category, setCategory] = useState(
+    localStorage.getItem("category") || "default"
+  );
   return (
     <Flex vertical>
       <AppHeader title="마이페이지" />
@@ -68,36 +70,43 @@ const MyPage = () => {
             value={budgets.length}
           />
         </Flex>
-        <Flex id="settingView" vertical style={{ marginTop: 20 }} gap={10}>
+        <Flex
+          id="settingView"
+          vertical
+          style={{
+            marginTop: 20,
+          }}
+          gap={10}
+        >
           <Label
-            name="설정"
+            name="가계부 설정"
             style={{
               fontSize: sizes.font.large,
               fontWeight: "bold",
             }}
           />
-          <Flex vertical>
-            <Flex
-              style={{
-                backgroundColor: colors.lighterGray,
-                borderRadius: 10,
-                padding: 10,
-              }}
-              justify="space-between"
-              align="center"
+          <List>
+            <List.Item
               onClick={() => {
                 navigate("/categoryList");
               }}
+              extra={
+                <Label
+                  name={
+                    category === "default" ? "기본 카테고리" : "내 카테고리"
+                  }
+                  style={{ color: colors.primary }}
+                />
+              }
             >
               <Label
-                name="카테고리 변경"
+                name="카테고리"
                 style={{
                   fontSize: sizes.font.medium,
                 }}
               />
-              <CiCircleChevRight style={{ fontSize: 20 }} />
-            </Flex>
-          </Flex>
+            </List.Item>
+          </List>
         </Flex>
       </Flex>
     </Flex>

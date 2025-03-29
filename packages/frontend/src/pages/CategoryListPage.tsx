@@ -16,6 +16,9 @@ const CategoryListPage = () => {
   const user = useUserStore((state) => state.user);
   const [visible, setVisible] = useState(false);
   const [newCategory, setNewCategory] = useState<CategoryData | null>(null);
+  const [selectedCategory, setSelectedCategory] = useState(
+    localStorage.getItem("category") || "default"
+  );
   const handleAddClick = async () => {
     if (!newCategory?.label) {
       message.error("카테고리 이름을 입력해주세요.");
@@ -85,7 +88,13 @@ const CategoryListPage = () => {
         vertical
         style={{ flex: 1, overflowY: "auto", padding: "0px 20px" }}
       >
-        <CapsuleTabs>
+        <CapsuleTabs
+          defaultActiveKey={selectedCategory}
+          onChange={(key) => {
+            setSelectedCategory(key);
+            localStorage.setItem("category", key);
+          }}
+        >
           <CapsuleTabs.Tab title="기본 카테고리" key="default">
             <Flex vertical gap={10}>
               <Flex vertical gap={10}>

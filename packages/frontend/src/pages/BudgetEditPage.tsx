@@ -19,6 +19,7 @@ import Label from "../components/Label";
 import { CheckListValue } from "antd-mobile/es/components/check-list";
 import { translateToKorean } from "../utils";
 import { colors } from "../colors";
+import { useUserStore } from "../store/userStore";
 
 const BudgetEditPage = () => {
   const location = useLocation();
@@ -27,6 +28,7 @@ const BudgetEditPage = () => {
   const navigate = useNavigate();
   const { budgets, updateBudget, saveBudget, deleteBudget } = useBudgetStore();
   const prevBudget = budgets.find((budget) => budget.id === budgetId);
+  const user = useUserStore((state) => state.user);
   const defaultBudget: BudgetData = {
     date: location.state?.date,
     amount: 0,
@@ -68,7 +70,13 @@ const BudgetEditPage = () => {
   };
   useEffect(() => {
     const fetchCategories = async () => {
-      const categories = await api.getCategories();
+      const categoryType = localStorage.getItem("category");
+      let categories = [];
+      if (categoryType === "default") {
+        categories = await api.getCategories();
+      } else {
+        categories = await api.getCategories(user?.id);
+      }
       console.log(`categories : ${JSON.stringify(categories)}`);
       if (categories.length === 0) {
         message.error("카테고리를 가져오는데 실패했습니다.");
