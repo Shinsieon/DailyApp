@@ -2,6 +2,7 @@ import { useLocation, useNavigate } from "react-router-dom";
 import { Flex, message } from "antd";
 import AppHeader from "../components/AppHeader";
 import {
+  Button,
   Cascader,
   DatePicker,
   DatePickerRef,
@@ -193,7 +194,25 @@ const BudgetEditPage = () => {
           </Form.Item>
           {budgetForm.category && (
             <Form.Item
-              label="카테고리"
+              label={
+                <Flex gap={10}>
+                  <Label name="카테고리" />
+                  <Button
+                    size="small"
+                    color="primary"
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      if (!user) {
+                        message.error("로그인 후 사용해주세요.");
+                        return;
+                      }
+                      navigate("/categoryList");
+                    }}
+                  >
+                    변경
+                  </Button>
+                </Flex>
+              }
               rules={[{ required: true, message: "카테고리를 선택해주세요" }]}
               onClick={() => setVisible(true)}
             >

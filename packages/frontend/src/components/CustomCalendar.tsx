@@ -139,7 +139,11 @@ const CustomCalendar = (props: CustomCalendarProps) => {
 
           const date = day.substring(6);
           const month = day.substring(4, 6);
-
+          const isCheckedDate = (
+            dayType === "day"
+              ? checkedDates
+              : checkedDates.map((item) => item.substring(0, 6))
+          ).includes(dayType === "day" ? day : day.substring(0, 6));
           return (
             <Flex
               key={day}
@@ -150,7 +154,11 @@ const CustomCalendar = (props: CustomCalendarProps) => {
                 borderRadius: 10,
                 padding: "10px",
                 backgroundColor:
-                  day === selDate ? colors.primary : colors.lightWhite,
+                  day === selDate
+                    ? colors.primary
+                    : isCheckedDate
+                      ? colors.lightGray
+                      : colors.lightWhite,
                 minWidth: 30,
                 flexShrink: 0,
                 transition: "opacity 0.3s ease",
@@ -158,21 +166,6 @@ const CustomCalendar = (props: CustomCalendarProps) => {
               }}
               onClick={() => handleClick(day)}
             >
-              {(dayType === "day"
-                ? checkedDates
-                : checkedDates.map((item) => item.substring(0, 6))
-              ).includes(dayType === "day" ? day : day.substring(0, 6)) && (
-                <FaStar
-                  style={{
-                    width: 10,
-                    height: 10,
-                    position: "absolute",
-                    color: colors.gold,
-                    left: 5,
-                    top: 5,
-                  }}
-                />
-              )}
               <Label
                 name={date}
                 style={{
