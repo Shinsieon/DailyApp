@@ -1,20 +1,31 @@
 import { create } from "zustand";
 import { Menu } from "../types";
-import {
-  HomeFilled,
-  HomeOutlined,
-  SettingFilled,
-  SettingOutlined,
-} from "@ant-design/icons";
+
 import SettingsPage from "../pages/SettingsPage";
 import HomePage from "../pages/HomePage";
+import { FaRegUser, FaUser } from "react-icons/fa";
+import MyPage from "../pages/MyPage";
+import {
+  IoHomeOutline,
+  IoHomeSharp,
+  IoSettings,
+  IoSettingsSharp,
+} from "react-icons/io5";
 
 const menus: Menu[] = [
   {
+    name: "My",
+    path: "/myPage",
+    icon: <FaRegUser style={{ fontSize: 20 }} />,
+    selIcon: <FaUser style={{ fontSize: 20 }} />,
+    element: <MyPage />,
+    loginNeed: true,
+  },
+  {
     name: "홈",
     path: "/home",
-    icon: <HomeOutlined style={{ fontSize: 20 }} />,
-    selIcon: <HomeFilled style={{ fontSize: 20 }} />,
+    icon: <IoHomeOutline style={{ fontSize: 20 }} />,
+    selIcon: <IoHomeSharp style={{ fontSize: 20 }} />,
     element: <HomePage />,
   },
 
@@ -26,11 +37,12 @@ const menus: Menu[] = [
   //   element: <SharePage />,
   //   loginNeed: true,
   // },
+
   {
     name: "설정",
     path: "/settings",
-    icon: <SettingOutlined style={{ fontSize: 20 }} />,
-    selIcon: <SettingFilled style={{ fontSize: 20 }} />,
+    icon: <IoSettings style={{ fontSize: 20 }} />,
+    selIcon: <IoSettingsSharp style={{ fontSize: 20 }} />,
     element: <SettingsPage />,
   },
 ];
@@ -42,6 +54,6 @@ type MenuState = {
 };
 export const useMenuStore = create<MenuState>((set) => ({
   menus,
-  selMenu: menus[0],
+  selMenu: menus[1],
   setSelMenu: (menu: Menu) => set({ selMenu: menu }),
 }));

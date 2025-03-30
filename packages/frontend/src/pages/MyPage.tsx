@@ -10,7 +10,7 @@ import { useTodoStore } from "../store/todoStore";
 import { useBudgetStore } from "../store/budgetStore";
 import { colors } from "../colors";
 import { EditFilled } from "@ant-design/icons";
-import { useNavigate } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import { useState } from "react";
 
 const formatter: StatisticProps["formatter"] = (value) => (
@@ -27,7 +27,12 @@ const MyPage = () => {
     localStorage.getItem("category") || "default"
   );
   return (
-    <Flex vertical>
+    <Flex
+      vertical
+      style={{
+        width: "100%",
+      }}
+    >
       <AppHeader title="마이페이지" />
       <Flex
         vertical
