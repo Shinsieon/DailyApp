@@ -93,7 +93,7 @@ const SettingsPage = () => {
             <List.Item
               prefix={<UserCircleOutline />}
               onClick={() => {
-                navigate("/change-nickname");
+                navigate("/changeNicknamePage");
               }}
             >
               닉네임 변경
@@ -135,7 +135,7 @@ const SettingsPage = () => {
             <List.Item
               prefix={<UserCircleOutline />}
               onClick={() => {
-                navigate("/login");
+                navigate("/loginPage");
               }}
             >
               로그인
@@ -233,7 +233,7 @@ const SettingsPage = () => {
         <List.Item
           prefix={<NotificationOutlined />}
           onClick={() => {
-            navigate("/patch-note");
+            navigate("/patchNotePage");
           }}
         >
           패치 노트

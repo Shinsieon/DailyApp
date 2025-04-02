@@ -3,9 +3,9 @@ import dayjs, { ManipulateType } from "dayjs";
 import Label from "./Label";
 import { colors } from "../colors";
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
-import { FaStar } from "react-icons/fa";
 import { Button, Segmented } from "antd-mobile";
 import { CalendarOutline } from "antd-mobile-icons";
+import { AllowedManipulateType } from "../types";
 interface CustomCalendarProps {
   selDate: string;
   onClick: (date: string) => void;
@@ -16,7 +16,6 @@ interface CustomCalendarProps {
 // interface DayType {
 //   [key: ManipulateType]: string[];
 // }
-type AllowedManipulateType = "day" | "month";
 type DayType = {
   [key in AllowedManipulateType]: string[];
 };

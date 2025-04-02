@@ -12,6 +12,7 @@ import CustomCalendar from "../components/CustomCalendar";
 import Label from "../components/Label";
 import { useNavigate } from "react-router-dom";
 import { DeleteOutline } from "antd-mobile-icons";
+import { FaChartBar } from "react-icons/fa";
 
 const BudgetPage = () => {
   const [selDate, setSelDate] = useState<string>(dayjs().format("YYYYMMDD"));
@@ -38,7 +39,20 @@ const BudgetPage = () => {
   return (
     <Flex vertical style={{ height: "100vh" }}>
       {/* 100vh 지우지말것 */}
-      <AppHeader title="가계부 정리" />
+      <AppHeader
+        title="가계부 정리"
+        right={
+          <FaChartBar
+            style={{
+              fontSize: 20,
+              paddingRight: 10,
+            }}
+            onClick={() => {
+              navigate("/budgetChartPage");
+            }}
+          />
+        }
+      />
       <Flex vertical style={{ flex: 1, overflowY: "auto" }}>
         <CustomCalendar
           selDate={selDate}
@@ -75,7 +89,7 @@ const BudgetPage = () => {
                   color: colors.primary,
                 }}
                 onClick={() => {
-                  navigate("/editBudget", {
+                  navigate("/budgetEditPage", {
                     state: { date: selDate, type: "income" },
                   });
                 }}
@@ -90,7 +104,7 @@ const BudgetPage = () => {
                   color: colors.lightWhite,
                 }}
                 onClick={() => {
-                  navigate("/editBudget", {
+                  navigate("/budgetEditPage", {
                     state: { date: selDate, type: "expense" },
                   });
                 }}
@@ -133,7 +147,7 @@ const BudgetPage = () => {
                     }}
                     key={budget.id}
                     onClick={() => {
-                      navigate("/editBudget", {
+                      navigate("/budgetEditPage", {
                         state: { budgetId: budget.id },
                       });
                     }}

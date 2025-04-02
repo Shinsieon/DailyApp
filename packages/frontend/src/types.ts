@@ -5,6 +5,7 @@ export interface PopupProps {
   onCancel?: () => void;
 }
 export type BudgetType = "income" | "expense" | "all";
+export type AllowedManipulateType = "day" | "month" | "year";
 export interface BudgetData {
   id?: number;
   date: string;

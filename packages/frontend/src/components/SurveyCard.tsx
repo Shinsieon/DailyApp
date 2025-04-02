@@ -13,7 +13,7 @@ const SurveyCard = () => {
       justify="center"
       align="center"
       onClick={() => {
-        navigate("/survey");
+        navigate("/surveyPage");
       }}
     >
       <Image

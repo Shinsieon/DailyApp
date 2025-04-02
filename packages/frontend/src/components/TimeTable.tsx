@@ -87,7 +87,9 @@ const TimeTable = (props: TimeTableProps) => {
                         flex: 1,
                       }}
                       onClick={() => {
-                        navigate(`/editTodo`, { state: { todoId: todo.id } });
+                        navigate(`/todoEditPage`, {
+                          state: { todoId: todo.id },
+                        });
                       }}
                     >
                       <Label name={todo.title} />

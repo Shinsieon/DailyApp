@@ -98,7 +98,7 @@ const TodoPage = () => {
                   color: colors.primary,
                 }}
                 onClick={() => {
-                  navigate("/editTodo", { state: { date: selDate } });
+                  navigate("/todoEditPage", { state: { date: selDate } });
                 }}
               >
                 <PlusOutlined />
@@ -183,7 +183,7 @@ const TodoPage = () => {
                                     borderRadius: "20px",
                                   }}
                                   onClick={() => {
-                                    navigate("/editTodo", {
+                                    navigate("/todoEditPage", {
                                       state: { todoId: todo.id },
                                     });
                                   }}

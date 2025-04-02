@@ -23,13 +23,13 @@ const TodoCard = () => {
           name="Todo"
           style={{ fontWeight: "bold", fontSize: 20 }}
           onClick={() => {
-            navigate("todo");
+            navigate("todoPage");
           }}
         />
         <Flex style={{ alignItems: "center" }}>
           <RightOutline
             onClick={() => {
-              navigate("todo");
+              navigate("todoPage");
             }}
             style={{
               fontSize: 15,
@@ -41,7 +41,7 @@ const TodoCard = () => {
           />
           <PlusCircleOutlined
             onClick={() => {
-              navigate("/editTodo");
+              navigate("/todoEditPage");
             }}
             style={{
               fontSize: 20,
@@ -74,7 +74,7 @@ function TodoItem(todo: TodoData) {
       justify="space-between"
       align="center"
       onClick={() => {
-        navigate("todo");
+        navigate("todoPage");
       }}
     >
       <Label

@@ -48,7 +48,7 @@ const MyPage = () => {
               <EditFilled
                 style={{ fontSize: 15 }}
                 onClick={() => {
-                  navigate("/change-nickname");
+                  navigate("/changeNicknamePage");
                 }}
               />
             </Flex>
@@ -93,7 +93,7 @@ const MyPage = () => {
           <List>
             <List.Item
               onClick={() => {
-                navigate("/categoryList");
+                navigate("/categoryListPage");
               }}
               extra={
                 <Label

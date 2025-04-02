@@ -90,7 +90,7 @@ const MemoItem = (props: MemoItemProps) => {
                 size="small"
                 style={{ backgroundColor: colors.lightGray, border: "none" }}
                 onClick={() => {
-                  navigate("/memoDetail", { state: { memoId: memo.id } });
+                  navigate("/memoDetailPage", { state: { memoId: memo.id } });
                 }}
               >
                 <Space key={memo.id}>
@@ -163,7 +163,7 @@ const MemoList = ({ memos }: { memos: MemoData[] }) => {
     });
   };
   const handleHeaderClick = (memoId: number) => {
-    navigate("/memoDetail", { state: { memoId: memoId } });
+    navigate("/memoDetailPage", { state: { memoId: memoId } });
   };
   const handleStarClick = (memoId: number) => {
     toggleMemo(memoId);
@@ -306,7 +306,7 @@ const MemoPage = () => {
             "--initial-position-right": "24px",
             "--edge-distance": "24px",
           }}
-          onClick={() => navigate("/memoEdit")}
+          onClick={() => navigate("/memoEditPage")}
         >
           <EditFill fontSize={32} />
         </FloatingBubble>

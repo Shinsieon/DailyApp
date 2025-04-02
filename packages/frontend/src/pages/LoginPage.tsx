@@ -163,7 +163,7 @@ const LoginPage = () => {
               type="link"
               style={{ color: colors.darkGray }}
               onClick={() => {
-                navigate("/register");
+                navigate("/registerPage");
               }}
             >
               회원가입

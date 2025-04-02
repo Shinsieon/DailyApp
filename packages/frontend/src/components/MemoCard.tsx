@@ -17,13 +17,13 @@ const MemoCard = () => {
           name="Memo"
           style={{ fontWeight: "bold", fontSize: 20 }}
           onClick={() => {
-            navigate("memo");
+            navigate("memoPage");
           }}
         />
         <Flex style={{ alignItems: "center" }}>
           <RightOutline
             onClick={() => {
-              navigate("memo");
+              navigate("memoPage");
             }}
             style={{
               fontSize: 15,
@@ -35,7 +35,7 @@ const MemoCard = () => {
           />
           <PlusCircleOutlined
             onClick={() => {
-              navigate("memoEdit");
+              navigate("memoEditPage");
             }}
             style={{
               fontSize: 20,
@@ -70,7 +70,7 @@ function MemoItem(memo: MemoData) {
       justify="space-between"
       align="center"
       onClick={() => {
-        navigate("/memoEdit", { state: { memoId: memo.id } });
+        navigate("/memoEditPage", { state: { memoId: memo.id } });
       }}
     >
       <Label

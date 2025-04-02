@@ -1,9 +1,9 @@
 import { useLocation, useNavigate } from "react-router-dom";
 import { NavBar, NavBarProps } from "antd-mobile";
-import { useMenuStore } from "../store/menuStore";
 
 interface AppHeaderProps extends NavBarProps {
   title: string;
+  right?: React.ReactNode;
 }
 
 const AppHeader = (props: AppHeaderProps) => {
@@ -13,6 +13,7 @@ const AppHeader = (props: AppHeaderProps) => {
   const cangoBack = location.pathname !== "/";
   return (
     <NavBar
+      right={props.right}
       {...props}
       onBack={() => {
         navigate(-1);

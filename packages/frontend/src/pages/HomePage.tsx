@@ -80,7 +80,7 @@ const HomePage = () => {
           className="blinking-text"
           content={"새로운 기능이 추가되었어요!"}
           onClick={() => {
-            navigate("/patch-note");
+            navigate("/patchNotePage");
             localStorage.setItem("patchNote", JSON.stringify(patchNotes));
           }}
         />

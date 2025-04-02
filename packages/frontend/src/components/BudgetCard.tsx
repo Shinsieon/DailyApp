@@ -43,13 +43,13 @@ const BudgetCard = () => {
           name="Budget"
           style={{ fontWeight: "bold", fontSize: 20 }}
           onClick={() => {
-            navigate("budget");
+            navigate("budgetPage");
           }}
         />
         <Flex style={{ alignItems: "center" }}>
           <RightOutline
             onClick={() => {
-              navigate("budget");
+              navigate("budgetPage");
             }}
             style={{
               fontSize: 15,
@@ -62,7 +62,7 @@ const BudgetCard = () => {
 
           <PlusCircleOutlined
             onClick={() => {
-              navigate("/editBudget", {
+              navigate("/budgetEditPage", {
                 state: { type: "income", date: dayjs().format("YYYYMMDD") },
               });
             }}
@@ -75,7 +75,7 @@ const BudgetCard = () => {
           />
           <MinusCircleOutline
             onClick={() => {
-              navigate("/editBudget", {
+              navigate("/budgetEditPage", {
                 state: { type: "expense", date: dayjs().format("YYYYMMDD") },
               });
             }}

@@ -97,7 +97,7 @@ const MemoDetailPage = () => {
                 shape="rounded"
                 style={{ backgroundColor: colors.lightGray, border: "none" }}
                 onClick={() => {
-                  navigate("/memoDetail", { state: { memoId: rMemo.id } });
+                  navigate("/memoDetailPage", { state: { memoId: rMemo.id } });
                 }}
               >
                 <Space>
@@ -145,7 +145,7 @@ const MemoDetailPage = () => {
           "--initial-position-right": "24px",
           "--edge-distance": "24px",
         }}
-        onClick={() => navigate("/memoEdit", { state: { memoId: memoId } })}
+        onClick={() => navigate("/memoEditPage", { state: { memoId: memoId } })}
       >
         <EditFill fontSize={32} />
       </FloatingBubble>

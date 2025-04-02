@@ -93,7 +93,7 @@ const WeatherCard = () => {
             }}
             justify="space-between"
             onClick={() => {
-              navigate("weather");
+              navigate("weatherPage");
             }}
           >
             <Label name="위치 정보를 허용해주세요" style={{ fontSize: 14 }} />
@@ -123,7 +123,7 @@ const WeatherCard = () => {
               padding: "10px 0px",
             }}
             onClick={() => {
-              navigate("weather");
+              navigate("weatherPage");
             }}
           >
             {timeWeather.length === 0 ? (

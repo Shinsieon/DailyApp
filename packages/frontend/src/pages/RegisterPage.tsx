@@ -18,7 +18,7 @@ const RegisterPage = () => {
     try {
       await api.signup(values.email, values.password, values.nickname);
       message.success("회원가입이 완료되었습니다.");
-      navigate("/login");
+      navigate("/loginPage");
     } catch (error: any) {
       showError(error);
     } finally {

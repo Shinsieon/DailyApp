@@ -33,7 +33,7 @@ function UserAvatar() {
   return (
     <UserOutline
       onClick={() => {
-        if (!user) navigate("/login");
+        if (!user) navigate("/loginPage");
       }}
       style={{
         backgroundColor: colors.lightGray,

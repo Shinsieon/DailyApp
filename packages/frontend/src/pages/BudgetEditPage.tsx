@@ -206,7 +206,7 @@ const BudgetEditPage = () => {
                         message.error("로그인 후 사용해주세요.");
                         return;
                       }
-                      navigate("/categoryList");
+                      navigate("/categoryListPage");
                     }}
                   >
                     변경
