@@ -13,6 +13,7 @@ import Label from "../components/Label";
 import { useNavigate } from "react-router-dom";
 import { DeleteOutline } from "antd-mobile-icons";
 import { FaChartBar } from "react-icons/fa";
+import { FaChartPie } from "react-icons/fa";
 
 const BudgetPage = () => {
   const [selDate, setSelDate] = useState<string>(dayjs().format("YYYYMMDD"));
@@ -42,7 +43,7 @@ const BudgetPage = () => {
       <AppHeader
         title="가계부 정리"
         right={
-          <FaChartBar
+          <FaChartPie
             style={{
               fontSize: 20,
               paddingRight: 10,
