@@ -1,9 +1,8 @@
-import dayjs from "dayjs";
 import ReactApexChart from "react-apexcharts";
 import { formatMoney } from "../utils";
 interface LineChartProps {
   series: { name: string; data: number[] }[];
-  labels?: string[];
+  labels?: string[] | number[];
 }
 const LineChart = (props: LineChartProps) => {
   const series = props.series;
@@ -34,9 +33,6 @@ const LineChart = (props: LineChartProps) => {
         style: {
           colors: "#999",
           fontSize: "12px",
-        },
-        formatter: (value: string) => {
-          return dayjs(value).format("MM-DD");
         },
       },
     },
