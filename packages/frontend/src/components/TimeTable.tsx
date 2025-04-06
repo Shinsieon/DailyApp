@@ -29,7 +29,10 @@ const TimeTable = (props: TimeTableProps) => {
     for (let i = 0; i < props.todos.length; i++) {
       const todo = props.todos[i];
       if (todo.time) {
-        timeMap[todo.time].push(todo);
+        const hour = todo.time.substring(0, 2) + ":00";
+        if (!timeMap[hour]) {
+          timeMap[hour] = [todo];
+        } else timeMap[hour].push(todo);
       } else {
         timeMap["00:00"].push(todo);
       }
