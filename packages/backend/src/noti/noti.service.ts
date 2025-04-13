@@ -3,7 +3,6 @@ import { InjectRepository } from "@nestjs/typeorm";
 import { Repository } from "typeorm";
 import { Noti } from "./noti.entity";
 import { User } from "@src/auth/auth.entity";
-import e from "express";
 
 @Injectable()
 export class NotiService {

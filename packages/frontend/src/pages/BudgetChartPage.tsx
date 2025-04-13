@@ -73,7 +73,6 @@ const BudgetChartPage = () => {
         summary.byDate["income"][date] = 0;
       }
     });
-    console.log(`budgetSummary for ${JSON.stringify(summary.byDate)}`);
     return summary;
   }, [filteredBudgetsByCategory, filteredBudgetsByDate]);
 

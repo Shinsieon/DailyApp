@@ -1,4 +1,4 @@
-import { Avatar, Flex, List } from "antd";
+import { Flex, List } from "antd";
 import { useEffect, useState } from "react";
 import { api, showError } from "../api";
 import AppHeader from "../components/AppHeader";

@@ -9,7 +9,6 @@ interface AppHeaderProps extends NavBarProps {
 const AppHeader = (props: AppHeaderProps) => {
   const navigate = useNavigate();
   const location = useLocation();
-  console.log(`location.pathname: ${location.pathname}`);
   const cangoBack = location.pathname !== "/";
   return (
     <NavBar

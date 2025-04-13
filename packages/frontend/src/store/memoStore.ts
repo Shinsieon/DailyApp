@@ -45,6 +45,7 @@ export const useMemoStore = create<MemoState>((set) => ({
   },
 
   saveMemo: async (memo) => {
+    console.log("saving memo");
     const key = await addData(storeName, memo);
     set((state) => ({ memos: [...state.memos, { ...memo, id: key }] }));
   },

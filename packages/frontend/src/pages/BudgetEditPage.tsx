@@ -43,15 +43,9 @@ const BudgetEditPage = () => {
   const [budgetForm, setBudgetForm] = useState<BudgetData>(
     prevBudget || defaultBudget
   );
-  console.log(
-    `budgetForm : ${JSON.stringify(budgetForm)} isPrev : ${JSON.stringify(
-      prevBudget
-    )}`
-  );
 
   const [categoryOptions, setCategoryOptions] = useState<CategoryData[]>([]);
   const onfinish = async () => {
-    console.log(`budgetForm : ${JSON.stringify(budgetForm)}`);
     if (!budgetForm.amount || budgetForm.amount <= 0) {
       message.error("금액을 입력해주세요.");
       return;
@@ -80,7 +74,6 @@ const BudgetEditPage = () => {
       } else {
         categories = await api.getCategories(user?.id);
       }
-      console.log(`categories : ${JSON.stringify(categories)}`);
       if (categories.length === 0) {
         message.error("카테고리를 가져오는데 실패했습니다.");
         return;
@@ -168,7 +161,6 @@ const BudgetEditPage = () => {
             cancelText="취소"
             ref={datePickerRef}
             onConfirm={(value) => {
-              console.log(`setting new date`);
               setBudgetForm({
                 ...budgetForm,
                 date: dayjs(value).format("YYYYMMDD"),
@@ -218,7 +210,6 @@ const BudgetEditPage = () => {
             cancelText="취소"
             placeholder="카테고리선택"
             onConfirm={(value: CheckListValue[]) => {
-              console.log(value);
               setVisible(false);
               const g = categoryOptions.find((item) => item.value === value[0]);
               if (g) setBudgetForm({ ...budgetForm, category: g });

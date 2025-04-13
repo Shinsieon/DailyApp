@@ -1,6 +1,8 @@
 import { Button, Result } from "antd";
+import { useEffect } from "react";
 import { ErrorBoundary as ReactErrorBoundary } from "react-error-boundary";
 import { useNavigate } from "react-router-dom";
+import { sendToTelegram } from "../telegram";
 
 interface ErrorFallbackProps {
   error: Error;
@@ -12,6 +14,9 @@ const ErrorFallback: React.FC<ErrorFallbackProps> = ({
   resetErrorBoundary,
 }) => {
   const navigate = useNavigate();
+  useEffect(() => {
+    sendToTelegram(error.message);
+  }, []);
 
   return (
     <Result

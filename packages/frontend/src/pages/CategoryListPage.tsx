@@ -25,7 +25,6 @@ const CategoryListPage = () => {
       return;
     }
     const result = await api.createCategory(user!.id, newCategory);
-    console.log(`result: ${JSON.stringify(result)}`);
     if (result) {
       message.success("카테고리가 추가되었습니다.");
       setMyCategory([...myCategory, result]);

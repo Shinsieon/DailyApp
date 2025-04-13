@@ -38,12 +38,6 @@ const TimeTable = (props: TimeTableProps) => {
       }
     }
     setTimeMap(timeMap);
-    console.log(
-      `Object.keys(timeMap) ${Object.keys(timeMap).filter((item) => timeMap[item].length > 0)} `
-    );
-    console.log(
-      `아이템별 개수 ${Object.keys(timeMap).map((item) => timeMap[item].length)}`
-    );
   }, [props.todos]);
   if (props.todos.length === 0) {
     return <Empty />;

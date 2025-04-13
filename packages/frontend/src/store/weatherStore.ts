@@ -25,15 +25,12 @@ export const useWeatherStore = create<WeatherState>((set) => ({
         nx = 60;
         ny = 127;
       }
-      console.log(`nx: ${nx}, ny: ${ny}`);
       const items = await api.getWeather(dayjs().format("YYYYMMDD"), nx, ny);
       //const data = await response.json();
-      console.log(`날씨 items : ${items.length}`);
       if (!items || !Array.isArray(items)) {
         console.error("API에서 받은 데이터가 배열이 아닙니다:", items);
         return;
       }
-      console.log(items[0]);
       const filtered = items.filter(
         (item: WeatherProps) =>
           Number(item.fcstValue) &&

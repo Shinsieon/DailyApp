@@ -1,13 +1,14 @@
 import React from "react";
-import { createBrowserRouter } from "react-router-dom";
+import { createBrowserRouter, RouteObject } from "react-router-dom";
 
 // pages 폴더의 모든 페이지를 동적으로 가져오기 (Vite 전용)
 const pageModules = import.meta.glob("./pages/*Page.tsx", { eager: true });
 
 // Index 페이지는 따로 import
 import Index from "./Index";
+import ErrorPage from "./pages/ErrorPage";
 
-const routes = [
+const routes: RouteObject[] = [
   {
     path: "/",
     element: <Index />,
@@ -27,6 +28,7 @@ for (const path in pageModules) {
   routes.push({
     path: routePath,
     element: React.createElement(module.default),
+    errorElement: <ErrorPage />,
   });
 }
 

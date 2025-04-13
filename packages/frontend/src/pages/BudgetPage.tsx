@@ -59,7 +59,6 @@ const BudgetPage = () => {
           selDate={selDate}
           checkDates={budgets.map((bd) => bd.date)}
           onClick={(date) => {
-            console.log("seldate changed!");
             setSelDate(date);
           }}
           onTypeChange={(type) => {

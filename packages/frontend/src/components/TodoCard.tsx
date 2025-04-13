@@ -15,7 +15,6 @@ const TodoCard = () => {
   const uncompletedTodos = todos
     .filter((td) => !td.completed && td.date >= dayjs().format("YYYYMMDD"))
     .sort((a, b) => Number(a.date) - Number(b.date));
-  console.log(`todos : ${JSON.stringify(uncompletedTodos)}`);
   return (
     <Flex vertical style={{ backgroundColor: colors.lighterGray, padding: 10 }}>
       <Flex justify="space-between" style={{ marginBottom: 10 }}>

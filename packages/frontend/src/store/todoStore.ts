@@ -62,7 +62,6 @@ export const useTodoStore = create<TodoState>((set) => ({
     }
   },
   updateTodo: async (id, todo) => {
-    console.log(`updateTodo: ${id}, ${JSON.stringify(todo)}`);
     await updateData(storeName, todo);
     set((state) => ({
       todos: state.todos.map((t) => (t.id === id ? todo : t)),
