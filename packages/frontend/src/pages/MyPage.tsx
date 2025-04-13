@@ -12,6 +12,7 @@ import { colors } from "../colors";
 import { EditFilled } from "@ant-design/icons";
 import { useLocation, useNavigate } from "react-router-dom";
 import { useState } from "react";
+import { useDiaryStore } from "../store/diaryStore";
 
 const formatter: StatisticProps["formatter"] = (value) => (
   <CountUp end={value as number} separator="," />
@@ -22,6 +23,7 @@ const MyPage = () => {
   const memos = useMemoStore((state) => state.memos);
   const todos = useTodoStore((state) => state.todos);
   const budgets = useBudgetStore((state) => state.budgets);
+  const diary = useDiaryStore((state) => state.diary);
   const navigate = useNavigate();
   const [category, setCategory] = useState(
     localStorage.getItem("category") || "default"
@@ -74,6 +76,8 @@ const MyPage = () => {
             formatter={formatter}
             value={budgets.length}
           />
+          <Divider direction="vertical" />
+          <Statistic title="일기" formatter={formatter} value={diary.length} />
         </Flex>
         <Flex
           id="settingView"
