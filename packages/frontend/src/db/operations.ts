@@ -5,6 +5,7 @@ export const dbStores = {
   todoStore: "todoStore",
   memoStore: "memoStore",
   themeStore: "themeStore",
+  diaryStore: "diaryStore",
 };
 // 데이터 추가
 export const addData = async <T>(storeName: string, data: T) => {

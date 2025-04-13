@@ -2,24 +2,12 @@ import { Flex, message } from "antd";
 import { TabBar } from "antd-mobile";
 import { useMenuStore } from "./store/menuStore";
 import { useUserStore } from "./store/userStore";
-import { useEffect } from "react";
-import { api } from "./api";
-import { useWeatherStore } from "./store/weatherStore";
 
 const Index = () => {
   // Load the initial menu from localStorage or default to the first menu
   const { menus, selMenu, setSelMenu } = useMenuStore();
 
   const user = useUserStore((state) => state.user);
-  const fetchWeather = useWeatherStore((state) => state.fetchWeather);
-  useEffect(() => {
-    if (!user && localStorage.getItem("token")) {
-      api.getProfile().then((data) => {
-        useUserStore.getState().setUser(data);
-      });
-    }
-    fetchWeather();
-  }, []);
 
   return (
     <Flex vertical style={{ height: "100vh", overflow: "hidden" }}>

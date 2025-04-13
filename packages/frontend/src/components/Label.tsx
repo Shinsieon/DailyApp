@@ -6,6 +6,8 @@ import { colors } from "../colors";
 interface LabelProps extends TextProps {
   name?: string | number;
   placeholder?: boolean;
+  bold?: boolean;
+  maxLength?: number;
 }
 const Label = (props: LabelProps) => {
   const theme = useThemeStore((state) => state.theme);
@@ -15,10 +17,19 @@ const Label = (props: LabelProps) => {
       : theme.isDarkMode
         ? colors.lightWhite
         : colors.darkBlack,
+    fontWeight: props.bold ? "bold" : "normal",
   };
+  let showLabelText = "";
+  if (props.name) {
+    showLabelText = props.name.toString();
+  }
+  if (props.maxLength && showLabelText.length > props.maxLength) {
+    showLabelText = showLabelText.slice(0, props.maxLength) + "...";
+  }
+
   return (
     <Typography.Text {...props} style={{ ...style, ...props.style }}>
-      {props.name}
+      {showLabelText}
     </Typography.Text>
   );
 };

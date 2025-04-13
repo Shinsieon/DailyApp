@@ -10,29 +10,25 @@ import { Flex } from "antd";
 import WeatherCard from "../components/WeatherCard";
 import DayCard from "../components/DayCard";
 import HelpCard from "../components/SurveyCard";
+import DiaryCard from "../components/DiaryCard";
 
 const HomePage = () => {
   const [patchNotes, setPatchNotes] = useState<PatchNote | null>(null);
-
   const navigate = useNavigate();
 
   useEffect(() => {
     const fetchPatchNotes = async () => {
-      console.log("fetchPatchNotes");
       try {
         const response = await api.getPatchNotes();
         if (!response || response.length === 0) {
           return;
         }
         const prevPatchNotes = localStorage.getItem("patchNote");
-        console.log(`prevPatchNotes: ${prevPatchNotes}`);
         if (!prevPatchNotes) {
           setPatchNotes(response[0]);
           return;
         }
         const jsonPrevPatchNotes = JSON.parse(prevPatchNotes);
-        console.log(`jsonPrevPatchNotes: ${jsonPrevPatchNotes.version}`);
-        console.log(`response[0].version: ${response[0].version}`);
         if (jsonPrevPatchNotes.version !== response[0].version) {
           const [major, minor, patch] = response[0].version.split(".");
           const [prevMajor, prevMinor, prevPatch] =
@@ -89,6 +85,7 @@ const HomePage = () => {
       <WeatherCard />
       <MemoCard />
       <TodoCard />
+      <DiaryCard />
       <BudgetCard />
       <Divider />
       <HelpCard />

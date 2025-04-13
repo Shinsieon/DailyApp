@@ -1,9 +1,8 @@
 import { Flex, Space } from "antd";
 import { useUserStore } from "../store/userStore";
 import Label from "./Label";
-import { UserOutline } from "antd-mobile-icons";
-import { colors } from "../colors";
 import { useNavigate } from "react-router-dom";
+import UserAvatar from "./UserAvatar";
 
 const Profile = () => {
   const user = useUserStore((state) => state.user);
@@ -27,22 +26,5 @@ const Profile = () => {
     </Space>
   );
 };
-function UserAvatar() {
-  const navigate = useNavigate();
-  const user = useUserStore((state) => state.user);
-  return (
-    <UserOutline
-      onClick={() => {
-        if (!user) navigate("/loginPage");
-      }}
-      style={{
-        backgroundColor: colors.lightGray,
-        padding: 5,
-        borderRadius: 10,
-        color: user ? colors.primary : colors.darkBlack,
-      }}
-    />
-  );
-}
 
 export default Profile;

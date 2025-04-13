@@ -46,6 +46,16 @@ export interface MemoData {
   relatedMemoIds?: number[];
 }
 
+export interface Diary {
+  title: string;
+  content: string;
+}
+export interface DiaryData {
+  id?: number;
+  date: string;
+  diaries: Diary[];
+}
+
 export interface ThemeData {
   isDarkMode: boolean;
 }
@@ -121,4 +131,55 @@ export interface WeatherProps {
 export interface WeatherMap {
   fcstTime: string; // 예보 시간 (ex: "0500", "0700", ...)
   [key: string]: string; // 날씨 데이터 (카테고리 키-값 매핑)
+}
+
+export type FeedCategory = "음악" | "책" | "에피소드" | "여행" | "기타";
+
+export interface Feed {
+  id: number;
+  title: string;
+  category: FeedCategory;
+  content: string;
+  createdAt: string;
+  updatedAt: string;
+  user: {
+    id: number;
+    name: string;
+    profileImage: string;
+  };
+  comments: {
+    id: number;
+    content: string;
+    createdAt: string;
+    updatedAt: string;
+    user: {
+      id: number;
+      name: string;
+      profileImage: string;
+    };
+    feedId: number;
+  }[];
+  likes: {
+    id: number;
+    feedId: number;
+    createdAt: string;
+    updatedAt: string;
+    user: {
+      id: number;
+      name: string;
+      profileImage: string;
+    };
+  }[];
+  images?: {
+    id: string;
+    url: string;
+    createdAt: string;
+    updatedAt: string;
+    feedId: number;
+    user: {
+      id: string;
+      name: string;
+      profileImage: string;
+    };
+  };
 }

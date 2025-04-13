@@ -1,6 +1,6 @@
 import { PlusCircleOutlined } from "@ant-design/icons";
 import { useEffect, useState } from "react";
-import { BudgetData, BudgetSum, BudgetType } from "../types";
+import { BudgetData, BudgetSum } from "../types";
 import { useNavigate } from "react-router-dom";
 import { formatMoney } from "../utils";
 import { useBudgetStore } from "../store/budgetStore";
@@ -33,7 +33,6 @@ const BudgetCard = () => {
     });
     //d.date format '2024/12/14'
     settodayBudget(sum);
-    console.log(`render BudgetCard`);
   }, [budgets]);
 
   return (

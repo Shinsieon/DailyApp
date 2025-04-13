@@ -3,6 +3,7 @@ import { Flex } from "antd";
 import { useRouteError } from "react-router-dom";
 import AppHeader from "../components/AppHeader";
 import { sendToTelegram } from "../telegram";
+import Label from "../components/Label";
 
 export default function ErrorPage() {
   const error = useRouteError();
@@ -18,6 +19,7 @@ export default function ErrorPage() {
     <Flex vertical style={{ height: "100vh" }}>
       {/* 100vh 지우지말것 */}
       <AppHeader title="Error Page" />
+      <Label name={error.statusText + error.message} />
     </Flex>
   );
 }

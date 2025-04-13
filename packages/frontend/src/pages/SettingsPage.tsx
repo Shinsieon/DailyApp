@@ -40,10 +40,8 @@ const SettingsPage = () => {
 
   useEffect(() => {
     sendToNative("getAppVersion", {}, (data: any) => {
-      console.log(`appVersion: ${data.appVersion}`);
       setAppVersion(data.appVersion);
     });
-    console.log(`settingspage isGranted: ${isGranted.isNativeGranted}`);
     if (isGranted.isNativeGranted && isGranted.isServerGranted) {
       setAcceptPush(true);
     }
@@ -55,18 +53,14 @@ const SettingsPage = () => {
       return;
     }
     if (value) {
-      console.log(`settingspage isGranted: ${isGranted.isNativeGranted}`);
       if (!isGranted.isNativeGranted) {
         message.info("알림을 허용해주세요.", 1, () => {
-          sendToNative("goToSettings", {}, (data: any) => {
-            console.log(data);
-          });
+          sendToNative("goToSettings", {}, (data: any) => {});
         });
         return;
       }
     }
     sendToNative("getFCMToken", {}, async (data: any) => {
-      console.log(`fcmToken: ${data.fcmToken}`);
       const deviceId = data.fcmToken;
       const result = await api.setNotificationGranted(user.id, deviceId, value);
       if (result) {

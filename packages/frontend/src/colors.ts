@@ -3,6 +3,8 @@ export const colors = {
   lightBlack: "#555",
   lightWhite: "#fff",
   lightGray: "#f0f0f0",
+  lightYellow: "#ffec3d",
+  lightRed: "#EFAD94",
   lighterGray: "#f8f8f8",
   darkGray: "#666",
   darkBlue: "rgba(0,34,68)",

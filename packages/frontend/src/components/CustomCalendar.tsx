@@ -9,13 +9,10 @@ import { AllowedManipulateType } from "../types";
 interface CustomCalendarProps {
   selDate: string;
   onClick: (date: string) => void;
+  allowedManipulateTypes?: AllowedManipulateType[];
   onTypeChange?: (type: ManipulateType) => void;
   checkDates?: string[];
 }
-
-// interface DayType {
-//   [key: ManipulateType]: string[];
-// }
 type DayType = {
   [key in AllowedManipulateType]: string[];
 };
@@ -42,17 +39,49 @@ const CustomCalendar = (props: CustomCalendarProps) => {
   const checkedDates = useMemo(() => {
     return dayType === "day"
       ? props.checkDates || []
-      : (props.checkDates || []).map((date) => date.substring(0, 6));
+      : dayType === "month"
+        ? props.checkDates?.map((item) => item.substring(0, 6)) || []
+        : props.checkDates?.map((item) => item.substring(0, 4)) || [];
   }, [dayType, props.checkDates]);
+  let segmentedOptions = [
+    {
+      label: "일",
+      value: "day",
+    },
+
+    {
+      label: "월",
+      value: "month",
+    },
+    {
+      label: "연",
+      value: "year",
+    },
+  ];
+  if (props.allowedManipulateTypes) {
+    segmentedOptions = segmentedOptions.filter((option) =>
+      props.allowedManipulateTypes?.includes(
+        option.value as AllowedManipulateType
+      )
+    );
+  } else {
+    //default
+    segmentedOptions = segmentedOptions.filter((option) =>
+      ["day", "month"].includes(option.value as AllowedManipulateType)
+    );
+  }
 
   useEffect(() => {
     props.onTypeChange?.(dayType);
 
     if (dayType === "day") {
       handleClick(dayjs().format("YYYYMMDD"));
-    } else {
+    } else if (dayType === "month") {
       const firstOfMonth = dayjs(selDate).startOf("month").format("YYYYMMDD");
       handleClick(firstOfMonth);
+    } else if (dayType === "year") {
+      const firstOfYear = dayjs(selDate).startOf("year").format("YYYYMMDD");
+      handleClick(firstOfYear);
     }
   }, [dayType]);
   // ✅ 날짜 클릭 핸들러 (useCallback으로 최적화)
@@ -87,17 +116,7 @@ const CustomCalendar = (props: CustomCalendarProps) => {
     <Flex vertical style={{ padding: "20px" }}>
       <Flex justify="center">
         <Segmented
-          options={[
-            {
-              label: "일",
-              value: "day",
-            },
-
-            {
-              label: "월",
-              value: "month",
-            },
-          ]}
+          options={segmentedOptions}
           block
           value={dayType}
           onChange={(value) => setDayType(value as AllowedManipulateType)}
@@ -107,8 +126,10 @@ const CustomCalendar = (props: CustomCalendarProps) => {
           onClick={() => {
             if (dayType === "day") {
               handleClick(dayjs().format("YYYYMMDD"));
-            } else {
+            } else if (dayType === "month") {
               handleClick(dayjs().startOf("month").format("YYYYMMDD"));
+            } else if (dayType === "year") {
+              handleClick(dayjs().startOf("year").format("YYYYMMDD"));
             }
           }}
           style={{ marginLeft: 10 }}

@@ -93,7 +93,6 @@ const LoginPage = () => {
       },
     });
   };
-  console.log("로그인 화면 렌더링[no effect]");
   return (
     <Flex vertical>
       <AppHeader title="로그인" />
@@ -126,7 +125,6 @@ const LoginPage = () => {
             <Checkbox
               defaultChecked={localStorage.getItem("rememberEmail") === "true"}
               onChange={(value) => {
-                console.log("체크박스 클릭", value);
                 if (value) localStorage.setItem("rememberEmail", "true");
                 else localStorage.removeItem("rememberEmail");
               }}
@@ -184,8 +182,6 @@ const LoginPage = () => {
               onClick={() => {
                 if (isNative()) {
                   sendToNative("kakaoLogin", {}, async (data: any) => {
-                    console.log("🔵 카카오 로그인 요청을 전송했습니다.");
-                    console.log(data);
                     await handleLogin(
                       data.user.email,
                       data.user.id.toString(),
@@ -219,8 +215,6 @@ const LoginPage = () => {
               icon={<AppleFilled />}
               onClick={() => {
                 sendToNative("appleLogin", {}, async (data: any) => {
-                  console.log("🔵 애플 로그인 요청을 전송했습니다.");
-                  console.log(data);
                   await handleLogin(
                     data.token,
                     data.user.id.toString(),

@@ -169,17 +169,14 @@ const TodoEditPage = () => {
 
   const [form] = Form.useForm();
   const onfinish = async () => {
-    console.log(`todoForm : ${JSON.stringify(todoForm)}`);
     if (!todoForm.title) {
       message.error("할 일을 입력해주세요.");
       return;
     }
     try {
       if (prevTodo) {
-        console.log(`updating todo : ${JSON.stringify(todoForm)}`);
         await updateTodo(todoForm.id!, todoForm);
       } else {
-        console.log(`saving todo : ${JSON.stringify(todoForm)}`);
         await saveTodo(todoForm);
       }
       if (todoForm.notification && user) {
@@ -254,7 +251,6 @@ const TodoEditPage = () => {
               confirmText="확인"
               cancelText="취소"
               onConfirm={(value) => {
-                console.log(`setting new date`);
                 setTodoForm({
                   ...todoForm,
                   date: dayjs(value).format("YYYYMMDD"),
@@ -280,7 +276,6 @@ const TodoEditPage = () => {
               confirmText="확인"
               cancelText="취소"
               onConfirm={(value) => {
-                console.log(`setting new time : ${value.join(":")}`);
                 setTodoForm({
                   ...todoForm,
                   time: value.join(":"),
@@ -302,7 +297,6 @@ const TodoEditPage = () => {
               ]}
               value={[todoForm.notification ? "1" : "0"]}
               onChange={(arr) => {
-                console.log(`notificationAccepted : ${arr[0]}`);
                 if (arr[0] === "1") {
                   if (!isGranted.isUser) {
                     message.error("로그인 후 사용해주세요.");

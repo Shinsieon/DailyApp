@@ -7,6 +7,7 @@ import { Flex } from "antd";
 import { useThemeStore } from "../store/themeStore";
 import { colors } from "../colors";
 import useIsMobile from "../hooks/useIsMobile";
+import { useDiaryStore } from "../store/diaryStore";
 
 export const AppLayout = ({ children }: { children: React.ReactElement }) => {
   const isDarkMode = useThemeStore((state) => state.theme.isDarkMode);
@@ -16,12 +17,14 @@ export const AppLayout = ({ children }: { children: React.ReactElement }) => {
   const fetchTodos = useTodoStore((state) => state.fetchTodos);
   const fetchMemos = useMemoStore((state) => state.fetchMemos);
   const fetchTheme = useThemeStore((state) => state.fetchTheme);
+  const fetchDiary = useDiaryStore((state) => state.fetchDiary);
 
   useEffect(() => {
     fetchBudgets();
     fetchTodos();
     fetchMemos();
     fetchTheme();
+    fetchDiary();
   }, []);
   return (
     <Flex

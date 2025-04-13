@@ -6,7 +6,6 @@ interface LineChartProps {
 }
 const LineChart = (props: LineChartProps) => {
   const series = props.series;
-  console.log(`series : ${JSON.stringify(series)}`);
   const options = {
     chart: {
       height: 350,

@@ -67,7 +67,6 @@ const TodoPage = () => {
           selDate={selDate}
           checkDates={todos.map((todo) => todo.date)}
           onClick={(date) => {
-            console.log("seldate changed!");
             setSelDate(date);
           }}
           onTypeChange={(type) => {

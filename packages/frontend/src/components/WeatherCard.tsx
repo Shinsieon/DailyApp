@@ -11,6 +11,8 @@ import { WeatherMap, WeatherProps } from "../types";
 import { useNavigate } from "react-router-dom";
 import { useWeatherStore } from "../store/weatherStore";
 import { sendToNative } from "../hooks/useNative";
+import { useUserStore } from "../store/userStore";
+import { api } from "../api";
 
 //PTY(강수형태): 없음(0), 비(1), 비/눈(2), 눈(3), 소나기(4), 빗방울(5), 빗방울/눈날림(6), 눈날림(7)
 const getWeatherImage = (PTY: string) => {
@@ -62,10 +64,18 @@ const WeatherCard = () => {
   const [timeWeather, setTimeWeather] = useState<WeatherMap[]>([]);
   const navigate = useNavigate();
   const [locationGranted, setLocationGranted] = useState("");
+  const { user } = useUserStore();
+  useEffect(() => {
+    if (!user && localStorage.getItem("token")) {
+      api.getProfile().then((data) => {
+        useUserStore.getState().setUser(data);
+      });
+    }
+    fetchWeather();
+  }, []);
   useEffect(() => {
     sendToNative("checkLocationGranted", {}, (data: any) => {
       setLocationGranted(data);
-      console.log(data);
     });
     setTimeWeather(filterWeatherData(weather));
   }, [weather]);
@@ -104,7 +114,6 @@ const WeatherCard = () => {
               onClick={(e) => {
                 e.stopPropagation();
                 sendToNative("goToSettings", {}, (data: any) => {
-                  console.log(data);
                   fetchWeather();
                 });
               }}
