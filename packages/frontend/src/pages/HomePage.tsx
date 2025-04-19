@@ -65,7 +65,6 @@ const HomePage = () => {
       gap={10}
       style={{
         overflowY: "auto",
-        width: "100%",
       }}
     >
       {patchNotes && (
@@ -86,15 +85,26 @@ const HomePage = () => {
       <Flex
         vertical
         gap={10}
-        style={{ backgroundColor: colors.lighterGray, padding: "10px 20px" }}
+        style={{
+          backgroundColor: colors.lighterGray,
+          padding: "10px 20px",
+        }}
       >
         <WeatherCard />
         <Flex gap={10}>
-          <MemoCard />
-          <TodoCard />
+          <Flex style={{ flex: 1 }}>
+            <MemoCard />
+          </Flex>
+          <Flex style={{ flex: 1 }}>
+            <TodoCard />
+          </Flex>
         </Flex>
-        <DiaryCard />
-        <BudgetCard />
+        <Flex>
+          <DiaryCard />
+        </Flex>
+        <Flex>
+          <BudgetCard />
+        </Flex>
         <HelpCard />
       </Flex>
     </Flex>

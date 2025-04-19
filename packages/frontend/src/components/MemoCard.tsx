@@ -31,8 +31,11 @@ const MemoCard = () => {
                     onClick={(e) => {
                       e.stopPropagation();
                       console.log(`memo clicked ${memo.id}`);
-                      navigate("memoEditPage", { state: { memoId: memo.id } });
+                      navigate("memoEditPage", {
+                        state: { memoId: memo.id },
+                      });
                     }}
+                    maxLength={10}
                   />
                 )
             )}

@@ -23,7 +23,7 @@ const CustomCard = (props: CustomCardProps) => {
         backgroundColor: colors.lightWhite,
         padding: 10,
         borderRadius: 10,
-        flex: 1,
+        width: "100%",
       }}
       onClick={onClick}
     >

@@ -6,6 +6,7 @@ interface CardItemProps {
   description?: string;
   backgroundColor?: string;
   onClick: (e: any) => void;
+  maxLength?: number;
 }
 
 const CardItem = (props: CardItemProps) => {
@@ -32,13 +33,15 @@ const CardItem = (props: CardItemProps) => {
       <Label
         name={description}
         style={{
+          overflowWrap: "break-word",
+          wordBreak: "break-word",
           overflow: "hidden",
-          whiteSpace: "nowrap",
+          whiteSpace: "normal",
           textOverflow: "ellipsis",
           fontSize: 16,
         }}
         placeholder
-        maxLength={20}
+        maxLength={props.maxLength || 20}
       />
     </Flex>
   );
