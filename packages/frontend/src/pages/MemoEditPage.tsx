@@ -22,6 +22,7 @@ import sizes from "../sizes";
 import { CheckListValue } from "antd-mobile/es/components/check-list";
 import { AddCircleOutline } from "antd-mobile-icons";
 import { FolderOutlined } from "@ant-design/icons";
+import BottomFixedButton from "../components/BottomFixedButton";
 
 const MemoEditPage = () => {
   const [groupVisible, setGroupVisible] = useState(false);
@@ -29,7 +30,7 @@ const MemoEditPage = () => {
   const location = useLocation();
   const navigate = useNavigate();
   const [mentionVisible, setMentionVisible] = useState(false);
-  const { memos, saveMemo, updateMemo } = useMemoStore();
+  const { memos, saveMemo, updateMemo, deleteMemo } = useMemoStore();
   const groups =
     memos.length > 0 ? [...new Set(memos.map((memo) => memo.group))] : ["기본"];
 
@@ -283,15 +284,41 @@ const MemoEditPage = () => {
             />
           </Flex>
         )}
-        <Flex>
+        {/* <Flex style={{ width: "100%" }} gap={10}>
+          <Button
+            onClick={() => {
+              navigate(-1);
+            }}
+            style={{
+              height: "50px",
+              flex: 1,
+            }}
+          >
+            취소
+          </Button>
           <Button
             onClick={onfinish}
             color="primary"
-            style={{ width: "100%", height: "50px" }}
+            style={{ height: "50px", flex: 1 }}
           >
             저장
           </Button>
-        </Flex>
+        </Flex> */}
+        <BottomFixedButton
+          type="double"
+          confirmName="저장"
+          onConfirm={onfinish}
+          onCancel={() => {
+            if (prevMemo) {
+              deleteMemo(prevMemo.id!);
+              message.success("메모가 삭제되었습니다.");
+              navigate(-1);
+            } else {
+              navigate(-1);
+            }
+          }}
+          cancelName={prevMemo ? "삭제" : "취소"}
+        />
       </Flex>
 
       <CustomPopup

@@ -1,4 +1,4 @@
-import { Divider, NoticeBar, Space } from "antd-mobile";
+import { NoticeBar, Space } from "antd-mobile";
 import BudgetCard from "../components/BudgetCard";
 import TodoCard from "../components/TodoCard";
 import MemoCard from "../components/MemoCard";
@@ -71,7 +71,6 @@ const HomePage = () => {
       {patchNotes && (
         <NoticeBar
           color="info"
-          shape="rounded"
           bordered={false}
           className="blinking-text"
           content={"새로운 기능이 추가되었어요!"}
@@ -97,7 +96,6 @@ const HomePage = () => {
         <DiaryCard />
         <BudgetCard />
         <HelpCard />
-        <Space style={{ height: "100px" }} />
       </Flex>
     </Flex>
   );

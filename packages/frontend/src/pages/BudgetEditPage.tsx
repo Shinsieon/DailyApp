@@ -1,19 +1,11 @@
 import { useLocation, useNavigate } from "react-router-dom";
-import { Flex, message } from "antd";
+import { Button, Flex, message } from "antd";
 import AppHeader from "../components/AppHeader";
-import {
-  Button,
-  Cascader,
-  DatePicker,
-  DatePickerRef,
-  Form,
-  Input,
-  Modal,
-} from "antd-mobile";
+import { Cascader, DatePicker, DatePickerRef, Input, Modal } from "antd-mobile";
 import { BudgetData, CategoryData } from "../types";
 import BottomFixedButton from "../components/BottomFixedButton";
 import { useBudgetStore } from "../store/budgetStore";
-import { RefObject, useEffect, useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { api } from "../api";
 import dayjs from "dayjs";
 import Label from "../components/Label";
@@ -22,7 +14,7 @@ import { translateToKorean } from "../utils";
 import { colors } from "../colors";
 import { useUserStore } from "../store/userStore";
 import sizes from "../sizes";
-import { EditOutlined } from "@ant-design/icons";
+import { PlusOutlined } from "@ant-design/icons";
 
 const BudgetEditPage = () => {
   const location = useLocation();
@@ -177,7 +169,7 @@ const BudgetEditPage = () => {
                 fontWeight: "bold",
               }}
             />
-            <Button
+            {/* <Button
               size="small"
               color="primary"
               onClick={(e) => {
@@ -190,7 +182,19 @@ const BudgetEditPage = () => {
               }}
             >
               변경
-            </Button>
+            </Button> */}
+            <Button
+              icon={<PlusOutlined />}
+              size="small"
+              onClick={(e) => {
+                e.stopPropagation();
+                if (!user) {
+                  message.error("로그인 후 사용해주세요.");
+                  return;
+                }
+                navigate("/categoryListPage");
+              }}
+            />
           </Flex>
           <Flex>
             <Input

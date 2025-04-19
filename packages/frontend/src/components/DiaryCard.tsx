@@ -22,24 +22,22 @@ const DiaryCard = () => {
       }}
       children={
         <>
-          {todayDiary ? (
-            <Flex vertical gap={5}>
-              {todayDiary.diaries.map((diary, index) => (
-                <CardItem
-                  title={diary.title}
-                  key={index}
-                  description={diary.content}
-                  backgroundColor={"#F0F0F0"}
-                  onClick={(e) => {
-                    e.stopPropagation();
-                    //navigate("diaryEditPage", {
-                  }}
-                />
-              ))}
-            </Flex>
-          ) : (
-            <Empty />
-          )}
+          <Flex vertical gap={5}>
+            {todayDiary?.diaries.map((diary, index) => (
+              <CardItem
+                title={diary.title}
+                key={index}
+                description={diary.content}
+                backgroundColor={"#F0F0F0"}
+                onClick={(e) => {
+                  e.stopPropagation();
+                  navigate("diaryEditPage", {
+                    state: { selDate: dayjs().format("YYYYMMDD") },
+                  });
+                }}
+              />
+            ))}
+          </Flex>
         </>
       }
     />

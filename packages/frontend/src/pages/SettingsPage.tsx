@@ -23,6 +23,7 @@ import Label from "../components/Label";
 import { UserCircleOutline } from "antd-mobile-icons";
 import { sendToNative } from "../hooks/useNative";
 import useGranted from "../hooks/useGranted";
+import { selectModal } from "../components/SelectModal";
 
 const SettingsPage = () => {
   const { memos, flushMemos, setMemos } = useMemoStore();
@@ -173,11 +174,12 @@ const SettingsPage = () => {
             }
 
             try {
-              Modal.confirm({
-                showCloseButton: true,
-                content: "데이터 동기화를 진행하시겠습니까?",
-                confirmText: "서버에서 가져오기",
-                async onConfirm() {
+              selectModal({
+                title: "동기화 방법",
+                question: "서버와 동기화 하시겠습니까?",
+                leftButtonText: "가져오기",
+                rightButtonText: "저장하기",
+                onLeftButtonClick: async () => {
                   setLoading(true);
                   const todos = await api.getTodos(user.id);
                   const budgets = await api.getBudgets(user.id);
@@ -195,8 +197,7 @@ const SettingsPage = () => {
                   setSyncDb(now);
                   message.success("데이터를 동기화했습니다.");
                 },
-                cancelText: "서버에 저장하기",
-                async onCancel() {
+                onRightButtonClick: async () => {
                   setLoading(true);
                   await api.syncTodos(todos, user.id);
                   await api.syncBudgets(budgets, user.id);
@@ -208,9 +209,9 @@ const SettingsPage = () => {
                   message.success("데이터를 동기화했습니다.");
                 },
               });
-            } catch (e) {
-              showError("데이터 동기화에 실패했습니다.");
+            } catch (error) {
               setLoading(false);
+              showError(error);
             }
           }}
         >

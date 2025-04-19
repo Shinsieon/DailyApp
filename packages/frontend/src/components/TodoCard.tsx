@@ -24,28 +24,22 @@ const TodoCard = () => {
       }}
       children={
         <>
-          {uncompletedTodos.length === 0 ? (
-            <Empty />
-          ) : (
-            <>
-              {uncompletedTodos.map(
-                (todo, index: number) =>
-                  index < 3 && (
-                    <CardItem
-                      key={todo.id}
-                      title={dayjs(todo.date).format("YYYY년 MM월 DD일")}
-                      onClick={(e) => {
-                        e.stopPropagation();
-                        navigate("/todoEditPage", {
-                          state: { todoId: todo.id },
-                        });
-                      }}
-                      backgroundColor={colors.lightPrimary}
-                      description={todo.title}
-                    />
-                  )
-              )}
-            </>
+          {uncompletedTodos.map(
+            (todo, index: number) =>
+              index < 3 && (
+                <CardItem
+                  key={todo.id}
+                  title={dayjs(todo.date).format("YYYY년 MM월 DD일")}
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    navigate("/todoEditPage", {
+                      state: { todoId: todo.id },
+                    });
+                  }}
+                  backgroundColor={colors.lightPrimary}
+                  description={todo.title}
+                />
+              )
           )}
         </>
       }

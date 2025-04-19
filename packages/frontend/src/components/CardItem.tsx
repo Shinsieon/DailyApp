@@ -38,7 +38,7 @@ const CardItem = (props: CardItemProps) => {
           fontSize: 16,
         }}
         placeholder
-        maxLength={6}
+        maxLength={20}
       />
     </Flex>
   );

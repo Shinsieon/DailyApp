@@ -69,7 +69,6 @@ const DiaryEditPage = () => {
                       borderRadius: 10,
                     }}
                     onChange={(value) => {
-                      console.log(`onChange diary : ${value}`);
                       const updatedDiaries = updatedDiary.diaries.map(
                         (diary, i) => {
                           if (i === index) {
@@ -82,9 +81,6 @@ const DiaryEditPage = () => {
                         ...updatedDiary,
                         diaries: updatedDiaries,
                       };
-                      console.log(
-                        `updated diary : ${JSON.stringify(updatedDiaryData)}`
-                      );
                       setUpdatedDiary(updatedDiaryData);
                     }}
                     placeholder="답변을 입력해주세요."
