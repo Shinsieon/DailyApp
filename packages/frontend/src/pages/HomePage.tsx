@@ -81,7 +81,7 @@ const HomePage = () => {
           }}
         />
       )}
-      <Flex style={{ padding: "0px 20px" }} vertical>
+      <Flex style={{ padding: 20 }} vertical>
         <DayCard />
       </Flex>
       <Flex

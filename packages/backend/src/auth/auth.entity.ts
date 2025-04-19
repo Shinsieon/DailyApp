@@ -1,4 +1,5 @@
 import { Category } from "@src/category/category.entity";
+import { Feed } from "@src/feed/feed.entity";
 import { Noti } from "@src/noti/noti.entity";
 import { Push } from "@src/push/push.entity";
 import { Budget } from "src/budget/budget.entity";
@@ -53,6 +54,9 @@ export class User {
 
   @OneToMany(() => Category, (category) => category.user)
   categories: Category[];
+
+  @OneToMany(() => Feed, (feed) => feed.user)
+  feeds: Feed[];
 
   @OneToOne(() => Noti, (noti) => noti.user)
   noti: Noti;

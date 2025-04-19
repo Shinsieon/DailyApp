@@ -54,23 +54,4 @@ export class FeedController {
   async deleteFeed(@Param("id") id: number): Promise<void> {
     return this.feedService.deleteFeed(id);
   }
-
-  // 🔹 6. 좋아요 추가/취소 (POST /feeds/:id/like)
-  @Post(":id/like")
-  async toggleLike(
-    @Param("id") id: number,
-    @Body("userId") userId: string
-  ): Promise<Feed> {
-    return this.feedService.toggleLike(id, userId);
-  }
-
-  // 🔹 7. 댓글 추가 (POST /feeds/:id/comment)
-  @Post(":id/comment")
-  async addComment(
-    @Param("id") id: number,
-    @Body("userId") userId: string,
-    @Body("text") text: string
-  ): Promise<Feed> {
-    return this.feedService.addComment(id, userId, text);
-  }
 }

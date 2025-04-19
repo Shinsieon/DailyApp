@@ -16,6 +16,12 @@ import { UserResponse } from "src/types";
 export class AuthController {
   constructor(private readonly authService: AuthService) {}
 
+  @Get("users")
+  @UseGuards(AuthGuard)
+  async getUsers() {
+    return this.authService.getUsers();
+  }
+
   @Post("register")
   async register(
     @Body()

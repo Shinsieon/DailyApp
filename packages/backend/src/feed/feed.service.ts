@@ -43,25 +43,4 @@ export class FeedService {
   async deleteFeed(id: number): Promise<void> {
     await this.feedRepository.delete(id);
   }
-
-  // 🔹 6. 좋아요 추가/취소
-  async toggleLike(id: number, userId: string): Promise<Feed> {
-    const feed = await this.getFeedById(id);
-    const likeIndex = feed.likes.indexOf(userId);
-    if (likeIndex > -1) {
-      // 이미 좋아요한 경우 취소
-      feed.likes.splice(likeIndex, 1);
-    } else {
-      // 좋아요 추가
-      feed.likes.push(userId);
-    }
-    return await this.feedRepository.save(feed);
-  }
-
-  // 🔹 7. 댓글 추가
-  async addComment(id: number, userId: string, text: string): Promise<Feed> {
-    const feed = await this.getFeedById(id);
-    feed.comments.push({ userId, text, createdAt: new Date().toString() });
-    return await this.feedRepository.save(feed);
-  }
 }

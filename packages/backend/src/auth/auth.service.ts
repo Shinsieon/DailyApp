@@ -18,6 +18,10 @@ export class AuthService {
     private jwtService: JwtService
   ) {}
 
+  async getUsers() {
+    return await this.userRepository.find();
+  }
+
   async findByEmail(email: string, includeDeleted = false) {
     if (!includeDeleted) {
       return await this.userRepository.findOne({ where: { email } });

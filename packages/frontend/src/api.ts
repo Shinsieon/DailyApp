@@ -22,7 +22,7 @@ export const http = axios.create({
   baseURL:
     process.env.NODE_ENV === "production"
       ? "https://bono-dev.click"
-      : "http://192.168.45.98:3000",
+      : "http://192.168.45.169:3000",
   withCredentials: true,
   beforeRedirect: () => {
     console.log("Redirecting...");
@@ -154,7 +154,6 @@ const getPatchNotes = async () => {
 };
 
 const getCategories = async (userId?: number) => {
-  console.log(`userId: ${userId}`);
   const url = userId ? `/api/v1/categories/${userId}` : `/api/v1/categories`;
   const response = await http.get(url);
   return response.data;
@@ -227,7 +226,6 @@ const setNotificationGranted = async (
   deviceId: string,
   isGranted: boolean
 ) => {
-  console.log(`isGranted: ${isGranted}`);
   if (isGranted) {
     const response = await http.post(`/api/v1/noti/`, {
       userId,
@@ -238,6 +236,11 @@ const setNotificationGranted = async (
     const response = await http.delete(`/api/v1/noti/${userId}`);
     return response.data;
   }
+};
+
+const getFeed = async (userId: number) => {
+  const response = await http.get(`/api/v1/feed/${userId}`);
+  return response.data;
 };
 
 export const api = {
@@ -263,4 +266,5 @@ export const api = {
   getNotificationGranted,
   setNotificationGranted,
   sendSurvey,
+  getFeed,
 };

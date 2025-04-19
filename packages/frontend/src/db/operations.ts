@@ -75,6 +75,7 @@ export const deleteData = async (storeName: string, id: number) => {
 };
 
 async function getStore(storeName: string) {
+  console.log(`getStore: ${storeName}`);
   const db = await initDB();
   const tx = db.transaction(storeName, "readwrite");
   const store = tx.objectStore(storeName);

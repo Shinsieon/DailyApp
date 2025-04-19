@@ -9,7 +9,7 @@ export class TodoScheduler {
   constructor(private readonly todoService: TodoService) {}
 
   // 🔹 매 30분마다 실행
-  @Cron("0 */10 * * * *") // 매 10분마다 실행
+  @Cron("0 */1 * * * *") // 매 10분마다 실행
   //  @Cron("*/5 * * * * *")
   async handleScheduledNotifications() {
     this.logger.log("Checking for todos that need notifications...");
