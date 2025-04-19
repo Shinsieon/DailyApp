@@ -1,4 +1,4 @@
-import { Flex, message } from "antd";
+import { Empty, Flex, message } from "antd";
 import AppHeader from "../components/AppHeader";
 import { Badge, Button, Checkbox, Tabs } from "antd-mobile";
 import { useState } from "react";
@@ -12,7 +12,6 @@ import { colors } from "../colors";
 import { useNavigate } from "react-router-dom";
 import { CiViewTable, CiCircleList } from "react-icons/ci";
 import TimeTable from "../components/TimeTable";
-import Empty from "../components/Empty";
 
 type TodoMapKey = "All" | "Open" | "Closed";
 type TodoMap = {

@@ -14,7 +14,7 @@ import {
 
 const menus: Menu[] = [
   {
-    name: "My",
+    name: "마이",
     path: "/myPage",
     icon: <FaRegUser style={{ fontSize: 20 }} />,
     selIcon: <FaUser style={{ fontSize: 20 }} />,
@@ -28,16 +28,14 @@ const menus: Menu[] = [
     selIcon: <IoHomeSharp style={{ fontSize: 20 }} />,
     element: <HomePage />,
   },
-
   // {
-  //   name: "하루공유",
-  //   path: "/share",
-  //   icon: <AiOutlineWechat style={{ fontSize: 20 }} />,
-  //   selIcon: <AiOutlineWechat style={{ fontSize: 20 }} />,
-  //   element: <SharePage />,
+  //   name: "We",
+  //   path: "/feedPage",
+  //   icon: <IoShareSocial style={{ fontSize: 20 }} />,
+  //   selIcon: <IoShareSocial style={{ fontSize: 20 }} />,
+  //   element: <FeedPage />,
   //   loginNeed: true,
   // },
-
   {
     name: "설정",
     path: "/settings",

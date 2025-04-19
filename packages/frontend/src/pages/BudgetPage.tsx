@@ -12,7 +12,6 @@ import CustomCalendar from "../components/CustomCalendar";
 import Label from "../components/Label";
 import { useNavigate } from "react-router-dom";
 import { DeleteOutline } from "antd-mobile-icons";
-import { FaChartBar } from "react-icons/fa";
 import { FaChartPie } from "react-icons/fa";
 
 const BudgetPage = () => {

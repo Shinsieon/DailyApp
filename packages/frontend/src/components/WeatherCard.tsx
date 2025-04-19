@@ -13,6 +13,7 @@ import { useWeatherStore } from "../store/weatherStore";
 import { sendToNative } from "../hooks/useNative";
 import { useUserStore } from "../store/userStore";
 import { api } from "../api";
+import { CiCircleInfo } from "react-icons/ci";
 
 //PTY(강수형태): 없음(0), 비(1), 비/눈(2), 눈(3), 소나기(4), 빗방울(5), 빗방울/눈날림(6), 눈날림(7)
 const getWeatherImage = (PTY: string) => {
@@ -81,24 +82,13 @@ const WeatherCard = () => {
   }, [weather]);
   return (
     <Flex vertical>
-      <Flex
-        style={{ alignItems: "flex-end", margin: "5px 0px" }}
-        justify="space-between"
-        gap={10}
-      >
-        <Label name="하루날씨" style={{ fontWeight: "bold", fontSize: 20 }} />
-        <Label
-          name="기상청 단기예보 정보입니다. (발표시간 : 오전 5시)"
-          placeholder
-          style={{ fontSize: 12 }}
-        />
-      </Flex>
       {locationGranted === "denied" ? (
         <>
           <Flex
             style={{
-              backgroundColor: colors.lighterGray,
+              backgroundColor: colors.lightWhite,
               borderRadius: 10,
+              border: "none",
               padding: "10px 30px",
             }}
             justify="space-between"
@@ -127,9 +117,9 @@ const WeatherCard = () => {
           <Flex
             vertical
             style={{
-              border: "1px solid #e8e8e8",
               borderRadius: 10,
               padding: "10px 0px",
+              backgroundColor: colors.lightWhite,
             }}
             onClick={() => {
               navigate("weatherPage");
@@ -178,6 +168,11 @@ const WeatherCard = () => {
               </>
             )}
           </Flex>
+          <Label
+            name="기상청 단기예보 정보입니다. (발표시간 : 오전 5시)"
+            placeholder
+            style={{ fontSize: 12, textAlign: "right", marginTop: 5 }}
+          />
         </>
       )}
     </Flex>

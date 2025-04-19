@@ -1,10 +1,9 @@
-import { Flex, Input } from "antd";
+import { Empty, Flex, Input } from "antd";
 import AppHeader from "../components/AppHeader";
 import { useLocation, useNavigate } from "react-router-dom";
 import { useMemoStore } from "../store/memoStore";
 import sizes from "../sizes";
 import Label from "../components/Label";
-import Empty from "../components/Empty";
 import { colors } from "../colors";
 import { Button, FloatingBubble, Space, Tag, TextArea } from "antd-mobile";
 import { MemoData } from "../types";

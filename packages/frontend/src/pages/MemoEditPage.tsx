@@ -82,6 +82,7 @@ const MemoEditPage = () => {
         await saveMemo(uMemo);
       }
     } catch (e) {
+      console.log(`e : ${e}`);
       message.error("메모 저장에 실패했습니다.");
       console.error(e);
       return;

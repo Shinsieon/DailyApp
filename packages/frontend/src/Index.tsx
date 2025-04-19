@@ -18,6 +18,7 @@ const Index = () => {
           height: "40px", // Fixed height for the BottomMenu
           borderTop: "solid 1px var(--adm-color-border)",
           padding: "10px",
+          borderRadius: "10px 10px 0 0",
           backgroundColor: "var(--adm-color-background)",
         }}
         safeArea

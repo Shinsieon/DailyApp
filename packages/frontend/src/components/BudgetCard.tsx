@@ -1,15 +1,14 @@
-import { PlusCircleOutlined } from "@ant-design/icons";
 import { useEffect, useState } from "react";
 import { BudgetData, BudgetSum } from "../types";
 import { useNavigate } from "react-router-dom";
 import { formatMoney } from "../utils";
 import { useBudgetStore } from "../store/budgetStore";
 import dayjs from "dayjs";
-import { MinusCircleOutline, RightOutline } from "antd-mobile-icons";
-import { colors } from "../colors";
 import { Flex } from "antd";
 import Label from "./Label";
 import CountUp from "react-countup";
+import CustomCard from "./CustomCard";
+import { selectModal } from "./SelectModal";
 
 const BudgetCard = () => {
   const [todayBudget, settodayBudget] = useState<BudgetSum>({
@@ -36,84 +35,58 @@ const BudgetCard = () => {
   }, [budgets]);
 
   return (
-    <Flex vertical style={{ backgroundColor: colors.lighterGray, padding: 10 }}>
-      <Flex justify="space-between" style={{ marginBottom: 10 }}>
-        <Label
-          name="Budget"
-          style={{ fontWeight: "bold", fontSize: 20 }}
-          onClick={() => {
-            navigate("budgetPage");
-          }}
-        />
-        <Flex style={{ alignItems: "center" }}>
-          <RightOutline
-            onClick={() => {
-              navigate("budgetPage");
-            }}
-            style={{
-              fontSize: 15,
-              padding: 5,
-              borderRadius: 10,
-              color: colors.lightWhite,
-              backgroundColor: colors.darkGray,
-            }}
-          />
-
-          <PlusCircleOutlined
-            onClick={() => {
-              navigate("/budgetEditPage", {
-                state: { type: "income", date: dayjs().format("YYYYMMDD") },
-              });
-            }}
-            style={{
-              fontSize: 20,
-              padding: 5,
-              borderRadius: 10,
-              color: colors.darkBlack,
-            }}
-          />
-          <MinusCircleOutline
-            onClick={() => {
-              navigate("/budgetEditPage", {
-                state: { type: "expense", date: dayjs().format("YYYYMMDD") },
-              });
-            }}
-            style={{
-              fontSize: 20,
-              padding: 5,
-              borderRadius: 10,
-              color: colors.darkBlack,
-            }}
-          />
-        </Flex>
-      </Flex>
-      <Flex vertical>
-        <Flex justify="space-between">
-          <Label name="수입" style={{ fontSize: 15, fontWeight: "bold" }} />
-          <Flex>
-            <CountUp
-              start={todayBudget.income > 10 ? todayBudget.income - 10 : 0}
-              end={todayBudget.income}
-              formattingFn={formatMoney}
-              style={{ fontSize: 15 }}
-            />
-            <Label name={"원"} style={{ fontSize: 15 }}></Label>
+    <CustomCard
+      title="가계부"
+      onAddClick={() => {
+        selectModal({
+          title: "가계부 항목",
+          question: "가계부를 추가할 항목을 선택해주세요",
+          leftButtonText: "수입",
+          rightButtonText: "지출",
+          onLeftButtonClick: () => {
+            navigate("/budgetEditPage", {
+              state: { type: "income", date: dayjs().format("YYYYMMDD") },
+            });
+          },
+          onRightButtonClick: () => {
+            navigate("/budgetEditPage", {
+              state: { type: "expense", date: dayjs().format("YYYYMMDD") },
+            });
+          },
+        });
+      }}
+      onClick={() => {
+        navigate("budgetPage");
+      }}
+      children={
+        <>
+          <Flex justify="space-between">
+            <Label name="수입" style={{ fontSize: 15, fontWeight: "bold" }} />
+            <Flex>
+              <CountUp
+                start={todayBudget.income > 10 ? todayBudget.income - 10 : 0}
+                end={todayBudget.income}
+                formattingFn={formatMoney}
+                style={{ fontSize: 15 }}
+              />
+              <Label name={"원"} style={{ fontSize: 15 }}></Label>
+            </Flex>
           </Flex>
-        </Flex>
-        <Flex justify="space-between">
-          <Label name="지출" style={{ fontSize: 15, fontWeight: "bold" }} />
-          <Flex>
-            <CountUp
-              start={todayBudget.expense > 10 ? todayBudget.expense - 10 : 0}
-              end={todayBudget.expense}
-              formattingFn={formatMoney}
-              style={{ fontSize: 15 }}
-            />
-            <Label name={"원"} style={{ fontSize: 15 }}></Label>
+          <Flex justify="space-between">
+            <Label name="지출" style={{ fontSize: 15, fontWeight: "bold" }} />
+            <Flex>
+              <CountUp
+                start={todayBudget.expense > 10 ? todayBudget.expense - 10 : 0}
+                end={todayBudget.expense}
+                formattingFn={formatMoney}
+                style={{ fontSize: 15 }}
+              />
+              <Label name={"원"} style={{ fontSize: 15 }}></Label>
+            </Flex>
           </Flex>
-        </Flex>
-      </Flex>
-    </Flex>
+        </>
+      }
+    />
   );
 };
 export default BudgetCard;

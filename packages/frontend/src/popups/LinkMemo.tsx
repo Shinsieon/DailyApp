@@ -1,7 +1,6 @@
-import { Flex } from "antd";
+import { Empty, Flex } from "antd";
 import Label from "../components/Label";
 import { useMemoStore } from "../store/memoStore";
-import Empty from "../components/Empty";
 import { colors } from "../colors";
 import { SearchBar, Tag } from "antd-mobile";
 import { useState } from "react";

@@ -11,6 +11,7 @@ import WeatherCard from "../components/WeatherCard";
 import DayCard from "../components/DayCard";
 import HelpCard from "../components/SurveyCard";
 import DiaryCard from "../components/DiaryCard";
+import { colors } from "../colors";
 
 const HomePage = () => {
   const [patchNotes, setPatchNotes] = useState<PatchNote | null>(null);
@@ -61,11 +62,10 @@ const HomePage = () => {
   return (
     <Flex
       vertical
+      gap={10}
       style={{
-        width: "100%",
-        gap: "10px",
         overflowY: "auto",
-        padding: "30px 20px",
+        width: "100%",
       }}
     >
       {patchNotes && (
@@ -81,15 +81,24 @@ const HomePage = () => {
           }}
         />
       )}
-      <DayCard />
-      <WeatherCard />
-      <MemoCard />
-      <TodoCard />
-      <DiaryCard />
-      <BudgetCard />
-      <Divider />
-      <HelpCard />
-      <Space style={{ height: "100px" }} />
+      <Flex style={{ padding: "0px 20px" }} vertical>
+        <DayCard />
+      </Flex>
+      <Flex
+        vertical
+        gap={10}
+        style={{ backgroundColor: colors.lighterGray, padding: "10px 20px" }}
+      >
+        <WeatherCard />
+        <Flex gap={10}>
+          <MemoCard />
+          <TodoCard />
+        </Flex>
+        <DiaryCard />
+        <BudgetCard />
+        <HelpCard />
+        <Space style={{ height: "100px" }} />
+      </Flex>
     </Flex>
   );
 };

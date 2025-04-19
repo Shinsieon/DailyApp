@@ -1,8 +1,7 @@
-import { Flex, List } from "antd";
+import { Empty, Flex, List } from "antd";
 import { useEffect, useState } from "react";
 import { api, showError } from "../api";
 import AppHeader from "../components/AppHeader";
-import Empty from "../components/Empty";
 import Label from "../components/Label";
 
 const AdminPage = () => {

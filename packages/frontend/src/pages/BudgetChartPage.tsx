@@ -1,15 +1,14 @@
-import { Flex } from "antd";
+import { Empty, Flex } from "antd";
 import AppHeader from "../components/AppHeader";
-import { Divider, Segmented } from "antd-mobile";
-import { useEffect, useMemo, useState } from "react";
-import { AllowedManipulateType, BudgetData, BudgetType } from "../types";
+import { Segmented } from "antd-mobile";
+import { useMemo, useState } from "react";
+import { AllowedManipulateType, BudgetType } from "../types";
 import { useBudgetStore } from "../store/budgetStore";
 import dayjs from "dayjs";
 import Label from "../components/Label";
 import { colors } from "../colors";
 import { FaChevronCircleLeft, FaChevronCircleRight } from "react-icons/fa";
 import DonutChart from "../components/DonutChart";
-import Empty from "../components/Empty";
 import LineChart from "../components/LineChart";
 
 const BudgetChartPage = () => {

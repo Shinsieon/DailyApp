@@ -1,100 +1,45 @@
-import { PlusCircleOutlined } from "@ant-design/icons";
-import { Flex } from "antd";
-import { RightOutline } from "antd-mobile-icons";
 import { useNavigate } from "react-router-dom";
-import Label from "./Label";
 import { colors } from "../colors";
 import { useMemoStore } from "../store/memoStore";
-import { MemoData } from "../types";
+import CardItem from "./CardItem";
+import CustomCard from "./CustomCard";
 
 const MemoCard = () => {
   const navigate = useNavigate();
   const memos = useMemoStore((state) => state.memos);
   return (
-    <Flex vertical style={{ backgroundColor: colors.lighterGray, padding: 10 }}>
-      <Flex justify="space-between" style={{ marginBottom: 10 }}>
-        <Label
-          name="Memo"
-          style={{ fontWeight: "bold", fontSize: 20 }}
-          onClick={() => {
-            navigate("memoPage");
-          }}
-        />
-        <Flex style={{ alignItems: "center" }}>
-          <RightOutline
-            onClick={() => {
-              navigate("memoPage");
-            }}
-            style={{
-              fontSize: 15,
-              padding: 5,
-              borderRadius: 10,
-              color: colors.lightWhite,
-              backgroundColor: colors.darkGray,
-            }}
-          />
-          <PlusCircleOutlined
-            onClick={() => {
-              navigate("memoEditPage");
-            }}
-            style={{
-              fontSize: 20,
-              padding: 5,
-              borderRadius: 10,
-              color: colors.darkBlack,
-            }}
-          />
-        </Flex>
-      </Flex>
-      <Flex vertical gap={5}>
-        {memos
-          .sort((a, b) => a.title.localeCompare(b.title, "ko-KR"))
-          .map(
-            (memo, index: number) =>
-              index < 3 && <MemoItem key={memo.id} {...memo} />
-          )}
-      </Flex>
-    </Flex>
+    <CustomCard
+      title="메모"
+      onAddClick={() => {
+        navigate("memoEditPage");
+      }}
+      onClick={() => {
+        navigate("memoPage");
+      }}
+      children={
+        <>
+          {memos
+            .sort((a, b) => a.title.localeCompare(b.title, "ko-KR"))
+            .map(
+              (memo, index: number) =>
+                index < 3 && (
+                  <CardItem
+                    key={memo.id}
+                    title={memo.title}
+                    description={memo.content}
+                    backgroundColor={colors.lightGreen}
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      console.log(`memo clicked ${memo.id}`);
+                      navigate("memoEditPage", { state: { memoId: memo.id } });
+                    }}
+                  />
+                )
+            )}
+        </>
+      }
+    />
   );
 };
 
-function MemoItem(memo: MemoData) {
-  const navigate = useNavigate();
-  return (
-    <Flex
-      style={{
-        backgroundColor: colors.lightGreen,
-        padding: 10,
-        borderRadius: 10,
-      }}
-      justify="space-between"
-      align="center"
-      onClick={() => {
-        navigate("/memoEditPage", { state: { memoId: memo.id } });
-      }}
-    >
-      <Label
-        name={memo.title}
-        style={{
-          fontWeight: "bold",
-          fontSize: 18,
-          maxWidth: 150, // 제목이 너무 길어지지 않도록 최대 너비 설정
-          overflow: "hidden",
-          whiteSpace: "nowrap", // 한 줄로 유지
-          textOverflow: "ellipsis", // 길면 "..." 표시
-        }}
-      />
-      <Label
-        name={memo.content}
-        style={{
-          fontSize: 16,
-          maxWidth: 200, // 최대 너비 설정 (조절 가능)
-          overflow: "hidden",
-          whiteSpace: "nowrap",
-          textOverflow: "ellipsis",
-        }}
-      />
-    </Flex>
-  );
-}
 export default MemoCard;

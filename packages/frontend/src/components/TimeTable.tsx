@@ -1,10 +1,9 @@
-import { Flex } from "antd";
+import { Empty, Flex } from "antd";
 import Label from "./Label";
 import { generateLightColor } from "../utils";
 import { TodoData } from "../types";
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import Empty from "./Empty";
 import { Space } from "antd-mobile";
 
 const timeArray: string[] = [];

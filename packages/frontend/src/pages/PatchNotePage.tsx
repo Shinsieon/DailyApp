@@ -1,9 +1,8 @@
-import { Avatar, Flex } from "antd";
+import { Avatar, Empty, Flex } from "antd";
 import AppHeader from "../components/AppHeader";
 import { PatchNote } from "../types";
 import { useEffect, useState } from "react";
 import { api, showError } from "../api";
-import Empty from "../components/Empty";
 import { List } from "antd-mobile";
 import Label from "../components/Label";
 import avatar_man from "../assets/avatar_man.svg";
