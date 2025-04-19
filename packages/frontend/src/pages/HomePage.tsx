@@ -65,6 +65,7 @@ const HomePage = () => {
       gap={10}
       style={{
         overflowY: "auto",
+        width: "100%",
       }}
     >
       {patchNotes && (
