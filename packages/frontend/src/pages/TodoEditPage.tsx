@@ -286,6 +286,28 @@ const TodoEditPage = () => {
             </Picker>
           </Form.Item>
           <Form.Item
+            onClick={(_, datePickerRef: RefObject<DatePickerRef>) => {
+              datePickerRef.current?.open(); // ⬅️
+            }}
+            name="endDate"
+            label="끝나는 날짜"
+            trigger="onConfirm"
+          >
+            <DatePicker
+              confirmText="확인"
+              cancelText="취소"
+              onConfirm={(value) => {
+                setTodoForm({
+                  ...todoForm,
+                  endDate: dayjs(value).format("YYYYMMDD"),
+                });
+              }}
+            >
+              {() => dayjs(todoForm.endDate).format("YYYY-MM-DD")}
+            </DatePicker>
+          </Form.Item>
+
+          <Form.Item
             name="notificationAccepted"
             label="알림 허용"
             initialValue={todoForm.notification ? "1" : "0"}

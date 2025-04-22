@@ -29,6 +29,7 @@ export interface TodoData {
   id?: number;
   title: string;
   date: string;
+  endDate?: string;
   time?: string;
   notification?: string;
   completed: boolean;

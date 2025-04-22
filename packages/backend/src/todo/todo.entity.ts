@@ -19,6 +19,9 @@ export class Todo {
   @Column({ type: "date" })
   date: string;
 
+  @Column({ type: "date" })
+  endDate: string;
+
   @Column({ type: "varchar", length: 5, default: "00:00" })
   time: string;
 
