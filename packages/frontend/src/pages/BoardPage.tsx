@@ -3,21 +3,72 @@ import AppHeader from "../components/AppHeader";
 import dayjs, { Dayjs } from "dayjs";
 import { useTodoStore } from "../store/todoStore";
 import sizes from "../sizes";
-import { colors } from "../colors";
 import Label from "../components/Label";
 import CustomPopup from "../components/CustomPopup";
 import Detail from "../popups/Detail";
 import { useState } from "react";
 import { SelectInfo } from "antd/es/calendar/generateCalendar";
+import { useBudgetStore } from "../store/budgetStore";
+import { formatMoney } from "../utils";
 
 const colorArr = ["#C70D3A", "#ED5107", "#230338", "#02383C"];
 
 const BoardPage = () => {
   const todos = useTodoStore((state) => state.todos);
+  const budgets = useBudgetStore((state) => state.budgets);
   const [detailVisible, setDetailVisible] = useState(false);
   const [selDate, setSelDate] = useState<string>(dayjs().format("YYYYMMDD"));
+  const renderTodo = (date: Dayjs, info: any) => {
+    if (info.type === "date") {
+      return renderTodoForDate(date);
+    } else if (info.type === "month") {
+      return renderTodoForMonth(date);
+    }
+  };
+  const renderTodoForMonth = (date: Dayjs) => {
+    const monthlyTodoLength = todos.filter((todo) => {
+      if (!todo.endDate) {
+        // 종료일이 없으면 하루짜리 투두로 처리
+        return date.isSame(todo.date, "day");
+      }
 
-  const renderTodoForDate = (date: Dayjs, info: any) => {
+      // 종료일이 있다면 범위 안에 포함되는지 확인
+      return (
+        date.isSame(todo.date, "day") ||
+        date.isSame(todo.endDate, "day") ||
+        (date.isAfter(todo.date, "day") && date.isBefore(todo.endDate, "day"))
+      );
+    }).length;
+    const monthlyBudget = budgets.filter((budget) => {
+      return (
+        date.isSame(dayjs(budget.date), "month") &&
+        budget.date.substring(0, 6) === date.format("YYYYMM")
+      );
+    });
+    const monthlyIncomeSum = monthlyBudget
+      .filter((b) => b.type === "income")
+      .reduce((acc, b) => acc + b.amount, 0);
+    const monthlyExpenseSum = monthlyBudget
+      .filter((b) => b.type === "expense")
+      .reduce((acc, b) => acc + b.amount, 0);
+    return (
+      <Flex vertical gap={2}>
+        <Label
+          name={`일정 ${monthlyTodoLength}`}
+          style={{ fontSize: sizes.font.medium, fontWeight: "bold" }}
+        />
+        <Label
+          name={`수입 ${formatMoney(monthlyIncomeSum)}원`}
+          style={{ fontSize: sizes.font.small }}
+        />
+        <Label
+          name={`지출 ${formatMoney(monthlyExpenseSum)}원`}
+          style={{ fontSize: sizes.font.small }}
+        />
+      </Flex>
+    );
+  };
+  const renderTodoForDate = (date: Dayjs) => {
     // 해당 날짜에 포함된 todo 리스트 필터링
     const matchedTodos = todos
       .filter((todo) => {
@@ -62,10 +113,10 @@ const BoardPage = () => {
                   : isEnd
                     ? "0 4px 4px 0"
                     : "0",
-                padding: "2px 4px",
                 fontSize: sizes.font.xsmall,
                 textAlign: "center",
                 fontWeight: "bold",
+                overflow: "hidden",
               }}
               maxLength={3}
               name={todo.title}
@@ -90,12 +141,12 @@ const BoardPage = () => {
         <Calendar
           value={dayjs(selDate)}
           onSelect={(date: Dayjs, selectInfo: SelectInfo) => {
+            setSelDate(date.format("YYYYMMDD"));
             if (selectInfo.source === "date") {
-              setSelDate(date.format("YYYYMMDD"));
               setDetailVisible(true);
             }
           }}
-          cellRender={renderTodoForDate}
+          cellRender={renderTodo}
         />
       </Flex>
       <CustomPopup

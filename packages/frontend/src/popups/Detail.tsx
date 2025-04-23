@@ -110,7 +110,7 @@ const Detail = (props: DetailProps) => {
                   padding: 10,
                   borderRadius: 10,
                 }}
-                name={diaryEntry?.diaries[index].content || ""}
+                name={diaryEntry?.diaries[index].content || "답변이 없습니다."}
               />
             </Flex>
           );
