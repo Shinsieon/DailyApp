@@ -3,24 +3,21 @@ import AppHeader from "../components/AppHeader";
 import dayjs, { Dayjs } from "dayjs";
 import { useTodoStore } from "../store/todoStore";
 import sizes from "../sizes";
-import { getRandomDarkHexColor, getRandomHexColor } from "../utils";
 import { colors } from "../colors";
 import Label from "../components/Label";
 import CustomPopup from "../components/CustomPopup";
 import Detail from "../popups/Detail";
 import { useState } from "react";
+import { SelectInfo } from "antd/es/calendar/generateCalendar";
+
+const colorArr = ["#C70D3A", "#ED5107", "#230338", "#02383C"];
 
 const BoardPage = () => {
   const todos = useTodoStore((state) => state.todos);
   const [detailVisible, setDetailVisible] = useState(false);
   const [selDate, setSelDate] = useState<string>(dayjs().format("YYYYMMDD"));
 
-  const todoColors: string[] = [];
-  const todoColorCount = 3;
-  for (let i = 0; i < todoColorCount; i++) {
-    todoColors.push(getRandomHexColor());
-  }
-  const renderTodoForDate = (date: Dayjs) => {
+  const renderTodoForDate = (date: Dayjs, info: any) => {
     // 해당 날짜에 포함된 todo 리스트 필터링
     const matchedTodos = todos
       .filter((todo) => {
@@ -41,13 +38,14 @@ const BoardPage = () => {
         const bLength = b.endDate ? dayjs(b.endDate).diff(b.date, "day") : 0;
         return bLength - aLength;
       });
+    matchedTodos.length = 3;
 
     return (
       <Flex vertical gap={2} style={{ overflow: "hidden" }}>
         {matchedTodos.map((todo, index) => {
           const isStart = date.isSame(todo.date, "day");
           const isEnd = todo.endDate ? date.isSame(todo.endDate, "day") : false;
-          const borderColor = `2px solid ${todoColors[index % todoColorCount]}`;
+          const borderColor = `2px solid ${colorArr[index % colorArr.length]}`;
           return (
             <Label
               key={todo.id}
@@ -56,8 +54,9 @@ const BoardPage = () => {
                 borderLeft: isStart ? borderColor : "none",
                 borderTop: borderColor,
                 borderBottom: borderColor,
-                borderRight: isEnd ? borderColor : "none",
-                color: colors.darkBlack,
+                borderRight:
+                  isEnd || todo.date === todo.endDate ? borderColor : "none",
+                //backgroundColor: colorArr[index % colorArr.length],
                 borderRadius: isStart
                   ? "4px 0 0 4px"
                   : isEnd
@@ -66,6 +65,7 @@ const BoardPage = () => {
                 padding: "2px 4px",
                 fontSize: sizes.font.xsmall,
                 textAlign: "center",
+                fontWeight: "bold",
               }}
               maxLength={3}
               name={todo.title}
@@ -89,10 +89,11 @@ const BoardPage = () => {
       >
         <Calendar
           value={dayjs(selDate)}
-          onSelect={(date: Dayjs) => {
-            console.log(`onSelect: ${date}`);
-            setSelDate(date.format("YYYYMMDD"));
-            setDetailVisible(true);
+          onSelect={(date: Dayjs, selectInfo: SelectInfo) => {
+            if (selectInfo.source === "date") {
+              setSelDate(date.format("YYYYMMDD"));
+              setDetailVisible(true);
+            }
           }}
           cellRender={renderTodoForDate}
         />

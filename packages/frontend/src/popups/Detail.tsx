@@ -46,7 +46,7 @@ const Detail = (props: DetailProps) => {
         <FaCirclePlus
           style={{ fontSize: sizes.font.medium }}
           onClick={() => {
-            navigate("/todoEditPage", {});
+            navigate("/todoEditPage", { state: { date: selDate } });
           }}
         />
       </Flex>
@@ -110,10 +110,7 @@ const Detail = (props: DetailProps) => {
                   padding: 10,
                   borderRadius: 10,
                 }}
-                name={
-                  diaryEntry?.diaries[index].content ||
-                  "아직 작성된 내용이 없습니다."
-                }
+                name={diaryEntry?.diaries[index].content || ""}
               />
             </Flex>
           );
