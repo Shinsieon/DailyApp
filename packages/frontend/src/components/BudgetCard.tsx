@@ -38,21 +38,8 @@ const BudgetCard = () => {
     <CustomCard
       title="가계부"
       onAddClick={() => {
-        selectModal({
-          title: "가계부 항목",
-          question: "가계부를 추가할 항목을 선택해주세요",
-          leftButtonText: "수입",
-          rightButtonText: "지출",
-          onLeftButtonClick: () => {
-            navigate("/budgetEditPage", {
-              state: { type: "income", date: dayjs().format("YYYYMMDD") },
-            });
-          },
-          onRightButtonClick: () => {
-            navigate("/budgetEditPage", {
-              state: { type: "expense", date: dayjs().format("YYYYMMDD") },
-            });
-          },
+        navigate("/budgetEditPage", {
+          state: { type: "income", date: dayjs().format("YYYYMMDD") },
         });
       }}
       onClick={() => {

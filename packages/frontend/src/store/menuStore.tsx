@@ -6,11 +6,14 @@ import HomePage from "../pages/HomePage";
 import { FaRegUser, FaUser } from "react-icons/fa";
 import MyPage from "../pages/MyPage";
 import {
+  IoClipboard,
+  IoClipboardOutline,
   IoHomeOutline,
   IoHomeSharp,
   IoSettings,
-  IoSettingsSharp,
+  IoSettingsOutline,
 } from "react-icons/io5";
+import BoardPage from "../pages/BoardPage";
 
 const menus: Menu[] = [
   {
@@ -28,19 +31,18 @@ const menus: Menu[] = [
     selIcon: <IoHomeSharp style={{ fontSize: 20 }} />,
     element: <HomePage />,
   },
-  // {
-  //   name: "We",
-  //   path: "/feedPage",
-  //   icon: <IoShareSocial style={{ fontSize: 20 }} />,
-  //   selIcon: <IoShareSocial style={{ fontSize: 20 }} />,
-  //   element: <FeedPage />,
-  //   loginNeed: true,
-  // },
+  {
+    name: "보드",
+    path: "/board",
+    icon: <IoClipboardOutline style={{ fontSize: 20 }} />,
+    selIcon: <IoClipboard style={{ fontSize: 20 }} />,
+    element: <BoardPage />,
+  },
   {
     name: "설정",
     path: "/settings",
-    icon: <IoSettings style={{ fontSize: 20 }} />,
-    selIcon: <IoSettingsSharp style={{ fontSize: 20 }} />,
+    icon: <IoSettingsOutline style={{ fontSize: 20 }} />,
+    selIcon: <IoSettings style={{ fontSize: 20 }} />,
     element: <SettingsPage />,
   },
 ];

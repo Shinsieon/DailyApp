@@ -96,3 +96,7 @@ button:focus-visible {
 .slidedown {
   animation: slidedown 0.5s forwards;
 }
+
+.ant-picker-cell-inner {
+  padding: 0 !important;
+}

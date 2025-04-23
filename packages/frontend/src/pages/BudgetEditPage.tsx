@@ -1,7 +1,14 @@
 import { useLocation, useNavigate } from "react-router-dom";
 import { Button, Flex, message } from "antd";
 import AppHeader from "../components/AppHeader";
-import { Cascader, DatePicker, DatePickerRef, Input, Modal } from "antd-mobile";
+import {
+  Cascader,
+  DatePicker,
+  DatePickerRef,
+  Input,
+  Modal,
+  Segmented,
+} from "antd-mobile";
 import { BudgetData, CategoryData } from "../types";
 import BottomFixedButton from "../components/BottomFixedButton";
 import { useBudgetStore } from "../store/budgetStore";
@@ -14,7 +21,7 @@ import { translateToKorean } from "../utils";
 import { colors } from "../colors";
 import { useUserStore } from "../store/userStore";
 import sizes from "../sizes";
-import { PlusOutlined } from "@ant-design/icons";
+import { FaCirclePlus } from "react-icons/fa6";
 
 const BudgetEditPage = () => {
   const location = useLocation();
@@ -104,6 +111,21 @@ const BudgetEditPage = () => {
         gap={15}
       >
         <Flex vertical gap={5}>
+          <Segmented
+            options={["수입", "지출"]}
+            block
+            value={budgetForm.type === "income" ? "수입" : "지출"}
+            onChange={(value) => {
+              setBudgetForm({
+                ...budgetForm,
+                type: value === "수입" ? "income" : "expense",
+                category: categoryOptions.filter(
+                  (item) =>
+                    item.type === (value === "수입" ? "income" : "expense")
+                )[0],
+              });
+            }}
+          />
           <Label
             name="금액"
             style={{
@@ -161,7 +183,7 @@ const BudgetEditPage = () => {
           />
         </Flex>
         <Flex vertical gap={5}>
-          <Flex gap={10}>
+          <Flex gap={10} align="center">
             <Label
               name="카테고리"
               style={{
@@ -169,25 +191,10 @@ const BudgetEditPage = () => {
                 fontWeight: "bold",
               }}
             />
-            {/* <Button
-              size="small"
-              color="primary"
-              onClick={(e) => {
-                e.stopPropagation();
-                if (!user) {
-                  message.error("로그인 후 사용해주세요.");
-                  return;
-                }
-                navigate("/categoryListPage");
-              }}
-            >
-              변경
-            </Button> */}
-            <Button
-              icon={<PlusOutlined />}
-              size="small"
-              onClick={(e) => {
-                e.stopPropagation();
+
+            <FaCirclePlus
+              style={{ fontSize: sizes.font.medium }}
+              onClick={() => {
                 if (!user) {
                   message.error("로그인 후 사용해주세요.");
                   return;
