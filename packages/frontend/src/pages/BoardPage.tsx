@@ -106,7 +106,9 @@ const BoardPage = () => {
                 borderTop: borderColor,
                 borderBottom: borderColor,
                 borderRight:
-                  isEnd || todo.date === todo.endDate ? borderColor : "none",
+                  isEnd || todo.date === todo.endDate || !todo.endDate
+                    ? borderColor
+                    : "none",
                 //backgroundColor: colorArr[index % colorArr.length],
                 borderRadius: isStart
                   ? "4px 0 0 4px"

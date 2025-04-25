@@ -274,7 +274,11 @@ const TodoEditPage = () => {
           <Flex>
             <Input
               style={commonFieldStyle}
-              value={dayjs(todoForm.endDate).format("YYYY-MM-DD")}
+              value={
+                todoForm.endDate
+                  ? dayjs(todoForm.endDate).format("YYYY-MM-DD")
+                  : dayjs(todoForm.date).format("YYYY-MM-DD")
+              }
               onClick={() => {
                 endDatePickerRef.current?.open(); // ⬅️
               }}
