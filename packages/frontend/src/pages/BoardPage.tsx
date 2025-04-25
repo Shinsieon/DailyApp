@@ -10,6 +10,7 @@ import { useState } from "react";
 import { SelectInfo } from "antd/es/calendar/generateCalendar";
 import { useBudgetStore } from "../store/budgetStore";
 import { formatMoney } from "../utils";
+import { colors } from "../colors";
 
 const colorArr = ["#C70D3A", "#ED5107", "#230338", "#02383C"];
 
@@ -52,18 +53,26 @@ const BoardPage = () => {
       .filter((b) => b.type === "expense")
       .reduce((acc, b) => acc + b.amount, 0);
     return (
-      <Flex vertical gap={2}>
+      <Flex vertical gap={5}>
         <Label
           name={`일정 ${monthlyTodoLength}`}
           style={{ fontSize: sizes.font.medium, fontWeight: "bold" }}
         />
         <Label
           name={`수입 ${formatMoney(monthlyIncomeSum)}원`}
-          style={{ fontSize: sizes.font.small }}
+          style={{
+            fontSize: sizes.font.small,
+            borderLeft: `4px solid ${colors.lightTomato}`,
+            paddingLeft: 10,
+          }}
         />
         <Label
           name={`지출 ${formatMoney(monthlyExpenseSum)}원`}
-          style={{ fontSize: sizes.font.small }}
+          style={{
+            fontSize: sizes.font.small,
+            borderLeft: `4px solid ${colors.lightPrimary}`,
+            paddingLeft: 10,
+          }}
         />
       </Flex>
     );
