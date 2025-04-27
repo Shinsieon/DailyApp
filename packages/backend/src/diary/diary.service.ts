@@ -17,6 +17,7 @@ export class DiaryService {
   async createDiary(userId: number): Promise<Diary> {
     const user = await this.userRepo.findOneBy({ id: userId });
     if (!user) throw new NotFoundException("User not found");
+    console.log("something changed");
 
     const diary = this.diaryRepo.create({ user });
     return this.diaryRepo.save(diary);
