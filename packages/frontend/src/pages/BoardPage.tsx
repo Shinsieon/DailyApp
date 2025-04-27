@@ -27,10 +27,10 @@ const BoardPage = () => {
   const [months, setMonths] = useState<string[]>(
     Array.from({ length: 12 }, (_, i) => String(i + 1).padStart(2, "0"))
   );
-  const beforeYears = Array.from({ length: 10 }, (_, i) =>
+  const beforeYears = Array.from({ length: 20 }, (_, i) =>
     dayjs(selDate).subtract(i, "year").format("YYYY")
   );
-  const afterYears = Array.from({ length: 10 }, (_, i) =>
+  const afterYears = Array.from({ length: 20 }, (_, i) =>
     dayjs(selDate)
       .add(i + 1, "year")
       .format("YYYY")
@@ -42,7 +42,6 @@ const BoardPage = () => {
   useEffect(() => {
     const scrollRef = selType === "year" ? yearScrollRef : monthScrollRef;
     if (scrollRef.current) {
-      console.log(`selDate : ${selDate}`);
       const todayIndex =
         selType === "year"
           ? years.indexOf(dayjs(selDate).format("YYYY"))
@@ -56,7 +55,6 @@ const BoardPage = () => {
             itemWidth / 2,
           behavior: "smooth",
         });
-        console.log(`scroll updated to index: ${todayIndex}`);
       }
     }
   }, [selType]);
@@ -251,7 +249,6 @@ const BoardPage = () => {
                           }}
                           onClick={() => {
                             const newSelDate = year + selDate.substring(4);
-                            console.log(`newSelDate: ${newSelDate}`);
                             setSelDate(newSelDate);
                             onChange(dayjs(newSelDate));
                           }}
@@ -301,8 +298,6 @@ const BoardPage = () => {
 
                             setSelDate(newSelDate);
                             onChange(dayjs(newSelDate));
-
-                            console.log(`newSelDate: ${newSelDate}`); // 변경된 값 찍기
                           }}
                         >
                           {month}
