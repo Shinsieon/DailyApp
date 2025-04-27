@@ -129,7 +129,6 @@ const BoardPage = () => {
                 fontWeight: "bold",
                 overflow: "hidden",
               }}
-              maxLength={3}
               name={todo.title}
             />
           );
