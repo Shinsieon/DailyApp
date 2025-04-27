@@ -24,11 +24,13 @@ import { UserCircleOutline } from "antd-mobile-icons";
 import { sendToNative } from "../hooks/useNative";
 import useGranted from "../hooks/useGranted";
 import { selectModal } from "../components/SelectModal";
+import { useDiaryStore } from "../store/diaryStore";
 
 const SettingsPage = () => {
   const { memos, flushMemos, setMemos } = useMemoStore();
   const { budgets, flushBudgets, setBudgets } = useBudgetStore();
   const { todos, flushTodos, setTodos } = useTodoStore();
+  const { diary, flushDiary, setDiary } = useDiaryStore();
 
   const user = useUserStore((state) => state.user);
   const [loading, setLoading] = useState(false);
@@ -157,6 +159,7 @@ const SettingsPage = () => {
                 flushMemos();
                 flushBudgets();
                 flushTodos();
+                flushDiary();
                 message.success("데이터를 초기화했습니다.");
               },
               cancelText: "취소",
@@ -184,9 +187,12 @@ const SettingsPage = () => {
                   const todos = await api.getTodos(user.id);
                   const budgets = await api.getBudgets(user.id);
                   const memos = await api.getMemos(user.id);
+                  const diary = await api.getDiaries(user.id);
                   flushMemos();
                   flushBudgets();
                   flushTodos();
+                  flushDiary();
+                  setDiary(diary);
                   setTodos(todos);
                   setBudgets(budgets);
                   setMemos(memos);
@@ -202,6 +208,7 @@ const SettingsPage = () => {
                   await api.syncTodos(todos, user.id);
                   await api.syncBudgets(budgets, user.id);
                   await api.syncMemos(memos, user.id);
+                  await api.syncDiaries(diary, user.id);
                   const now = dayjs().format("YYYY-MM-DD HH:mm:ss");
                   localStorage.setItem("syncDb", now);
                   setLoading(false);

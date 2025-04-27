@@ -18,6 +18,7 @@ import { MemoModule } from "./memo/memo.module";
 import { Survey } from "./app.entity";
 import { NotiModule } from "./noti/noti.module";
 import { PushModule } from "./push/push.module";
+import { DiaryModule } from "./diary/diary.module";
 
 @Module({
   imports: [
@@ -55,6 +56,7 @@ import { PushModule } from "./push/push.module";
     MemoModule,
     NotiModule,
     PushModule,
+    DiaryModule,
     TypeOrmModule.forFeature([Survey]),
   ],
   controllers: [AppController],
