@@ -38,7 +38,6 @@ export class MemoController {
     @Param("userId", ParseIntPipe) userId: number,
     @Body() data: any
   ): Promise<Memo[]> {
-    console.log("controller", data);
     data.memos.forEach((memo: any) => {
       memo.group_name = memo.group;
       delete memo.group;

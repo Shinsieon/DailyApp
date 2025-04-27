@@ -2,8 +2,8 @@ import { message } from "antd";
 import axios from "axios";
 import {
   BudgetData,
-  BudgetType,
   CategoryData,
+  DiaryData,
   MemoData,
   TodoData,
 } from "./types";
@@ -22,7 +22,7 @@ export const http = axios.create({
   baseURL:
     process.env.NODE_ENV === "production"
       ? "https://bono-dev.click"
-      : "http://192.168.45.169:3000",
+      : "http://192.168.45.90:3000",
   withCredentials: true,
   beforeRedirect: () => {
     console.log("Redirecting...");
@@ -184,6 +184,18 @@ const deleteCategory = async (userId: number, id: number) => {
   return response.data;
 };
 
+const syncDiaries = async (diaries: DiaryData[], userId: number) => {
+  const response = await http.post(`/api/v1/diary/multiple/${userId}`, {
+    diaries,
+  });
+  return response.data;
+};
+
+const getDiaries = async (userId: number) => {
+  const response = await http.get(`/api/v1/diary/${userId}`);
+  return response.data;
+};
+
 /*
 로그인이 필요한 API 호출
 */
@@ -267,4 +279,6 @@ export const api = {
   setNotificationGranted,
   sendSurvey,
   getFeed,
+  getDiaries,
+  syncDiaries,
 };
