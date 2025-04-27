@@ -6,11 +6,12 @@ import sizes from "../sizes";
 import Label from "../components/Label";
 import CustomPopup from "../components/CustomPopup";
 import Detail from "../popups/Detail";
-import { useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { SelectInfo } from "antd/es/calendar/generateCalendar";
 import { useBudgetStore } from "../store/budgetStore";
 import { formatMoney } from "../utils";
 import { colors } from "../colors";
+import { Button, Segmented } from "antd-mobile";
 
 const colorArr = ["#C70D3A", "#ED5107", "#230338", "#02383C"];
 
@@ -19,6 +20,47 @@ const BoardPage = () => {
   const budgets = useBudgetStore((state) => state.budgets);
   const [detailVisible, setDetailVisible] = useState(false);
   const [selDate, setSelDate] = useState<string>(dayjs().format("YYYYMMDD"));
+  const [selType, setSelType] = useState<"month" | "year">("month");
+  const yearScrollRef = useRef<HTMLDivElement>(null);
+  const monthScrollRef = useRef<HTMLDivElement>(null);
+
+  const [months, setMonths] = useState<string[]>(
+    Array.from({ length: 12 }, (_, i) => String(i + 1).padStart(2, "0"))
+  );
+  const beforeYears = Array.from({ length: 10 }, (_, i) =>
+    dayjs(selDate).subtract(i, "year").format("YYYY")
+  );
+  const afterYears = Array.from({ length: 10 }, (_, i) =>
+    dayjs(selDate)
+      .add(i + 1, "year")
+      .format("YYYY")
+  );
+  const [years, setYears] = useState<string[]>(
+    beforeYears.reverse().concat(afterYears)
+  );
+
+  useEffect(() => {
+    const scrollRef = selType === "year" ? yearScrollRef : monthScrollRef;
+    if (scrollRef.current) {
+      console.log(`selDate : ${selDate}`);
+      const todayIndex =
+        selType === "year"
+          ? years.indexOf(dayjs(selDate).format("YYYY"))
+          : months.indexOf(dayjs(selDate).format("MM"));
+      if (todayIndex !== -1) {
+        const itemWidth = 60;
+        scrollRef.current.scrollTo({
+          left:
+            todayIndex * itemWidth -
+            scrollRef.current.clientWidth / 2 +
+            itemWidth / 2,
+          behavior: "smooth",
+        });
+        console.log(`scroll updated to index: ${todayIndex}`);
+      }
+    }
+  }, [selType]);
+
   const renderTodo = (date: Dayjs, info: any) => {
     if (info.type === "date") {
       return renderTodoForDate(date);
@@ -157,6 +199,121 @@ const BoardPage = () => {
             }
           }}
           cellRender={renderTodo}
+          headerRender={({
+            value,
+            type,
+            onTypeChange,
+            onChange,
+          }: {
+            value: Dayjs;
+            type: "month" | "year";
+            onTypeChange: (type: "month" | "year") => void;
+            onChange: (date: Dayjs) => void;
+          }) => {
+            return (
+              <Flex vertical gap={5}>
+                <Segmented
+                  block
+                  options={["year", "month"]}
+                  defaultValue={selType}
+                  value={type}
+                  onChange={(value) => {
+                    onTypeChange(value as "month" | "year");
+                    setSelType(value as "month" | "year");
+                  }}
+                />
+                {type === "year" ? (
+                  <Flex
+                    gap={5}
+                    style={{
+                      overflowX: "auto",
+                      whiteSpace: "nowrap",
+                      padding: "10px 0",
+                      scrollBehavior: "smooth",
+                    }}
+                    ref={yearScrollRef}
+                  >
+                    {years.map((year, index) => {
+                      const isSelected = year === dayjs(selDate).format("YYYY");
+                      return (
+                        <Button
+                          fill="none"
+                          style={{
+                            color: isSelected
+                              ? colors.lightWhite
+                              : colors.darkGray,
+                            fontSize: sizes.font.small,
+                            fontWeight: "bold",
+                            backgroundColor: isSelected
+                              ? colors.primary
+                              : colors.lightWhite,
+                            width: 60,
+                          }}
+                          onClick={() => {
+                            const newSelDate = year + selDate.substring(4);
+                            console.log(`newSelDate: ${newSelDate}`);
+                            setSelDate(newSelDate);
+                            onChange(dayjs(newSelDate));
+                          }}
+                        >
+                          {year}
+                        </Button>
+                      );
+                    })}
+                  </Flex>
+                ) : (
+                  <Flex
+                    gap={5}
+                    style={{
+                      overflowX: "auto",
+                      whiteSpace: "nowrap",
+                      padding: "10px 0",
+                      scrollBehavior: "smooth",
+                    }}
+                    ref={monthScrollRef}
+                  >
+                    {months.map((month, index) => {
+                      const isSelected = month === dayjs(selDate).format("MM");
+                      return (
+                        <Button
+                          fill="none"
+                          style={{
+                            color: isSelected
+                              ? colors.lightWhite
+                              : colors.darkGray,
+                            fontSize: sizes.font.small,
+                            fontWeight: "bold",
+                            backgroundColor: isSelected
+                              ? colors.primary
+                              : colors.lightWhite,
+                          }}
+                          onClick={() => {
+                            // month를 항상 2자리 문자열로 포맷
+                            const formattedMonth = Number(month)
+                              .toString()
+                              .padStart(2, "0");
+
+                            // selDate 수정 (YYYY-MM-DD 형태라고 가정)
+                            const newSelDate =
+                              selDate.substring(0, 4) +
+                              formattedMonth +
+                              selDate.substring(6);
+
+                            setSelDate(newSelDate);
+                            onChange(dayjs(newSelDate));
+
+                            console.log(`newSelDate: ${newSelDate}`); // 변경된 값 찍기
+                          }}
+                        >
+                          {month}
+                        </Button>
+                      );
+                    })}
+                  </Flex>
+                )}
+              </Flex>
+            );
+          }}
         />
       </Flex>
       <CustomPopup
