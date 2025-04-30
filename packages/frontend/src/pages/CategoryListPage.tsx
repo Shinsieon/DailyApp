@@ -113,6 +113,7 @@ const CategoryListPage = () => {
                     .map((category) => (
                       <Label
                         name={category.label}
+                        key={category.id}
                         style={{
                           backgroundColor: colors.lightTomato,
                           color: colors.lightWhite,
@@ -140,6 +141,7 @@ const CategoryListPage = () => {
                     .map((category) => (
                       <Label
                         name={category.label}
+                        key={category.id}
                         style={{
                           backgroundColor: colors.lightPrimary,
                           padding: 5,
@@ -167,7 +169,7 @@ const CategoryListPage = () => {
                   {myCategory
                     .filter((item) => item.type === "income")
                     .map((category) => (
-                      <Flex>
+                      <Flex key={category.id}>
                         <Label
                           name={category.label}
                           style={{
@@ -221,7 +223,7 @@ const CategoryListPage = () => {
                   {myCategory
                     .filter((item) => item.type === "expense")
                     .map((category) => (
-                      <Flex>
+                      <Flex key={category.id}>
                         <Label
                           name={category.label}
                           style={{

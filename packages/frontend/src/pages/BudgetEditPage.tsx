@@ -32,11 +32,12 @@ const BudgetEditPage = () => {
   const { budgets, updateBudget, saveBudget, deleteBudget } = useBudgetStore();
   const prevBudget = budgets.find((budget) => budget.id === budgetId);
   const user = useUserStore((state) => state.user);
+  const defaultCategory = { label: "", value: "", type: "" };
   const defaultBudget: BudgetData = {
     date: location.state?.date,
     amount: 0,
     type: location.state?.type || "expense",
-    category: { label: "", value: "", type: "" },
+    category: defaultCategory,
     other: "",
   };
   const [budgetForm, setBudgetForm] = useState<BudgetData>(
@@ -47,6 +48,10 @@ const BudgetEditPage = () => {
   const onfinish = async () => {
     if (!budgetForm.amount || budgetForm.amount <= 0) {
       message.error("금액을 입력해주세요.");
+      return;
+    }
+    if (!budgetForm.category || !budgetForm.category.value) {
+      message.error("카테고리를 선택해주세요.");
       return;
     }
     try {
@@ -116,13 +121,14 @@ const BudgetEditPage = () => {
             block
             value={budgetForm.type === "income" ? "수입" : "지출"}
             onChange={(value) => {
+              const cat = categoryOptions.filter(
+                (item) =>
+                  item.type === (value === "수입" ? "income" : "expense")
+              )[0];
               setBudgetForm({
                 ...budgetForm,
                 type: value === "수입" ? "income" : "expense",
-                category: categoryOptions.filter(
-                  (item) =>
-                    item.type === (value === "수입" ? "income" : "expense")
-                )[0],
+                category: cat ? cat : defaultCategory,
               });
             }}
           />
@@ -206,7 +212,7 @@ const BudgetEditPage = () => {
           <Flex>
             <Input
               style={commonFieldStyle}
-              value={budgetForm.category.label}
+              value={budgetForm.category?.label}
               onClick={() => {
                 setVisible(true);
               }}
@@ -226,8 +232,8 @@ const BudgetEditPage = () => {
               if (g) setBudgetForm({ ...budgetForm, category: g });
             }}
             onCancel={() => setVisible(false)}
-            value={[budgetForm.category.value]}
-            defaultValue={[budgetForm.category.value]}
+            value={[budgetForm.category?.value]}
+            defaultValue={[budgetForm.category?.value]}
           />
         </Flex>
         <Flex vertical gap={5}>
