@@ -1,6 +1,6 @@
 import { Flex, Statistic, StatisticProps } from "antd";
 import AppHeader from "../components/AppHeader";
-import { Divider, List } from "antd-mobile";
+import { Divider } from "antd-mobile";
 import Label from "../components/Label";
 import sizes from "../sizes";
 import { useUserStore } from "../store/userStore";
@@ -10,8 +10,7 @@ import { useTodoStore } from "../store/todoStore";
 import { useBudgetStore } from "../store/budgetStore";
 import { colors } from "../colors";
 import { EditFilled } from "@ant-design/icons";
-import { useLocation, useNavigate } from "react-router-dom";
-import { useState } from "react";
+import { useNavigate } from "react-router-dom";
 import { useDiaryStore } from "../store/diaryStore";
 
 const formatter: StatisticProps["formatter"] = (value) => (
@@ -25,9 +24,7 @@ const MyPage = () => {
   const budgets = useBudgetStore((state) => state.budgets);
   const diary = useDiaryStore((state) => state.diary);
   const navigate = useNavigate();
-  const [category, setCategory] = useState(
-    localStorage.getItem("category") || "default"
-  );
+
   return (
     <Flex
       vertical
@@ -40,7 +37,7 @@ const MyPage = () => {
         vertical
         style={{ flex: 1, overflowY: "auto", padding: "0px 20px" }}
       >
-        <Flex style={{ height: 140 }} id="profileView">
+        <Flex style={{ height: 100 }} id="profileView">
           <Flex vertical style={{ padding: "20px 0" }} id="nameView">
             <Flex gap={10} align="center">
               <Label
@@ -69,7 +66,7 @@ const MyPage = () => {
         >
           <Statistic title="메모" value={memos.length} formatter={formatter} />
           <Divider direction="vertical" />
-          <Statistic title="할 일" formatter={formatter} value={todos.length} />
+          <Statistic title="일정" formatter={formatter} value={todos.length} />
           <Divider direction="vertical" />
           <Statistic
             title="가계부"
@@ -78,44 +75,6 @@ const MyPage = () => {
           />
           <Divider direction="vertical" />
           <Statistic title="일기" formatter={formatter} value={diary.length} />
-        </Flex>
-        <Flex
-          id="settingView"
-          vertical
-          style={{
-            marginTop: 20,
-          }}
-          gap={10}
-        >
-          <Label
-            name="가계부 설정"
-            style={{
-              fontSize: sizes.font.large,
-              fontWeight: "bold",
-            }}
-          />
-          <List>
-            <List.Item
-              onClick={() => {
-                navigate("/categoryListPage");
-              }}
-              extra={
-                <Label
-                  name={
-                    category === "default" ? "기본 카테고리" : "내 카테고리"
-                  }
-                  style={{ color: colors.primary }}
-                />
-              }
-            >
-              <Label
-                name="카테고리"
-                style={{
-                  fontSize: sizes.font.medium,
-                }}
-              />
-            </List.Item>
-          </List>
         </Flex>
       </Flex>
     </Flex>

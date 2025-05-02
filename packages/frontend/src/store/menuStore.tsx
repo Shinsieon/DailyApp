@@ -10,10 +10,11 @@ import {
   IoClipboardOutline,
   IoHomeOutline,
   IoHomeSharp,
-  IoSettings,
-  IoSettingsOutline,
+  IoMenu,
+  IoMenuOutline,
 } from "react-icons/io5";
 import BoardPage from "../pages/BoardPage";
+import MenuPage from "../pages/MenuPage";
 
 const menus: Menu[] = [
   {
@@ -38,12 +39,19 @@ const menus: Menu[] = [
     selIcon: <IoClipboard style={{ fontSize: 20 }} />,
     element: <BoardPage />,
   },
+  // {
+  //   name: "설정",
+  //   path: "/settings",
+  //   icon: <IoSettingsOutline style={{ fontSize: 20 }} />,
+  //   selIcon: <IoSettings style={{ fontSize: 20 }} />,
+  //   element: <SettingsPage />,
+  // },
   {
-    name: "설정",
-    path: "/settings",
-    icon: <IoSettingsOutline style={{ fontSize: 20 }} />,
-    selIcon: <IoSettings style={{ fontSize: 20 }} />,
-    element: <SettingsPage />,
+    name: "메뉴",
+    path: "/menu",
+    icon: <IoMenuOutline style={{ fontSize: 20 }} />,
+    selIcon: <IoMenu style={{ fontSize: 20 }} />,
+    element: <MenuPage />,
   },
 ];
 

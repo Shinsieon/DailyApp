@@ -6,7 +6,6 @@ import AppHeader from "../components/AppHeader";
 import {
   DatePicker,
   DatePickerRef,
-  Form,
   Input,
   Modal,
   Picker,
@@ -182,7 +181,7 @@ const TodoEditPage = () => {
 
   const onfinish = async () => {
     if (!todoForm.title) {
-      message.error("할 일을 입력해주세요.");
+      message.error("일정을 입력해주세요.");
       return;
     }
     if (todoForm.date > todoForm.endDate!) {
@@ -202,12 +201,12 @@ const TodoEditPage = () => {
       message.error("데이터를 저장하는데 실패했습니다.");
       return;
     }
-    message.success(`할 일이 저장되었습니다.`);
+    message.success(`일정이 저장되었습니다.`);
     navigate(-1);
   };
   return (
     <Flex vertical style={{ height: "100vh" }}>
-      <AppHeader title={`할 일 ${prevTodo ? "수정" : "추가"}`} />
+      <AppHeader title={`일정 ${prevTodo ? "수정" : "추가"}`} />
       <Flex
         vertical
         style={{ flex: 1, overflowY: "auto", padding: "20px" }}
@@ -215,7 +214,7 @@ const TodoEditPage = () => {
       >
         <Flex vertical gap={5}>
           <Label
-            name="할 일"
+            name="일정"
             style={{
               fontSize: sizes.font.medium,
               fontWeight: "bold",
@@ -375,12 +374,12 @@ const TodoEditPage = () => {
         onCancel={() => {
           if (prevTodo) {
             Modal.confirm({
-              content: "할 일을 삭제하시겠습니까?",
+              content: "일정을 삭제하시겠습니까?",
               confirmText: "삭제",
               cancelText: "취소",
               onConfirm: async () => {
                 deleteTodo(prevTodo.id!);
-                message.success(`할 일이 삭제되었습니다.`);
+                message.success(`일정이 삭제되었습니다.`);
                 navigate(-1);
               },
             });

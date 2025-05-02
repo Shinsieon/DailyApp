@@ -8,7 +8,7 @@ const Profile = () => {
   return (
     <Space style={{ fontSize: "24px" }}>
       {user ? (
-        <Flex style={{ alignItems: "flex-end" }} gap={5}>
+        <Flex style={{ alignItems: "center" }} gap={5}>
           <Label name={user.nickname + "님 반갑습니다"}></Label>
           <UserAvatar />
         </Flex>

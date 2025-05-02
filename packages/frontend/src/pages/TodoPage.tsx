@@ -60,7 +60,7 @@ const TodoPage = () => {
 
   return (
     <Flex vertical style={{ height: "100vh" }}>
-      <AppHeader title="할 일 정리" />
+      <AppHeader title="일정 정리" />
       <Flex vertical style={{ flex: 1, overflow: "auto" }}>
         <CustomCalendar
           selDate={selDate}
@@ -100,7 +100,7 @@ const TodoPage = () => {
                 }}
               >
                 <PlusOutlined />
-                새로운 할 일
+                새로운 일정
               </Button>
               <Button
                 style={{
@@ -200,9 +200,7 @@ const TodoPage = () => {
                                     onClick={(e) => {
                                       e.stopPropagation();
                                       deleteTodo(todo.id!);
-                                      message.success(
-                                        "할 일이 삭제되었습니다."
-                                      );
+                                      message.success("일정이 삭제되었습니다.");
                                     }}
                                   />
                                 </Flex>

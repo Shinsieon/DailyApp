@@ -1,12 +1,3 @@
-import {
-  BellFilled,
-  DeleteOutlined,
-  InfoCircleOutlined,
-  LogoutOutlined,
-  NotificationOutlined,
-  SyncOutlined,
-  UserDeleteOutlined,
-} from "@ant-design/icons";
 import { List, Modal, Switch } from "antd-mobile";
 import { useTodoStore } from "../store/todoStore";
 import { useMemoStore } from "../store/memoStore";
@@ -20,7 +11,6 @@ import dayjs from "dayjs";
 import { api, showError } from "../api";
 import CustomLoading from "../components/Loading";
 import Label from "../components/Label";
-import { UserCircleOutline } from "antd-mobile-icons";
 import { sendToNative } from "../hooks/useNative";
 import useGranted from "../hooks/useGranted";
 import { selectModal } from "../components/SelectModal";
@@ -76,19 +66,11 @@ const SettingsPage = () => {
   };
 
   return (
-    <Flex
-      vertical
-      style={{
-        width: "100%",
-        padding: "0",
-        gap: 10,
-      }}
-    >
+    <Flex vertical>
       <List mode="card" header="사용자 설정">
         {user ? (
           <>
             <List.Item
-              prefix={<UserCircleOutline />}
               onClick={() => {
                 navigate("/changeNicknamePage");
               }}
@@ -96,7 +78,6 @@ const SettingsPage = () => {
               닉네임 변경
             </List.Item>
             <List.Item
-              prefix={<LogoutOutlined />}
               onClick={() => {
                 clearUser();
                 localStorage.removeItem("token");
@@ -106,7 +87,6 @@ const SettingsPage = () => {
               로그아웃
             </List.Item>
             <List.Item
-              prefix={<UserDeleteOutlined />}
               onClick={() => {
                 Modal.confirm({
                   content: "정말 탈퇴하시겠습니까?",
@@ -130,7 +110,6 @@ const SettingsPage = () => {
         ) : (
           <>
             <List.Item
-              prefix={<UserCircleOutline />}
               onClick={() => {
                 navigate("/loginPage");
               }}
@@ -142,7 +121,6 @@ const SettingsPage = () => {
       </List>
       <List mode="card" header="알림 설정">
         <List.Item
-          prefix={<BellFilled />}
           extra={<Switch checked={acceptPush} onChange={handleNotiToggle} />}
         >
           앱 푸시
@@ -150,7 +128,6 @@ const SettingsPage = () => {
       </List>
       <List mode="card" header="앱 설정">
         <List.Item
-          prefix={<DeleteOutlined />}
           onClick={() => {
             Modal.confirm({
               content: "정말 초기화하시겠습니까?",
@@ -169,7 +146,6 @@ const SettingsPage = () => {
           데이터 초기화
         </List.Item>
         <List.Item
-          prefix={<SyncOutlined />}
           onClick={async () => {
             if (!user) {
               message.error("로그인 후 사용해주세요.");
@@ -233,7 +209,6 @@ const SettingsPage = () => {
         </List.Item>
 
         <List.Item
-          prefix={<NotificationOutlined />}
           onClick={() => {
             navigate("/patchNotePage");
           }}
@@ -241,9 +216,7 @@ const SettingsPage = () => {
           패치 노트
           {process.env.NODE_ENV === "development" && " (개발)"}
         </List.Item>
-        <List.Item prefix={<InfoCircleOutlined />} extra={appVersion}>
-          앱 버전
-        </List.Item>
+        <List.Item extra={appVersion}>앱 버전</List.Item>
       </List>
 
       {loading && <CustomLoading />}
