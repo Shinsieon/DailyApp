@@ -1,7 +1,6 @@
 import { create } from "zustand";
 import { Menu } from "../types";
 
-import SettingsPage from "../pages/SettingsPage";
 import HomePage from "../pages/HomePage";
 import { FaRegUser, FaUser } from "react-icons/fa";
 import MyPage from "../pages/MyPage";
@@ -10,11 +9,10 @@ import {
   IoClipboardOutline,
   IoHomeOutline,
   IoHomeSharp,
-  IoMenu,
-  IoMenuOutline,
 } from "react-icons/io5";
 import BoardPage from "../pages/BoardPage";
 import MenuPage from "../pages/MenuPage";
+import { CiMenuBurger } from "react-icons/ci";
 
 const menus: Menu[] = [
   {
@@ -49,8 +47,8 @@ const menus: Menu[] = [
   {
     name: "메뉴",
     path: "/menu",
-    icon: <IoMenuOutline style={{ fontSize: 20 }} />,
-    selIcon: <IoMenu style={{ fontSize: 20 }} />,
+    icon: <CiMenuBurger style={{ fontSize: 20 }} />,
+    selIcon: <CiMenuBurger style={{ fontSize: 20 }} />,
     element: <MenuPage />,
   },
 ];

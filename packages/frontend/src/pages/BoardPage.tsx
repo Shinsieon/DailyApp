@@ -183,7 +183,6 @@ const BoardPage = () => {
         width: "100%",
       }}
     >
-      <AppHeader title="보드" />
       <Flex
         vertical
         style={{ flex: 1, overflowY: "auto", padding: "0px 20px" }}
