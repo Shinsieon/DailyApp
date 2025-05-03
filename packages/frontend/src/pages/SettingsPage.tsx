@@ -15,6 +15,7 @@ import { sendToNative } from "../hooks/useNative";
 import useGranted from "../hooks/useGranted";
 import { selectModal } from "../components/SelectModal";
 import { useDiaryStore } from "../store/diaryStore";
+import AppHeader from "../components/AppHeader";
 
 const SettingsPage = () => {
   const { memos, flushMemos, setMemos } = useMemoStore();
@@ -67,6 +68,7 @@ const SettingsPage = () => {
 
   return (
     <Flex vertical>
+      <AppHeader title="설정" />
       <List mode="card" header="사용자 설정">
         {user ? (
           <>

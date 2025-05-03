@@ -1,5 +1,4 @@
 import { Calendar, Flex } from "antd";
-import AppHeader from "../components/AppHeader";
 import dayjs, { Dayjs } from "dayjs";
 import { useTodoStore } from "../store/todoStore";
 import sizes from "../sizes";
@@ -24,7 +23,7 @@ const BoardPage = () => {
   const yearScrollRef = useRef<HTMLDivElement>(null);
   const monthScrollRef = useRef<HTMLDivElement>(null);
 
-  const [months, setMonths] = useState<string[]>(
+  const [months] = useState<string[]>(
     Array.from({ length: 12 }, (_, i) => String(i + 1).padStart(2, "0"))
   );
   const beforeYears = Array.from({ length: 20 }, (_, i) =>
@@ -197,7 +196,6 @@ const BoardPage = () => {
           }}
           cellRender={renderTodo}
           headerRender={({
-            value,
             type,
             onTypeChange,
             onChange,
