@@ -152,61 +152,66 @@ const MenuPage = () => {
       <Flex style={{ padding: "20px 0px" }} vertical>
         <SearchBar
           placeholder="메뉴명을 입력하세요."
-          style={{ margin: "0px 20px", fontSize: sizes.font.medium }}
+          style={{
+            margin: "0px 10px",
+            fontSize: sizes.font.xlarge,
+          }}
           onChange={setSearchText}
         />
-        <Flex align="center" style={{ padding: "0px 20px" }}>
-          <Label name="최근 메뉴" placeholder style={{ flex: 1 }} />
-          <Flex
-            gap={5}
-            style={{
-              overflowX: "auto",
-              whiteSpace: "nowrap",
-              padding: "10px 0",
-              scrollBehavior: "smooth",
-              flex: 5,
-            }}
-            align="center"
-            ref={scrollRef}
-          >
-            {menuHistory.map((menu, index) => {
-              return (
-                <Flex
-                  style={{
-                    fontSize: sizes.font.small,
-                    backgroundColor: colors.lighterGray,
-                    padding: 5,
-                    borderRadius: 5,
-                  }}
-                  align="center"
-                  gap={5}
-                  onClick={() => {
-                    if (menu.path) {
-                      customNavigate(menu);
-                    } else if (menu.onClick) {
-                      menu.onClick();
-                    }
-                  }}
-                >
-                  <Label name={menu.title} bold />
-                  <AiOutlineDelete
-                    style={{ fontSize: sizes.font.medium }}
-                    onClick={(e) => {
-                      e.stopPropagation();
-                      deleteMenuHistory(index);
-                      if (scrollRef.current) {
-                        scrollRef.current.scrollTo({
-                          left: 0,
-                          behavior: "smooth",
-                        });
+        {menuHistory.length > 0 && (
+          <Flex align="center" style={{ padding: "0px 10px" }}>
+            <Label name="최근 메뉴" placeholder style={{ flex: 1 }} />
+            <Flex
+              gap={5}
+              style={{
+                overflowX: "auto",
+                whiteSpace: "nowrap",
+                padding: "10px 0",
+                scrollBehavior: "smooth",
+                flex: 5,
+              }}
+              align="center"
+              ref={scrollRef}
+            >
+              {menuHistory.map((menu, index) => {
+                return (
+                  <Flex
+                    style={{
+                      fontSize: sizes.font.small,
+                      backgroundColor: colors.lighterGray,
+                      padding: 5,
+                      borderRadius: 5,
+                    }}
+                    align="center"
+                    gap={5}
+                    onClick={() => {
+                      if (menu.path) {
+                        customNavigate(menu);
+                      } else if (menu.onClick) {
+                        menu.onClick();
                       }
                     }}
-                  />
-                </Flex>
-              );
-            })}
+                  >
+                    <Label name={menu.title} bold />
+                    <AiOutlineDelete
+                      style={{ fontSize: sizes.font.medium }}
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        deleteMenuHistory(index);
+                        if (scrollRef.current) {
+                          scrollRef.current.scrollTo({
+                            left: 0,
+                            behavior: "smooth",
+                          });
+                        }
+                      }}
+                    />
+                  </Flex>
+                );
+              })}
+            </Flex>
           </Flex>
-        </Flex>
+        )}
 
         {/* 메뉴 리스트 */}
         {filteredMenu.map((item, index) => {
