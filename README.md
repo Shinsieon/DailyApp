@@ -49,4 +49,6 @@ React Native 기반으로 iOS/Android에서 모두 사용할 수 있으며, AWS 
 
 > https://apps.apple.com/kr/app/%ED%95%98%EB%A3%A8%EC%A0%95%EB%A6%AC/id6740744415
 
+## 시연영상
+> [![하루정리 소개 영상](https://img.youtube.com/vi/dQw4w9WgXcQ/hqdefault.jpg)](https://www.youtube.com/watch?v=kNYXSD-gKyc)
 ---
