@@ -1,81 +1,52 @@
-# Turborepo starter
+# 하루정리 📔  
+**하루를 정리하는 가장 쉬운 방법**
 
-This is an official starter Turborepo.
+> 앱스토어에 내 앱이 있으면 좋겠다던 작은 꿈, 6개월간의 노력 끝에 이뤄졌습니다. 퇴근 후 틈틈이 개발한 결과물이 드디어 세상에 나왔어요! 🎉
 
-## Using this example
+**하루정리**는 일정, 메모, 가계부를 한 곳에서 깔끔하게 관리할 수 있는 올인원 생산성 앱입니다.  
+React Native 기반으로 iOS/Android에서 모두 사용할 수 있으며, AWS 환경에서 백엔드까지 직접 구축한 풀스택 프로젝트입니다.
 
-Run the following command:
+---
 
-```sh
-npx create-turbo@latest
-```
+## ✨ 주요 기능
 
-## What's inside?
+- **홈화면**  
+  날씨, 일정, 메모, 가계부를 한눈에! 필요한 정보만 모아보는 데일리 허브 화면
 
-This Turborepo includes the following packages/apps:
+- **하루날씨**  
+  기상청 공식 데이터를 기반으로 하루를 4개 시간대로 나누어 기온/습도/강수확률/풍속 등을 상세히 제공
 
-### Apps and Packages
+- **일정관리**  
+  해야 할 일이나 약속을 기록하고 알림으로 챙겨주는 To-Do 리스트
 
-- `docs`: a [Next.js](https://nextjs.org/) app
-- `web`: another [Next.js](https://nextjs.org/) app
-- `@repo/ui`: a stub React component library shared by both `web` and `docs` applications
-- `@repo/eslint-config`: `eslint` configurations (includes `eslint-config-next` and `eslint-config-prettier`)
-- `@repo/typescript-config`: `tsconfig.json`s used throughout the monorepo
+- **메모관리**  
+  중요한 생각을 메모하고, 즐겨찾기 및 그룹 기능으로 깔끔하게 정리
 
-Each package/app is 100% [TypeScript](https://www.typescriptlang.org/).
+- **가계부관리**  
+  수입과 지출을 날짜별로 기록하고 소비 습관을 체크
 
-### Utilities
+- **위젯 지원**  
+  앱을 열지 않아도 홈화면에서 일정과 메모를 바로 확인 가능
 
-This Turborepo has some additional tools already setup for you:
+- **다이어리 기능**  
+  기억에 남는 순간, 하루의 기분, 요약 문장을 남기며 하루를 회고
 
-- [TypeScript](https://www.typescriptlang.org/) for static type checking
-- [ESLint](https://eslint.org/) for code linting
-- [Prettier](https://prettier.io) for code formatting
+---
 
-### Build
+## 🛠️ 기술 스택
 
-To build all apps and packages, run the following command:
+| 구성 | 기술 |
+|------|------|
+| **프론트엔드** | React Native, React, Vite |
+| **백엔드** | NestJS |
+| **데이터베이스** | MySQL |
+| **인프라/배포** | AWS (EC2, RDS, S3 등), GitHub Actions, Turbo |
+| **기타** | CI/CD 자동화, 위젯 기능, 기상청 OpenAPI 연동 |
 
-```
-cd my-turborepo
-pnpm build
-```
+---
 
-### Develop
+## 📱 앱 다운로드
 
-To develop all apps and packages, run the following command:
+> https://apps.apple.com/kr/app/%ED%95%98%EB%A3%A8%EC%A0%95%EB%A6%AC/id6740744415
 
-```
-cd my-turborepo
-pnpm dev
-```
-
-### Remote Caching
-
-Turborepo can use a technique known as [Remote Caching](https://turbo.build/repo/docs/core-concepts/remote-caching) to share cache artifacts across machines, enabling you to share build caches with your team and CI/CD pipelines.
-
-By default, Turborepo will cache locally. To enable Remote Caching you will need an account with Vercel. If you don't have an account you can [create one](https://vercel.com/signup), then enter the following commands:
-
-```
-cd my-turborepo
-npx turbo login
-```
-
-This will authenticate the Turborepo CLI with your [Vercel account](https://vercel.com/docs/concepts/personal-accounts/overview).
-
-Next, you can link your Turborepo to your Remote Cache by running the following command from the root of your Turborepo:
-
-```
-npx turbo link
-```
-
-## Useful Links
-
-Learn more about the power of Turborepo:
-
-- [Tasks](https://turbo.build/repo/docs/core-concepts/monorepos/running-tasks)
-- [Caching](https://turbo.build/repo/docs/core-concepts/caching)
-- [Remote Caching](https://turbo.build/repo/docs/core-concepts/remote-caching)
-- [Filtering](https://turbo.build/repo/docs/core-concepts/monorepos/filtering)
-- [Configuration Options](https://turbo.build/repo/docs/reference/configuration)
-- [CLI Usage](https://turbo.build/repo/docs/reference/command-line-reference)
+---
