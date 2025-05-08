@@ -1,4 +1,4 @@
-import { Flex } from "antd";
+import { Flex, message } from "antd";
 import { Button, List, SearchBar } from "antd-mobile";
 import { useNavigate } from "react-router-dom";
 import { useEffect, useRef, useState } from "react";
@@ -6,10 +6,12 @@ import { colors } from "../colors";
 import sizes from "../sizes";
 import Label from "../components/Label";
 import { AiOutlineDelete } from "react-icons/ai";
+import { useUserStore } from "../store/userStore";
 interface MenuData {
   title: string;
   path?: string;
   state?: any;
+  requireLoggin?: boolean;
   children?: MenuData[];
   onClick?: () => void;
 }
@@ -17,7 +19,9 @@ interface MenuData {
 const MenuPage = () => {
   const [searchText, setSearchText] = useState<string>("");
   const [menuHistory, setMenuHistory] = useState<MenuData[]>([]);
+  const user = useUserStore((state) => state.user);
   const navigate = useNavigate();
+
   const customNavigate = (menu: MenuData) => {
     console.log(`menu ${JSON.stringify(menu.state)}`);
     if (menuHistory.length > 0) {
@@ -35,6 +39,17 @@ const MenuPage = () => {
     navigate(menu.path!, {
       state: menu.state,
     });
+  };
+  const handleMenuClick = (menu: MenuData) => {
+    if (menu.requireLoggin && !user) {
+      message.error("로그인이 필요합니다.");
+      return;
+    }
+    if (menu.path) {
+      customNavigate(menu);
+    } else if (menu.onClick) {
+      menu.onClick();
+    }
   };
   const deleteMenuHistory = (index: number) => {
     const newHistory = [...menuHistory];
@@ -92,6 +107,7 @@ const MenuPage = () => {
         },
         {
           title: "카테고리 관리",
+          requireLoggin: true,
           path: "/categoryListPage",
         },
         {
@@ -185,11 +201,7 @@ const MenuPage = () => {
                     align="center"
                     gap={5}
                     onClick={() => {
-                      if (menu.path) {
-                        customNavigate(menu);
-                      } else if (menu.onClick) {
-                        menu.onClick();
-                      }
+                      handleMenuClick(menu);
                     }}
                   >
                     <Label name={menu.title} bold />
@@ -222,11 +234,7 @@ const MenuPage = () => {
                   <List.Item
                     key={childIndex}
                     onClick={() => {
-                      if (child.path) {
-                        customNavigate(child);
-                      } else if (child.onClick) {
-                        child.onClick();
-                      }
+                      handleMenuClick(child);
                     }}
                   >
                     {child.title}
@@ -239,11 +247,7 @@ const MenuPage = () => {
               <List.Item
                 key={index}
                 onClick={() => {
-                  if (item.path) {
-                    customNavigate(item);
-                  } else if (item.onClick) {
-                    item.onClick();
-                  }
+                  handleMenuClick(item);
                 }}
               >
                 {item.title}
