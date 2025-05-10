@@ -32,6 +32,9 @@ export const useTodoStore = create<TodoState>((set) => ({
 
     todos.forEach(async (todo) => {
       todo.date = dayjs(todo.date).format("YYYYMMDD");
+      if (todo.endDate) {
+        todo.endDate = dayjs(todo.endDate).format("YYYYMMDD");
+      }
       await addData(storeName, todo);
     });
 
