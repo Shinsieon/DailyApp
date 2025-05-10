@@ -10,25 +10,34 @@ interface LabelProps extends TextProps {
   maxLength?: number;
 }
 const Label = (props: LabelProps) => {
+  const {
+    name,
+    placeholder,
+    bold,
+    maxLength,
+    style: customStyle,
+    ...restProps // ✅ 나머지만 Typography.Text로 전달
+  } = props;
+
   const theme = useThemeStore((state) => state.theme);
+
   const style = {
-    color: props.placeholder
+    color: placeholder
       ? colors.darkGray
       : theme.isDarkMode
         ? colors.lightWhite
         : colors.darkBlack,
-    fontWeight: props.bold ? "bold" : "normal",
+    fontWeight: bold ? "bold" : "normal",
+    ...customStyle, // ✅ 사용자 스타일과 병합
   };
-  let showLabelText = "";
-  if (props.name) {
-    showLabelText = props.name.toString();
-  }
-  if (props.maxLength && showLabelText.length > props.maxLength) {
-    showLabelText = showLabelText.slice(0, props.maxLength) + "...";
+
+  let showLabelText = name?.toString() || "";
+  if (maxLength && showLabelText.length > maxLength) {
+    showLabelText = showLabelText.slice(0, maxLength) + "...";
   }
 
   return (
-    <Typography.Text {...props} style={{ ...style, ...props.style }}>
+    <Typography.Text {...restProps} style={style}>
       {showLabelText}
     </Typography.Text>
   );

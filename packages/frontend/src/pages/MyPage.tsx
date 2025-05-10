@@ -1,6 +1,6 @@
-import { Flex, Statistic, StatisticProps } from "antd";
+import { Flex, message, Statistic, StatisticProps } from "antd";
 import AppHeader from "../components/AppHeader";
-import { Divider } from "antd-mobile";
+import { Divider, Tag } from "antd-mobile";
 import Label from "../components/Label";
 import sizes from "../sizes";
 import { useUserStore } from "../store/userStore";
@@ -12,13 +12,13 @@ import { colors } from "../colors";
 import { EditFilled } from "@ant-design/icons";
 import { useNavigate } from "react-router-dom";
 import { useDiaryStore } from "../store/diaryStore";
-
+import { IoLogOut } from "react-icons/io5";
 const formatter: StatisticProps["formatter"] = (value) => (
   <CountUp end={value as number} separator="," />
 );
 
 const MyPage = () => {
-  const user = useUserStore((state) => state.user);
+  const { user, clearUser } = useUserStore();
   const memos = useMemoStore((state) => state.memos);
   const todos = useTodoStore((state) => state.todos);
   const budgets = useBudgetStore((state) => state.budgets);
@@ -48,6 +48,32 @@ const MyPage = () => {
                 style={{ fontSize: 15 }}
                 onClick={() => {
                   navigate("/changeNicknamePage");
+                }}
+              />
+              {user?.is_superuser && (
+                <Tag
+                  color="primary"
+                  onClick={() => {
+                    if (user?.is_superuser) {
+                      navigate("/adminPage");
+                    }
+                  }}
+                >
+                  관리자
+                </Tag>
+              )}
+
+              <IoLogOut
+                style={{
+                  fontSize: 20,
+                  color: colors.error,
+                  cursor: "pointer",
+                }}
+                onClick={() => {
+                  clearUser();
+                  localStorage.removeItem("token");
+                  message.success("로그아웃되었습니다.");
+                  navigate("/");
                 }}
               />
             </Flex>

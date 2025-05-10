@@ -40,6 +40,9 @@ export class User {
   @DeleteDateColumn()
   deletedAt: Date;
 
+  @Column({ default: false })
+  is_superuser: boolean;
+
   @OneToMany(() => Todo, (todo) => todo.user)
   todos: Todo[];
 

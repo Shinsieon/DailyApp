@@ -152,6 +152,7 @@ export class AuthService {
         id: user.id,
         email: user.email,
         nickname: user.nickname,
+        is_superuser: user.is_superuser,
       },
     };
   }
