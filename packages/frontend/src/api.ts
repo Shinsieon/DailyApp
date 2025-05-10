@@ -22,7 +22,7 @@ export const http = axios.create({
   baseURL:
     process.env.NODE_ENV === "production"
       ? "https://bono-dev.click"
-      : "http://192.168.45.90:3000",
+      : "http://192.168.45.53:3000",
   withCredentials: true,
   beforeRedirect: () => {
     console.log("Redirecting...");
@@ -69,6 +69,20 @@ export function showError(error: any) {
   // 텔레그램 전송 추가
   sendToTelegram(errorMsg);
 }
+
+const apiSender = async <T>(
+  apiFunc: () => Promise<T>,
+  setter: React.Dispatch<React.SetStateAction<T>>
+) => {
+  try {
+    const response = await apiFunc();
+    if (!response || (Array.isArray(response) && response.length === 0)) return;
+
+    setter(response);
+  } catch (error) {
+    showError(error);
+  }
+};
 
 const getUsers = async () => {
   const response = await http.get("/api/v1/auth/users");
@@ -255,7 +269,13 @@ const getFeed = async (userId: number) => {
   return response.data;
 };
 
+const getSurvey = async () => {
+  const response = await http.get("/api/v1/survey");
+  return response.data;
+};
+
 export const api = {
+  apiSender,
   getUsers,
   signin,
   signup,
@@ -281,4 +301,5 @@ export const api = {
   getFeed,
   getDiaries,
   syncDiaries,
+  getSurvey,
 };

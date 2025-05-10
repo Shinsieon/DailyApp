@@ -16,4 +16,8 @@ export class AppService {
     await this.surveyRepository.save(survey);
     return { message: "설문이 성공적으로 제출되었습니다." };
   }
+  async getSurvey() {
+    const surveys = await this.surveyRepository.find();
+    return surveys;
+  }
 }

@@ -57,4 +57,13 @@ export class AppController {
       console.error(`❌ 설문 제출 실패: ${error}`);
     }
   }
+  @Get("survey")
+  async getSurvey(@Request() req, @Res() res) {
+    try {
+      const survey = await this.appService.getSurvey();
+      return res.json(survey);
+    } catch (error: any) {
+      console.error(`❌ 설문 조회 실패: ${error}`);
+    }
+  }
 }

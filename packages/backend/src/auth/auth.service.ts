@@ -9,6 +9,7 @@ import { Repository } from "typeorm";
 import * as bcrypt from "bcryptjs";
 import { User } from "./auth.entity";
 import { UserResponse } from "src/types";
+import { instanceToPlain } from "class-transformer";
 
 @Injectable()
 export class AuthService {
@@ -19,7 +20,10 @@ export class AuthService {
   ) {}
 
   async getUsers() {
-    return await this.userRepository.find();
+    return await this.userRepository
+      .createQueryBuilder("user")
+      .select(["user.email", "user.nickname"]) // 필요한 필드만 선택
+      .getMany();
   }
 
   async findByEmail(email: string, includeDeleted = false) {

@@ -4,6 +4,11 @@ export interface PopupProps {
   onOk?: () => void;
   onCancel?: () => void;
 }
+export interface SurveyData {
+  id?: number;
+  content: string;
+  createdAt: string;
+}
 export type BudgetType = "income" | "expense" | "all";
 export type AllowedManipulateType = "day" | "month" | "year";
 export interface BudgetData {
