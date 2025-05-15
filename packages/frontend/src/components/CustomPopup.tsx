@@ -3,6 +3,7 @@ import AppHeader from "./AppHeader";
 import { useEffect, useState } from "react";
 import { useThemeStore } from "../store/themeStore";
 import { colors } from "../colors";
+import { Flex } from "antd";
 
 interface CustomPopupProps extends PopupProps {
   title: string;
@@ -38,9 +39,9 @@ const CustomPopup = (props: CustomPopupProps) => {
     >
       <AppHeader title={props.title} backIcon={false} />
 
-      <div key={key} style={{ overflow: "auto", height: "80%" }}>
+      <Flex key={key} style={{ overflow: "auto", height: "80%" }}>
         {props.children}
-      </div>
+      </Flex>
     </Popup>
   );
 };

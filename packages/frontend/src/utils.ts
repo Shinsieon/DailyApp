@@ -78,3 +78,32 @@ export function generateLightColor() {
   const b = Math.floor(Math.random() * 76) + 180; // 180~255
   return `rgb(${r}, ${g}, ${b})`;
 }
+
+/**
+ * PMT 함수: 일정한 이자율과 횟수로 원리금을 균등 상환할 때 매 기간 납부할 금액 계산
+ *
+ * @param {number} rate - 기간별 이자율 (예: 연 5%라면 0.05 / 12)
+ * @param {number} nper - 총 상환 횟수 (예: 30년 * 12 = 360)
+ * @param {number} pv - 현재 대출금 (현재 가치, 예: 100000000)
+ * @param {number} fv - 미래가치 (보통 0, 대부분 대출은 이 값이 0)
+ * @param {boolean} type - 선불 여부 (false = 후불, true = 선불)
+ * @returns {number} - 매 기간 상환해야 할 금액 (음수로 반환)
+ */
+export function PMT(
+  rate: number,
+  nper: number,
+  pv: number,
+  fv = 0,
+  type = false
+) {
+  if (rate === 0) return -(pv + fv) / nper;
+
+  const pvif = Math.pow(1 + rate, nper);
+  let pmt = (rate / (pvif - 1)) * -(pv * pvif + fv);
+
+  if (type) {
+    pmt /= 1 + rate;
+  }
+
+  return pmt;
+}

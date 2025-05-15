@@ -4,6 +4,7 @@ import { NavBar, NavBarProps } from "antd-mobile";
 interface AppHeaderProps extends NavBarProps {
   title: string;
   right?: React.ReactNode;
+  backIcon?: boolean;
 }
 
 const AppHeader = (props: AppHeaderProps) => {
@@ -17,7 +18,7 @@ const AppHeader = (props: AppHeaderProps) => {
       onBack={() => {
         navigate(-1);
       }}
-      backIcon={cangoBack}
+      backIcon={cangoBack ? props.backIcon : false}
     >
       {props.title}
     </NavBar>

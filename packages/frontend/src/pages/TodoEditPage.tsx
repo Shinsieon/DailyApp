@@ -19,7 +19,7 @@ import { api } from "../api";
 import { useUserStore } from "../store/userStore";
 import Label from "../components/Label";
 import sizes from "../sizes";
-import { colors } from "../colors";
+import { colors, commonFieldStyle } from "../colors";
 
 const timeColumns = [
   [
@@ -160,11 +160,6 @@ const TodoEditPage = () => {
   const endDatePickerRef = useRef<DatePickerRef>(null);
   const timePickerRef = useRef<Picker>(null);
   const isGranted = useGranted();
-  const commonFieldStyle = {
-    backgroundColor: colors.lightGray,
-    padding: 10,
-    borderRadius: 10,
-  };
   const defaultTodo: TodoData = {
     title: "",
     date: selDate

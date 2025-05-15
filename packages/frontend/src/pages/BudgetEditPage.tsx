@@ -18,7 +18,7 @@ import dayjs from "dayjs";
 import Label from "../components/Label";
 import { CheckListValue } from "antd-mobile/es/components/check-list";
 import { translateToKorean } from "../utils";
-import { colors } from "../colors";
+import { colors, commonFieldStyle } from "../colors";
 import { useUserStore } from "../store/userStore";
 import sizes from "../sizes";
 import { FaCirclePlus } from "react-icons/fa6";
@@ -100,11 +100,6 @@ const BudgetEditPage = () => {
     };
     fetchCategories();
   }, []);
-  const commonFieldStyle = {
-    backgroundColor: colors.lightGray,
-    padding: 10,
-    borderRadius: 10,
-  };
   return (
     <Flex vertical style={{ height: "100vh" }}>
       <AppHeader

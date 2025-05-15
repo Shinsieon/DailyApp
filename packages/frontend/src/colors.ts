@@ -49,3 +49,10 @@ export const lightStyles = {
   backgroundColor: colors.lightWhite,
   color: colors.darkBlack,
 };
+
+export const commonFieldStyle = {
+  backgroundColor: colors.lightGray,
+  padding: 10,
+  borderRadius: 10,
+  width: "100%",
+};

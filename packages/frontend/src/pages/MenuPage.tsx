@@ -114,6 +114,10 @@ const MenuPage = () => {
           title: "가계부 통계",
           path: "/budgetChartPage",
         },
+        {
+          title: "대출 계산기",
+          path: "/loanPage",
+        },
       ],
     },
     {
@@ -192,6 +196,7 @@ const MenuPage = () => {
               {menuHistory.map((menu, index) => {
                 return (
                   <Flex
+                    key={index}
                     style={{
                       fontSize: sizes.font.small,
                       backgroundColor: colors.lighterGray,

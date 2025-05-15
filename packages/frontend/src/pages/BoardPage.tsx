@@ -187,6 +187,7 @@ const BoardPage = () => {
         style={{ flex: 1, overflowY: "auto", padding: "0px 20px" }}
       >
         <Calendar
+          key={selDate}
           value={dayjs(selDate)}
           onSelect={(date: Dayjs, selectInfo: SelectInfo) => {
             setSelDate(date.format("YYYYMMDD"));
@@ -232,6 +233,7 @@ const BoardPage = () => {
                       const isSelected = year === dayjs(selDate).format("YYYY");
                       return (
                         <Button
+                          key={index}
                           fill="none"
                           style={{
                             color: isSelected
@@ -270,6 +272,7 @@ const BoardPage = () => {
                       const isSelected = month === dayjs(selDate).format("MM");
                       return (
                         <Button
+                          key={index}
                           fill="none"
                           style={{
                             color: isSelected
