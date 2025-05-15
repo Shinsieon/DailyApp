@@ -439,11 +439,11 @@ const LoanPage = () => {
                     borderRadius: 10,
                   }}
                 >
-                  <Label name={`회차: ${item.period}개월`} />
+                  <Label name={`${item.period}회차(개월)`} />
                   <Divider direction="vertical" />
-                  <Label name={`금액: ${formatMoney(item.amount)}원`} />
+                  <Label name={`${formatMoney(item.amount)}원`} />
                   <Divider direction="vertical" />
-                  <Label name={`이자율: ${item.interest}%`} />
+                  <Label name={`${item.interest}%`} />
                   <AiOutlineDelete
                     style={{ fontSize: sizes.font.medium }}
                     onClick={() => {
