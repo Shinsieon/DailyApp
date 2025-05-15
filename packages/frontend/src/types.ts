@@ -189,3 +189,23 @@ export interface Feed {
     };
   };
 }
+export interface Loan {
+  loanForm: LoanForm;
+  loanRepayment: LoanRepayment[];
+}
+
+export type LoanTypes = "원리금균등상환" | "원금균등상환" | "만기일시상환";
+
+export interface LoanForm {
+  type: LoanTypes;
+  amount: number;
+  interestRate: number;
+  period: number;
+  currentPeriod: number;
+  currentLoanAmount: number;
+}
+export interface LoanRepayment {
+  period: number;
+  amount: number;
+  interest: string;
+}

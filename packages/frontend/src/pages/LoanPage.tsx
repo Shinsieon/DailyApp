@@ -5,39 +5,21 @@ import { Button, Divider, Input, NoticeBar, Segmented } from "antd-mobile";
 import sizes from "../sizes";
 import { colors, commonFieldStyle } from "../colors";
 import { useEffect, useState } from "react";
-import { formatMoney, PMT, translateToKorean } from "../utils";
+import { formatMoney, PMT } from "../utils";
 import CustomPopup from "../components/CustomPopup";
 import MoneyInput from "../components/MoneyInput";
-import BottomFixedButton from "../components/BottomFixedButton";
 import { AiOutlineDelete } from "react-icons/ai";
+import { Loan, LoanForm, LoanRepayment, LoanTypes } from "../types";
+import AddRepayment from "../popups/AddRepayment";
 
-interface Loan {
-  loanForm: LoanForm;
-  loanRepayment: LoanRepayment[];
-}
-
-interface LoanForm {
-  type: LoanTypes;
-  amount: number;
-  interestRate: number;
-  period: number;
-  currentPeriod: number;
-  currentLoanAmount: number;
-}
 interface LoanResult {
   period: number;
   amount: string;
   interest: string;
   principal: string;
   remainingPrincipal: string;
-  render?: (value, record, index) => JSX.Element;
+  render?: (value: string) => JSX.Element;
 }
-interface LoanRepayment {
-  period: number;
-  amount: number;
-  interest: string;
-}
-type LoanTypes = "원리금균등상환" | "원금균등상환" | "만기일시상환";
 
 const LoanPage = () => {
   const [loanForm, setLoanForm] = useState<LoanForm>({
@@ -51,8 +33,7 @@ const LoanPage = () => {
   const [popupVisible, setPopupVisible] = useState(false);
   const [loanResult, setLoanResult] = useState<LoanResult[]>([]);
   const [loanRepayment, setLoanRepayment] = useState<LoanRepayment[]>([]);
-  const [newLoanRepayment, setNewLoanRepayment] =
-    useState<LoanRepayment | null>();
+
   const [selType, setSelType] = useState<LoanTypes>("원리금균등상환");
   const repayments = loanRepayment.map((item) => item.period);
   const [notificationShown, setNotificationShown] = useState(true);
@@ -271,13 +252,12 @@ const LoanPage = () => {
       <AppHeader title="대출 계산기" />
 
       <Flex vertical style={{ flex: 1, overflow: "auto" }} gap={15}>
-        <Flex vertical style={{ padding: "0 20px" }}>
+        <Flex vertical style={{ padding: "0 20px" }} gap={10}>
           {prevLoan && notificationShown && (
             <NoticeBar
               color="info"
               bordered={false}
               shape="rounded"
-              style={{ margin: 20 }}
               content={"이전 대출 정보가 있어요! 터치해서 불러와보세요."}
               onClick={() => {
                 setLoanForm(prevLoan.loanForm);
@@ -484,129 +464,24 @@ const LoanPage = () => {
             columns={columns}
             dataSource={loanResult}
             pagination={false}
-            scroll={{ y: 300 }}
+            scroll={{ y: 700 }}
+            size="small"
           />
         </Flex>
         <CustomPopup
           visible={popupVisible}
           setVisible={setPopupVisible}
           title="중도상환 추가"
-          height="50vh"
+          height="60vh"
           children={
-            <Flex vertical style={{ padding: 20, width: "100%" }} gap={5}>
-              <Label
-                name="중도상환금액"
-                style={{
-                  fontSize: sizes.font.medium,
-                  fontWeight: "bold",
-                }}
-              />
-              <MoneyInput
-                placeholder="중도상환금액 (원)"
-                value={
-                  newLoanRepayment && newLoanRepayment.amount > 0
-                    ? newLoanRepayment.amount + ""
-                    : ""
-                }
-                onChange={(value) => {
-                  setNewLoanRepayment({
-                    ...newLoanRepayment,
-                    amount: parseInt(value),
-                  } as LoanRepayment);
-                }}
-              />
-              <Label
-                name="중도상환 회차 (개월)"
-                style={{
-                  fontSize: sizes.font.medium,
-                  fontWeight: "bold",
-                }}
-              />
-              <Flex>
-                <Input
-                  placeholder="중도상환 회차 (개월)"
-                  inputMode="numeric"
-                  style={commonFieldStyle}
-                  value={
-                    newLoanRepayment && newLoanRepayment.period > 0
-                      ? newLoanRepayment.period + ""
-                      : ""
-                  }
-                  onChange={(value) => {
-                    setNewLoanRepayment({
-                      ...newLoanRepayment,
-                      period: parseInt(value),
-                    } as LoanRepayment);
-                  }}
-                />
-              </Flex>
-              <Label
-                name="이자율 변동 (%)"
-                style={{
-                  fontSize: sizes.font.medium,
-                  fontWeight: "bold",
-                }}
-              />
-              <Flex>
-                <Input
-                  placeholder="이자율 변동 (%). 빈 값일 경우 현재 이자율과 동일"
-                  inputMode="decimal"
-                  value={
-                    newLoanRepayment && Number(newLoanRepayment.interest) > 0
-                      ? newLoanRepayment.interest + ""
-                      : ""
-                  }
-                  onChange={(value) => {
-                    setNewLoanRepayment({
-                      ...newLoanRepayment,
-                      interest: value,
-                    } as LoanRepayment);
-                  }}
-                  style={commonFieldStyle}
-                />
-              </Flex>
-              <BottomFixedButton
-                type="single"
-                onConfirm={() => {
-                  if (!newLoanRepayment) {
-                    message.error("모든 필드를 입력해주세요.");
-                    return;
-                  }
-                  if (newLoanRepayment.period > loanForm.period) {
-                    message.error(
-                      "중도상환 회차는 대출기간보다 작아야 합니다."
-                    );
-                    return;
-                  }
-                  if (newLoanRepayment.period < 1) {
-                    message.error("중도상환 회차는 1보다 커야 합니다.");
-                    return;
-                  }
-                  if (newLoanRepayment.amount > loanForm.amount) {
-                    message.error("중도상환금액은 대출금액보다 작아야 합니다.");
-                    return;
-                  }
-                  if (!newLoanRepayment.interest) {
-                    console.log("이자율이 비어있습니다.");
-                    console.log(loanForm.interestRate);
-                    newLoanRepayment.interest = loanForm.interestRate + "";
-                  }
-                  if (Number(newLoanRepayment.interest) < 0) {
-                    message.error("이자율은 0보다 커야 합니다.");
-                    return;
-                  }
-
-                  setLoanRepayment([
-                    ...loanRepayment,
-                    newLoanRepayment as LoanRepayment,
-                  ]);
-                  setNewLoanRepayment(null);
-                  message.success("중도상환이 추가되었습니다.");
-                  setPopupVisible(false);
-                }}
-                confirmName="추가하기"
-              />
-            </Flex>
+            <AddRepayment
+              loanForm={loanForm}
+              onConfirm={(repayment: LoanRepayment) => {
+                setLoanRepayment([...loanRepayment, repayment]);
+                setPopupVisible(false);
+                message.success("중도상환이 추가되었습니다.");
+              }}
+            />
           }
         />
       </Flex>
