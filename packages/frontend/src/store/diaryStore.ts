@@ -1,4 +1,5 @@
 import { create } from "zustand";
+import { persist } from "zustand/middleware";
 import {
   addData,
   clearData,
@@ -28,38 +29,46 @@ type DiaryState = {
   flushDiary: () => void;
 };
 
-export const useDiaryStore = create<DiaryState>((set) => ({
-  diary: [],
-  setDiary: async (diary) => {
-    await clearData(storeName);
-    diary.forEach((d) => {
-      d.date = dayjs(d.date).format("YYYYMMDD");
-      addData(storeName, d);
-    });
-    set({ diary });
-  },
-  saveDiary: async (diary) => {
-    const key = await addData(storeName, diary);
-    set((state) => ({ diary: [...state.diary, { ...diary, id: key }] }));
-  },
-  fetchDiary: async () => {
-    const diary = (await getAllData<DiaryData>(storeName)).map((d) => {
-      d.date = dayjs(d.date).format("YYYYMMDD");
-      return d;
-    });
-    set({ diary });
-  },
-  updateDiary: async (diary) => {
-    await updateData(storeName, diary);
-    set((state) => ({
-      diary: state.diary.map((m) => (m.id === diary.id ? diary : m)),
-    }));
-  },
-  deleteDiary: async (id) => {
-    await deleteData(storeName, id);
-    set((state) => ({
-      diary: state.diary.filter((diary) => diary.id !== id),
-    }));
-  },
-  flushDiary: async () => set({ diary: [] }),
-}));
+export const useDiaryStore = create<DiaryState>()(
+  persist(
+    (set) => ({
+      diary: [],
+      setDiary: async (diary) => {
+        await clearData(storeName);
+        for (const d of diary) {
+          d.date = dayjs(d.date).format("YYYYMMDD");
+          await addData(storeName, d);
+        }
+        set({ diary });
+      },
+      saveDiary: async (diary) => {
+        const key = await addData(storeName, diary);
+        set((state) => ({ diary: [...state.diary, { ...diary, id: key }] }));
+      },
+      fetchDiary: async () => {
+        const diary = (await getAllData<DiaryData>(storeName)).map((d) => {
+          d.date = dayjs(d.date).format("YYYYMMDD");
+          return d;
+        });
+        set({ diary });
+      },
+      updateDiary: async (diary) => {
+        await updateData(storeName, diary);
+        set((state) => ({
+          diary: state.diary.map((m) => (m.id === diary.id ? diary : m)),
+        }));
+      },
+      deleteDiary: async (id) => {
+        await deleteData(storeName, id);
+        set((state) => ({
+          diary: state.diary.filter((diary) => diary.id !== id),
+        }));
+      },
+      flushDiary: async () => set({ diary: [] }),
+    }),
+    {
+      name: "diary-storage",
+      partialize: (state) => ({ diary: state.diary }),
+    }
+  )
+);
