@@ -8,18 +8,18 @@ import { Flex } from "antd";
 import Label from "./Label";
 import CountUp from "react-countup";
 import CustomCard from "./CustomCard";
-import { selectModal } from "./SelectModal";
 
 const BudgetCard = () => {
   const [todayBudget, settodayBudget] = useState<BudgetSum>({
     income: 0,
     expense: 0,
+    total: 0,
   });
   const budgets = useBudgetStore((state) => state.budgets);
   const navigate = useNavigate();
 
   useEffect(() => {
-    const sum: BudgetSum = { income: 0, expense: 0 };
+    const sum: BudgetSum = { income: 0, expense: 0, total: 0 };
     const dayBudget = budgets.filter(
       (item) => item.date === dayjs().format("YYYYMMDD")
     );
@@ -29,6 +29,7 @@ const BudgetCard = () => {
       } else {
         sum.expense = (sum.expense || 0) + item.amount;
       }
+      sum.total = sum.income - sum.expense;
     });
     //d.date format '2024/12/14'
     settodayBudget(sum);
@@ -65,6 +66,18 @@ const BudgetCard = () => {
               <CountUp
                 start={todayBudget.expense > 10 ? todayBudget.expense - 10 : 0}
                 end={todayBudget.expense}
+                formattingFn={formatMoney}
+                style={{ fontSize: 15 }}
+              />
+              <Label name={"원"} style={{ fontSize: 15 }}></Label>
+            </Flex>
+          </Flex>
+          <Flex justify="space-between">
+            <Label name="합계" style={{ fontSize: 15, fontWeight: "bold" }} />
+            <Flex>
+              <CountUp
+                start={todayBudget.total > 10 ? todayBudget.total - 10 : 0}
+                end={todayBudget.total}
                 formattingFn={formatMoney}
                 style={{ fontSize: 15 }}
               />

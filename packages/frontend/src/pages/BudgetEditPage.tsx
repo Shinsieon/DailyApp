@@ -68,6 +68,10 @@ const BudgetEditPage = () => {
       `${budgetForm.type === "income" ? "수입" : "지출"}이 저장되었습니다.`
     );
     navigate(-1);
+    console.log(`handleComplete ${location.state?.handleComplete}`);
+    if (location.state?.handleComplete) {
+      location.state.handleComplete();
+    }
   };
   useEffect(() => {
     const fetchCategories = async () => {

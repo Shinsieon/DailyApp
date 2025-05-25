@@ -28,6 +28,7 @@ export interface CategoryData {
 export type BudgetSum = {
   income: number;
   expense: number;
+  total: number;
 };
 
 export interface TodoData {
