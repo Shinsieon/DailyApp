@@ -11,11 +11,7 @@ import { DeleteOutline } from "antd-mobile-icons";
 import { MinusOutlined, PlusOutlined } from "@ant-design/icons";
 import { useBudgetUIStore } from "../store/budgetUIStore";
 
-interface DetailBudgetProps {
-  handleComplete?: () => void;
-}
-
-const DetailBudget = (props: DetailBudgetProps) => {
+const DetailBudget = () => {
   const { selDate } = useBudgetUIStore();
   const { budgets, deleteBudget } = useBudgetStore();
   const dailyBudget = budgets.filter((budget) => budget.date === selDate);
