@@ -19,11 +19,6 @@ const BudgetPage = () => {
   const navigate = useNavigate();
   const { budgets } = useBudgetStore();
 
-  const handleComplete = () => {
-    console.log("가계부 정리 완료");
-    setDetailVisible(true);
-  };
-
   const renderBudget = (date: Dayjs, info: any) => {
     if (info.type === "date") {
       return renderBudgetForDate(date);
@@ -50,7 +45,7 @@ const BudgetPage = () => {
           name={`수입 ${formatMoney(monthlyIncomeSum)}원`}
           style={{
             fontSize: sizes.font.small,
-            borderLeft: `4px solid ${colors.lightTomato}`,
+            borderLeft: `4px solid ${colors.lightPrimary}`,
             paddingLeft: 10,
           }}
         />
@@ -58,7 +53,7 @@ const BudgetPage = () => {
           name={`지출 ${formatMoney(monthlyExpenseSum)}원`}
           style={{
             fontSize: sizes.font.small,
-            borderLeft: `4px solid ${colors.lightPrimary}`,
+            borderLeft: `4px solid ${colors.lightTomato}`,
             paddingLeft: 10,
           }}
         />
@@ -84,7 +79,7 @@ const BudgetPage = () => {
             name={`${formatMoney(dailyIncomeSum)}`}
             style={{
               fontSize: sizes.font.xsmall,
-              borderLeft: `2px solid ${colors.lightTomato}`,
+              borderLeft: `2px solid ${colors.lightPrimary}`,
               paddingLeft: 2,
             }}
           />
@@ -96,7 +91,7 @@ const BudgetPage = () => {
             name={`${formatMoney(dailyExpenseSum)}`}
             style={{
               fontSize: sizes.font.xsmall,
-              borderLeft: `2px solid ${colors.lightPrimary}`,
+              borderLeft: `2px solid ${colors.lightTomato}`,
               paddingLeft: 2,
             }}
           />
@@ -143,7 +138,7 @@ const BudgetPage = () => {
         setVisible={setDetailVisible}
         title={`${dayjs(selDate).format("MM월 DD일")} 가계부`}
         height="60vh"
-        children={<DetailBudget handleComplete={handleComplete} />}
+        children={<DetailBudget />}
       />
     </Flex>
   );
