@@ -24,34 +24,35 @@ const HomePage = () => {
         if (!response || response.length === 0) {
           return;
         }
-        const prevPatchNotes = localStorage.getItem("patchNote");
-        if (!prevPatchNotes) {
-          setPatchNotes(response[0]);
-          return;
-        }
-        const jsonPrevPatchNotes = JSON.parse(prevPatchNotes);
-        if (jsonPrevPatchNotes.version !== response[0].version) {
-          const [major, minor, patch] = response[0].version.split(".");
-          const [prevMajor, prevMinor, prevPatch] =
-            jsonPrevPatchNotes.version.split(".");
-          if (major > prevMajor || minor > prevMinor) {
-            if (
-              confirm("새로운 기능이 추가되었습니다. 앱 업데이트를 받아주세요.")
-            ) {
-              setPatchNotes(response[0]);
-              localStorage.setItem("patchNote", JSON.stringify(response[0]));
-              const appId = "6740744415";
-              const APP_STORE_URL = `itms-apps://apps.apple.com/app/id${appId}`; // 실제 앱 ID로 변경
+        setPatchNotes(response[0]);
+        // const prevPatchNotes = localStorage.getItem("patchNote");
+        // if (!prevPatchNotes) {
+        //   setPatchNotes(response[0]);
+        //   return;
+        // }
+        // const jsonPrevPatchNotes = JSON.parse(prevPatchNotes);
+        // if (jsonPrevPatchNotes.version !== response[0].version) {
+        //   const [major, minor, patch] = response[0].version.split(".");
+        //   const [prevMajor, prevMinor, prevPatch] =
+        //     jsonPrevPatchNotes.version.split(".");
+        //   if (major > prevMajor || minor > prevMinor) {
+        //     if (
+        //       confirm("새로운 기능이 추가되었습니다. 앱 업데이트를 받아주세요.")
+        //     ) {
+        //       setPatchNotes(response[0]);
+        //       localStorage.setItem("patchNote", JSON.stringify(response[0]));
+        //       const appId = "6740744415";
+        //       const APP_STORE_URL = `itms-apps://apps.apple.com/app/id${appId}`; // 실제 앱 ID로 변경
 
-              window.location.href = APP_STORE_URL;
-            }
-          } else {
-            setPatchNotes(response[0]);
-            localStorage.setItem("patchNote", JSON.stringify(response[0]));
-          }
+        //       window.location.href = APP_STORE_URL;
+        //     }
+        //   } else {
+        //     setPatchNotes(response[0]);
+        //     localStorage.setItem("patchNote", JSON.stringify(response[0]));
+        //   }
 
-          return;
-        }
+        //   return;
+        // }
       } catch (error) {
         showError(error);
       }
@@ -73,7 +74,7 @@ const HomePage = () => {
           color="info"
           bordered={false}
           className="blinking-text"
-          content={"새로운 기능이 추가되었어요!"}
+          content={"새로운 소식이 추가되었어요!"}
           onClick={() => {
             navigate("/patchNotePage");
             localStorage.setItem("patchNote", JSON.stringify(patchNotes));
