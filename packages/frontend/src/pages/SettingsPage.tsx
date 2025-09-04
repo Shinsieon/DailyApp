@@ -160,33 +160,36 @@ const SettingsPage = () => {
                 question: "서버와 동기화 하시겠습니까?",
                 leftButtonText: "가져오기",
                 rightButtonText: "저장하기",
-                onLeftButtonClick: async () => {
-                  setLoading(true);
-                  const todos = await api.getTodos(user.id);
-                  const budgets = await api.getBudgets(user.id);
-                  const memos = await api.getMemos(user.id);
-                  const diary = await api.getDiaries(user.id);
-                  flushMemos();
-                  flushBudgets();
-                  flushTodos();
-                  flushDiary();
-                  setDiary(diary);
-                  setTodos(todos);
-                  setBudgets(budgets);
-                  setMemos(memos);
 
-                  const now = dayjs().format("YYYY-MM-DD HH:mm:ss");
-                  localStorage.setItem("syncDb", now);
-                  setLoading(false);
-                  setSyncDb(now);
-                  message.success("데이터를 동기화했습니다.");
+                onLeftButtonClick: async () => {
+                  //위험하므로 사용중지
+                  return;
+                  // setLoading(true);
+                  // const todos = await api.getTodos(user.id);
+                  // const budgets = await api.getBudgets(user.id);
+                  // const memos = await api.getMemos(user.id);
+                  // const diary = await api.getDiaries(user.id);
+                  // flushMemos();
+                  // flushBudgets();
+                  // flushTodos();
+                  // flushDiary();
+                  // setDiary(diary);
+                  // setTodos(todos);
+                  // setBudgets(budgets);
+                  // setMemos(memos);
+
+                  // const now = dayjs().format("YYYY-MM-DD HH:mm:ss");
+                  // localStorage.setItem("syncDb", now);
+                  // setLoading(false);
+                  // setSyncDb(now);
+                  // message.success("데이터를 동기화했습니다.");
                 },
                 onRightButtonClick: async () => {
                   setLoading(true);
-                  await api.syncTodos(todos, user.id);
-                  await api.syncBudgets(budgets, user.id);
+                  //await api.syncTodos(todos, user.id);
+                  //await api.syncBudgets(budgets, user.id);
                   await api.syncMemos(memos, user.id);
-                  await api.syncDiaries(diary, user.id);
+                  //await api.syncDiaries(diary, user.id);
                   const now = dayjs().format("YYYY-MM-DD HH:mm:ss");
                   localStorage.setItem("syncDb", now);
                   setLoading(false);
