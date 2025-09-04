@@ -45,7 +45,7 @@ export class MemoService {
     if (!user) throw new Error("User not found");
     console.log(memos);
 
-    await this.memoRepository.delete({ user: { id: userId } });
+    //await this.memoRepository.delete({ user: { id: userId } });
     const newMemos = memos.map((memo) =>
       this.memoRepository.create({
         ...memo,
