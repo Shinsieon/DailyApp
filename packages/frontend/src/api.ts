@@ -22,7 +22,7 @@ export const http = axios.create({
   baseURL:
     process.env.NODE_ENV === "production"
       ? "https://bono-dev.click"
-      : "http://192.168.45.53:3000",
+      : "http://192.168.45.41:3000",
   withCredentials: true,
   beforeRedirect: () => {
     console.log("Redirecting...");
@@ -151,10 +151,24 @@ const getBudgets = async (userId: number) => {
 };
 
 const syncMemos = async (memos: MemoData[], userId: number) => {
-  const response = await http.post(`/api/v1/memos/multiple/${userId}`, {
-    memos,
-  });
-  return response.data;
+  const BATCH_SIZE = 50;
+  const results: any[] = [];
+
+  for (let i = 0; i < memos.length; i += BATCH_SIZE) {
+    const batch = memos.slice(i, i + BATCH_SIZE);
+
+    console.log(
+      `📤 Sending batch ${i / BATCH_SIZE + 1}: ${batch.length} memos`
+    );
+
+    const response = await http.post(`/api/v1/memos/multiple/${userId}`, {
+      memos: batch,
+    });
+
+    results.push(response.data);
+  }
+
+  return results.flat(); // 서버가 배열 반환한다고 가정
 };
 
 const getMemos = async (userId: number) => {

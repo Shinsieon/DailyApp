@@ -189,7 +189,7 @@ const SettingsPage = () => {
                   await api.syncTodos(todos, user.id);
                   //await api.syncBudgets(budgets, user.id);
                   message.info(`${user.id} 님 데이터 동기화중 ... `);
-                  //await api.syncMemos(memos, user.id);
+                  await api.syncMemos(memos, user.id);
                   //await api.syncDiaries(diary, user.id);
                   const now = dayjs().format("YYYY-MM-DD HH:mm:ss");
                   localStorage.setItem("syncDb", now);
